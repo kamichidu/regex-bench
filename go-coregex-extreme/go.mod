@@ -1,4 +1,4 @@
-module github.com/kolkov/regex-bench/go-coregex
+module go-coregex-extreme
 
 go 1.25.4
 

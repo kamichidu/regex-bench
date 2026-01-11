@@ -1,7 +1,8 @@
 bin/
-input/data.txt
+input/
 *.exe
 .idea/
 rust/target/
 gosh.log
 Cargo.lock
+tmpclaude-*

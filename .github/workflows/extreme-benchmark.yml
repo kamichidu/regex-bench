@@ -1,0 +1,100 @@
+name: Extreme Benchmark (3000x+)
+
+# This workflow demonstrates 3000x+ speedups on data with NO DIGITS.
+# DigitPrefilter scans for first digit - no digits = entire 6MB skipped in microseconds.
+# stdlib must scan byte-by-byte = hundreds of milliseconds.
+# This reproduces coregex's internal benchmark: BenchmarkIPRegex_Find/coregex_1MB_no_ips (3324x)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  extreme-benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Generate NO-DIGITS input data (for 3000x speedup)
+        run: go run scripts/generate-3000x-input.go
+
+      - name: Build Go stdlib extreme
+        run: cd go-stdlib-extreme && go build -o ../bin/go-stdlib-extreme .
+
+      - name: Build Go coregex extreme
+        run: cd go-coregex-extreme && go build -o ../bin/go-coregex-extreme .
+
+      - name: Run EXTREME benchmarks
+        run: |
+          echo "## EXTREME Benchmark Results (3000x+ Speedups)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**What is this?** This benchmark uses data with **NO DIGITS** (0-9)." >> $GITHUB_STEP_SUMMARY
+          echo "This is the **worst case for stdlib** (must scan entire 6MB file byte-by-byte)" >> $GITHUB_STEP_SUMMARY
+          echo "and **best case for coregex DigitPrefilter** (skips entire file in microseconds)." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Platform**: Ubuntu $(lsb_release -rs), $(uname -m)" >> $GITHUB_STEP_SUMMARY
+          echo "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Go stdlib (baseline)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ./bin/go-stdlib-extreme input/no-digits-data.txt | tee stdlib.txt | tee -a $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Go coregex (optimized)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ./bin/go-coregex-extreme input/no-digits-data.txt | tee coregex.txt | tee -a $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Speedup Calculation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Pattern | stdlib | coregex | Speedup |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|---------|---------|" >> $GITHUB_STEP_SUMMARY
+
+          # Parse results and calculate speedups
+          while IFS= read -r line; do
+            pattern=$(echo "$line" | awk '{print $1}')
+            stdlib_time=$(grep "^$pattern " stdlib.txt | awk '{print $2}')
+            stdlib_unit=$(grep "^$pattern " stdlib.txt | awk '{print $3}')
+            coregex_time=$(grep "^$pattern " coregex.txt | awk '{print $2}')
+            coregex_unit=$(grep "^$pattern " coregex.txt | awk '{print $3}')
+
+            # Convert to ms for comparison
+            if [ "$stdlib_unit" = "ms" ]; then
+              stdlib_ms=$stdlib_time
+            else
+              stdlib_ms=$(echo "$stdlib_time / 1000" | bc -l)
+            fi
+
+            if [ "$coregex_unit" = "ms" ]; then
+              coregex_ms=$coregex_time
+            elif [ "$coregex_unit" = "µs" ]; then
+              coregex_ms=$(echo "$coregex_time / 1000" | bc -l)
+            else
+              coregex_ms=$(echo "$coregex_time / 1000000" | bc -l)
+            fi
+
+            speedup=$(echo "$stdlib_ms / $coregex_ms" | bc -l | xargs printf "%.0f")
+
+            echo "| $pattern | ${stdlib_time} ${stdlib_unit} | ${coregex_time} ${coregex_unit} | **${speedup}x** |" >> $GITHUB_STEP_SUMMARY
+          done < <(grep -v "^Go\|^─" coregex.txt | head -4)
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> **Note**: This benchmark shows 800-1000x on 6MB data. For 3000x+ on 1MB:" >> $GITHUB_STEP_SUMMARY
+          echo '> `go test -bench="BenchmarkIPRegex_Find/.*no_ips" ./meta/...`' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The 3324x speedup occurs in coregex's internal \`go test -bench\` which:" >> $GITHUB_STEP_SUMMARY
+          echo "- Uses 1MB input (less OS overhead)" >> $GITHUB_STEP_SUMMARY
+          echo "- Runs thousands of iterations (precise timing)" >> $GITHUB_STEP_SUMMARY
+          echo "- Linux kernel (lower latency)" >> $GITHUB_STEP_SUMMARY

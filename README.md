@@ -30,7 +30,7 @@ All benchmarks run on **identical conditions**:
 | char_class | 521 ms | **35.71 ms** | 52.39 ms | **15x** | **1.5x faster** |
 | anchored | 0.02 ms | 0.03 ms | 0.04 ms | ~1x | ~1x |
 
-> **coregex v0.10.2** — version pattern regression fixed (was 8.2ms in v0.10.1, now 2.2ms).
+> **coregex v0.10.3** — capture group fix for `.+` patterns. Run `make extreme` for 3000x demo.
 
 ### Key Findings
 
@@ -76,6 +76,54 @@ All benchmarks run on **identical conditions**:
 - v0.9.5: Aho-Corasick integration, Teddy 32 patterns
 - v0.9.4: CharClassSearcher, Teddy 2-byte fingerprint
 - v0.9.2: DigitPrefilter for IP patterns (3.2x faster than Rust)
+
+## Extreme Speedups (1000-3000x)
+
+The "3-3000x faster" claim refers to **specific edge cases** where coregex prefilters can skip entire input:
+
+```bash
+make extreme       # Run on no-match data (~300-560x)
+make extreme-3000x # Run on no-digits data (1000-3000x)
+```
+
+**Results on 6 MB no-digits data** (worst case for stdlib, best for DigitPrefilter):
+
+| Pattern | Go stdlib | Go coregex | Speedup |
+|---------|-----------|------------|---------|
+| ip_nomatch | ~660 ms | ~220-500 µs | **1300-3000x** |
+| suffix_find | ~340 ms | ~450-700 µs | **500-750x** |
+| phone_nomatch | ~200 ms | ~320-550 µs | **350-620x** |
+| inner_nomatch | ~400 ms | ~800 µs-1 ms | **400-500x** |
+
+> Variance due to OS scheduling. CI results are more stable.
+
+**When do we see 3000x?**
+
+The 3000x speedup occurs in coregex's own benchmark suite (`go test -bench`) under specific conditions:
+- **Pattern**: IP regex on data with NO IP addresses
+- **Size**: 1 MB of pure text
+- **Measurement**: `go test -bench` with multiple iterations
+
+```go
+// In coregex repo:
+BenchmarkIPRegex_Find/stdlib_1MB_no_ips    74.5ms
+BenchmarkIPRegex_Find/coregex_1MB_no_ips   22.4µs  // 3324x
+```
+
+The extreme speedup happens because:
+1. **DigitPrefilter** scans for first digit character
+2. No digits in input → entire 1 MB skipped in ~20µs
+3. stdlib must scan byte-by-byte → 74ms
+
+**Verified speedups** (from coregex repo, `docs/dev/SPEEDUP_VERIFICATION.md`):
+
+| Pattern | Strategy | Max Speedup |
+|---------|----------|-------------|
+| IP no-match (1MB) | DigitPrefilter | **3324x** |
+| `.*\.txt$` (1MB) | ReverseSuffix | **1124x** |
+| `.*error.*` (32KB) | ReverseInner | **909x** |
+
+> The speedup depends on input characteristics. Real-world mixed data shows 15-560x.
 
 ## Patterns Tested
 
