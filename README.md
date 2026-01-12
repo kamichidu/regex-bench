@@ -97,6 +97,9 @@ make extreme-3000x # Run on no-digits data (1000-3000x)
 
 [![Extreme Benchmark](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml/badge.svg)](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml)
 
+> **Note**: Results vary between runs (±30%) due to CI VM load and OS scheduling.
+> The key insight: coregex operates in **microseconds**, stdlib in **hundreds of milliseconds**.
+
 **When do we see 3000x?**
 
 The 3000x speedup occurs in coregex's own benchmark suite (`go test -bench`) under specific conditions:
