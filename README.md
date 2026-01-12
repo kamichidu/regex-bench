@@ -86,16 +86,16 @@ make extreme       # Run on no-match data (~300-560x)
 make extreme-3000x # Run on no-digits data (1000-3000x)
 ```
 
-**Results on 6 MB no-digits data** (worst case for stdlib, best for DigitPrefilter):
+**GitHub Actions Ubuntu results** (6 MB no-digits data):
 
 | Pattern | Go stdlib | Go coregex | Speedup |
 |---------|-----------|------------|---------|
-| ip_nomatch | ~660 ms | ~220-500 µs | **1300-3000x** |
-| suffix_find | ~340 ms | ~450-700 µs | **500-750x** |
-| phone_nomatch | ~200 ms | ~320-550 µs | **350-620x** |
-| inner_nomatch | ~400 ms | ~800 µs-1 ms | **400-500x** |
+| ip_nomatch | 389 ms | 214 µs | **1816x** |
+| suffix_find | 225 ms | 217 µs | **1039x** |
+| inner_nomatch | 208 ms | 253 µs | **823x** |
+| phone_nomatch | 131 ms | 218 µs | **604x** |
 
-> Variance due to OS scheduling. CI results are more stable.
+[![Extreme Benchmark](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml/badge.svg)](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml)
 
 **When do we see 3000x?**
 
