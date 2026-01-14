@@ -57,7 +57,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Go coregex v0.10.4 (input: %.2f MB)\n", float64(len(data))/1024/1024)
+	fmt.Printf("Go coregex v0.10.6 (input: %.2f MB)\n", float64(len(data))/1024/1024)
 	fmt.Println("─────────────────────────────────────────")
 
 	for _, p := range patterns {
