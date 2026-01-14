@@ -19,6 +19,11 @@ const PATTERNS: &[Pattern] = &[
     Pattern { name: "uri", pattern: r"[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?" },
     Pattern { name: "version", pattern: r"\d+\.\d+\.\d+" },
     Pattern { name: "ip", pattern: r"(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])" },
+    // Composite patterns (concatenated char classes)
+    Pattern { name: "alpha_digit", pattern: r"[a-zA-Z]+\d+" },
+    Pattern { name: "word_digit", pattern: r"\w+[0-9]+" },
+    // Branch dispatch patterns (anchored alternations)
+    Pattern { name: "http_methods", pattern: r"^(GET|POST|PUT|DELETE|PATCH)" },
 ];
 
 fn measure(data: &str, p: &Pattern) {

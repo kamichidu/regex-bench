@@ -24,6 +24,11 @@ var patterns = []Pattern{
 	{"uri", `[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?`},
 	{"version", `\d+\.\d+\.\d+`},
 	{"ip", `(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])`},
+	// Composite patterns (concatenated char classes)
+	{"alpha_digit", `[a-zA-Z]+\d+`},
+	{"word_digit", `\w+[0-9]+`},
+	// Branch dispatch patterns (anchored alternations)
+	{"http_methods", `^(GET|POST|PUT|DELETE|PATCH)`},
 }
 
 func measure(data []byte, p Pattern) {
@@ -52,7 +57,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Go coregex (input: %.2f MB)\n", float64(len(data))/1024/1024)
+	fmt.Printf("Go coregex v0.10.4 (input: %.2f MB)\n", float64(len(data))/1024/1024)
 	fmt.Println("─────────────────────────────────────────")
 
 	for _, p := range patterns {
