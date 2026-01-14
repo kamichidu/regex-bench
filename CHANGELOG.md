@@ -1,0 +1,123 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+---
+
+## [2026-01-14] - Overlapping Char Classes Fix
+
+### Changed
+- **Updated coregex v0.10.4 → v0.10.5**
+  - Critical fix: `\w+[0-9]+` patterns now work correctly (#81)
+  - Bug: Greedy `\w+` consumed all characters (including digits)
+  - Fix: Recursive backtracking in CompositeSearcher
+  - `word_digit` pattern now returns correct matches
+
+### Results
+- `word_digit` (`\w+[0-9]+`): Now finds 3575 matches (was 0)
+- No performance regression (+0.10% geomean)
+
+---
+
+## [2026-01-14] - Thread-safety Release
+
+### Changed
+- **Updated coregex v0.10.3 → v0.10.4**
+  - Critical fix: Panic on concurrent usage of compiled Regexp (#78)
+  - Implements `sync.Pool` pattern (same as Go stdlib `regexp`)
+  - Thread-safe concurrent access to `*Regexp` instances
+  - 32-bit platform compatibility (atomic operations alignment)
+  - No performance regression (-3.84% improvement in geomean)
+
+### Added
+- **New benchmark patterns:**
+
+  | Pattern | Regex | Category | Purpose |
+  |---------|-------|----------|---------|
+  | `alpha_digit` | `[a-zA-Z]+\d+` | Composite | Concatenated char classes |
+  | `word_digit` | `\w+[0-9]+` | Composite | Word followed by digits |
+  | `http_methods` | `^(GET\|POST\|PUT\|DELETE\|PATCH)` | Anchored | HTTP method dispatch |
+
+- Added patterns to all 3 benchmark suites:
+  - `go-coregex/main.go`
+  - `go-stdlib/main.go`
+  - `rust/src/main.rs`
+
+### Technical
+- These patterns test upcoming CompositeSearcher optimization (#72)
+- Branch dispatch patterns test O(1) first-byte optimization
+- Prepares for future coregex v0.11.0 release
+
+---
+
+## [2026-01-12] - Capture Group Fix
+
+### Changed
+- **Updated coregex v0.10.2 → v0.10.3**
+  - Fixed: FindStringSubmatch returned incorrect captures for `.+` patterns
+  - Bug: `^(.+)-(\d+)$` on "hello-123" returned wrong `matches[1]`
+  - Root cause: StateSplit in PikeVM passed captures without cloning
+
+---
+
+## [2026-01-07] - Version Pattern Hotfix
+
+### Changed
+- **Updated coregex v0.10.1 → v0.10.2**
+  - Restored DigitPrefilter for version patterns (`\d+\.\d+\.\d+`)
+  - v0.10.1 incorrectly chose ReverseInner with "." as inner literal
+  - Performance restored: 8.2ms → 2.15ms (3.8x speedup)
+
+---
+
+## [2026-01-07] - Fat Teddy Release
+
+### Changed
+- **Updated coregex v0.9.5 → v0.10.0**
+  - Fat Teddy 16-bucket SIMD (33-64 patterns, 9+ GB/s)
+  - AVX2 assembly implementation
+  - Pure Go scalar fallback
+
+### Results
+- `multi_literal` (12 patterns): 11.62 ms (Aho-Corasick)
+- 5 patterns now faster than Rust regex
+
+---
+
+## [2026-01-05] - Initial Public Release
+
+### Added
+- Cross-language regex benchmark suite
+- **Go stdlib** benchmarks
+- **Go coregex** benchmarks  
+- **Rust regex** benchmarks
+- 10 real-world patterns
+- GitHub Actions CI/CD
+- Extreme benchmark mode (3000x speedup demo)
+
+### Patterns
+| Pattern | Description |
+|---------|-------------|
+| literal_alt | 4-literal alternation |
+| multi_literal | 12-literal alternation |
+| anchored | Start anchor |
+| inner_literal | Inner literal search |
+| suffix | Suffix matching |
+| char_class | Character class |
+| email | Email validation |
+| uri | URI parsing |
+| version | Version numbers |
+| ip | IPv4 validation |
+
+---
+
+## Links
+
+- **coregex**: https://github.com/coregx/coregex
+- **Benchmark repo**: https://github.com/kolkov/regex-bench
+- **Go regex issue**: https://github.com/golang/go/issues/26623
