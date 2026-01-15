@@ -183,6 +183,12 @@ Benchmarks run automatically on GitHub Actions (Ubuntu) for reproducible results
 
 [![Benchmark](https://github.com/kolkov/regex-bench/actions/workflows/benchmark.yml/badge.svg)](https://github.com/kolkov/regex-bench/actions/workflows/benchmark.yml)
 
+**Auto-generated comparison table** in Job Summary:
+- Side-by-side results for all 3 engines
+- Speedup calculations (vs stdlib, vs Rust)
+- Winner column with bold formatting
+- Raw output in collapsible section
+
 ## Links
 
 - **coregex**: https://github.com/coregx/coregex

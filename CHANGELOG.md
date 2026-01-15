@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-01-16] - Auto-generated Comparison Table in CI
+
+### Added
+- **CI Job Summary now auto-generates comparison table**
+  - Side-by-side: Go stdlib | Go coregex | Rust regex
+  - vs stdlib speedup (bold if >= 2x)
+  - vs Rust comparison (faster/slower)
+  - Winner column (coregex/Rust)
+  - Bold formatting on fastest time per row
+  - Raw output in collapsible `<details>` section
+
+### Changed
+- Updated `.github/workflows/benchmark.yml` with table generation
+- Added `scripts/generate-summary.sh` helper script
+
+---
+
 ## [2026-01-16] - Multiline Pattern Benchmark (v0.11.1)
 
 ### Added
