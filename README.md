@@ -33,11 +33,11 @@ All benchmarks run on **identical conditions**:
 | anchored | 0.05 ms | **0.03 ms** | 0.03 ms | **1.7x** | ~1x |
 | http_methods | 0.02 ms | 0.04 ms | 0.06 ms | 0.5x | **1.5x faster** |
 
-> **coregex v0.10.9** — UTF-8 fixes + fuzz-found bug fixes. Run `make extreme` for 3000x demo.
+> **coregex v0.10.10** — ReverseSuffix CharClass Plus fix. Run `make extreme` for 1800x demo.
 
 ### Key Findings
 
-**Go coregex v0.10.9 vs Go stdlib:**
+**Go coregex v0.10.10 vs Go stdlib:**
 - Most patterns: **6-750x faster**
 - Best: `inner_literal` **750x**, `email` **206x**, `uri` **134x**, `suffix` **127x**
 - `multi_literal` **107x** (Aho-Corasick)
@@ -71,13 +71,13 @@ All benchmarks run on **identical conditions**:
 | **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, **5 patterns faster than Rust** | Teddy gap vs Rust |
 | **Rust regex** | Aho-Corasick (any count), mature DFA, overall fastest | inner_literal, ip, char_class, email, http_methods slower than coregex |
 
-**v0.10.9 (Current):**
-- UTF-8 suffix sharing reduces dot NFA states 39→28
-- Anchored suffix prefilter for O(1) rejection
-- Fuzz-found bug fixes (CharClassSearcher, ReverseSuffix, ReverseInner)
+**v0.10.10 (Current):**
+- CharClass Plus patterns (`[^\s]+`, `[\w]+`) now use ReverseSuffix optimization
+- Extreme benchmark: 613x-1820x speedups (was hanging before)
 - **5 patterns faster than Rust**: inner_literal (1.8x), ip (1.8x), http_methods (1.5x), char_class (1.4x), email (1.2x)
 
 **Historical Improvements:**
+- v0.10.10: ReverseSuffix CharClass Plus fix
 - v0.10.9: UTF-8 optimization + fuzz-found bug fixes
 - v0.10.8: FindAll allocation fix for anchored patterns
 - v0.10.7: UTF-8 fixes + 100% stdlib API compatibility
@@ -94,14 +94,14 @@ make extreme       # Run on no-match data (~300-560x)
 make extreme-3000x # Run on no-digits data (1000-3000x)
 ```
 
-**GitHub Actions Ubuntu results** (6 MB no-digits data):
+**GitHub Actions Ubuntu results** (6 MB no-digits data, v0.10.10):
 
 | Pattern | Go stdlib | Go coregex | Speedup |
 |---------|-----------|------------|---------|
-| ip_nomatch | 389 ms | 214 µs | **1816x** |
-| suffix_find | 225 ms | 217 µs | **1039x** |
-| inner_nomatch | 208 ms | 253 µs | **823x** |
-| phone_nomatch | 131 ms | 218 µs | **604x** |
+| ip_nomatch | 392 ms | 215 µs | **1820x** |
+| suffix_find | 226 ms | 218 µs | **1037x** |
+| inner_nomatch | 210 ms | 254 µs | **826x** |
+| phone_nomatch | 132 ms | 216 µs | **613x** |
 
 [![Extreme Benchmark](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml/badge.svg)](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml)
 

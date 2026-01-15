@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-01-15] - ReverseSuffix CharClass Plus Fix
+
+### Changed
+- **Updated coregex v0.10.9 → v0.10.10**
+  - Fix: CharClass Plus patterns (`[^\s]+`, `[\w]+`) now use ReverseSuffix optimization
+  - Bug: `[^\s]+\.txt` caused extreme benchmark to hang (266ms/MB instead of µs)
+  - Result: All extreme patterns now complete in µs
+
+### Results (GitHub Actions, 6MB no-digits data)
+| Pattern | stdlib | coregex | Speedup |
+|---------|--------|---------|---------|
+| ip_nomatch | 392 ms | 215 µs | **1820x** |
+| suffix_find | 226 ms | 218 µs | **1037x** |
+| inner_nomatch | 210 ms | 254 µs | **826x** |
+| phone_nomatch | 132 ms | 216 µs | **613x** |
+
+---
+
 ## [2026-01-15] - UTF-8 Optimization + Fuzz Bug Fixes
 
 ### Changed
