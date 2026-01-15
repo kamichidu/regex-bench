@@ -33,11 +33,11 @@ All benchmarks run on **identical conditions**:
 | anchored | 0.05 ms | **0.03 ms** | 0.03 ms | **1.7x** | ~1x |
 | http_methods | 0.02 ms | 0.04 ms | 0.06 ms | 0.5x | **1.5x faster** |
 
-> **coregex v0.10.8** — FindAll 600x faster for anchored patterns. Run `make extreme` for 3000x demo.
+> **coregex v0.10.9** — UTF-8 fixes + fuzz-found bug fixes. Run `make extreme` for 3000x demo.
 
 ### Key Findings
 
-**Go coregex v0.10.8 vs Go stdlib:**
+**Go coregex v0.10.9 vs Go stdlib:**
 - Most patterns: **6-750x faster**
 - Best: `inner_literal` **750x**, `email` **206x**, `uri` **134x**, `suffix` **127x**
 - `multi_literal` **107x** (Aho-Corasick)
@@ -71,12 +71,14 @@ All benchmarks run on **identical conditions**:
 | **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, **5 patterns faster than Rust** | Teddy gap vs Rust |
 | **Rust regex** | Aho-Corasick (any count), mature DFA, overall fastest | inner_literal, ip, char_class, email, http_methods slower than coregex |
 
-**v0.10.8 (Current):**
-- **FindAll 600x faster** for anchored patterns (`^...`)
+**v0.10.9 (Current):**
+- UTF-8 suffix sharing reduces dot NFA states 39→28
+- Anchored suffix prefilter for O(1) rejection
+- Fuzz-found bug fixes (CharClassSearcher, ReverseSuffix, ReverseInner)
 - **5 patterns faster than Rust**: inner_literal (1.8x), ip (1.8x), http_methods (1.5x), char_class (1.4x), email (1.2x)
-- Gap vs Rust narrowing on most patterns
 
 **Historical Improvements:**
+- v0.10.9: UTF-8 optimization + fuzz-found bug fixes
 - v0.10.8: FindAll allocation fix for anchored patterns
 - v0.10.7: UTF-8 fixes + 100% stdlib API compatibility
 - v0.10.5: CompositeSearcher backtracking fix

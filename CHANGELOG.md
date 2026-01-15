@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-01-15] - UTF-8 Optimization + Fuzz Bug Fixes
+
+### Changed
+- **Updated coregex v0.10.8 → v0.10.9**
+  - UTF-8 suffix sharing reduces dot NFA states 39→28
+  - Anchored suffix prefilter for O(1) rejection
+  - CharClassSearcher excludes `*` patterns (zero-width match fix)
+  - Invalid UTF-8 handling for negated char classes (stdlib compat)
+  - ReverseInner/ReverseSuffix whitelist (strategy safety)
+
+### Results
+- No regressions, all speedups maintained
+- Local benchmarks: 113x-389x+ on various patterns
+
+---
+
 ## [2026-01-15] - FindAll Anchored Pattern Fix
 
 ### Changed
