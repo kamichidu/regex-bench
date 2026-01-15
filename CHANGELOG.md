@@ -9,6 +9,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-01-16] - Multiline Pattern Benchmark (v0.11.1)
+
+### Added
+- **New pattern: `multiline_php`** (`(?m)^/.*\.php`)
+  - Tests UseMultilineReverseSuffix strategy (Issue #97)
+  - Multiline suffix matching for log files
+
+### Changed
+- **Updated coregex v0.11.0 → v0.11.1**
+  - UseMultilineReverseSuffix: 1.4-5.7x faster than stdlib for `(?m)^.*suffix`
+  - Known gap: Rust is 84x faster (DFA state acceleration, tracked in Issue #99)
+
+### Results (GitHub Actions Ubuntu, 6MB input)
+
+| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | Winner |
+|---------|-----------|------------|------------|-----------|--------|
+| inner_literal | 206 ms | **0.45 ms** | 0.59 ms | **457x** | coregex |
+| email | 249 ms | **1.30 ms** | 1.55 ms | **192x** | coregex |
+| uri | 242 ms | 1.65 ms | **1.05 ms** | **147x** | Rust |
+| literal_alt | 434 ms | 4.22 ms | **0.91 ms** | **103x** | Rust |
+| multi_literal | 1300 ms | 13.06 ms | **4.56 ms** | **99x** | Rust |
+| suffix | 203 ms | 2.12 ms | **1.60 ms** | **96x** | Rust |
+| http_methods | 95 ms | 1.04 ms | **0.72 ms** | **92x** | Rust |
+| ip | 468 ms | **6.37 ms** | 11.55 ms | **73x** | coregex |
+| version | 154 ms | 2.78 ms | **0.91 ms** | **55x** | Rust |
+| char_class | 494 ms | **49.31 ms** | 52.44 ms | **10x** | coregex |
+| multiline_php | 93 ms | 66.48 ms | **0.79 ms** | **1.4x** | Rust |
+
+**Summary:**
+- coregex wins: inner_literal, email, ip, char_class (4 patterns)
+- Rust wins: uri, literal_alt, multi_literal, suffix, http_methods, version, multiline_php (7 patterns)
+- Multiline gap: Rust 84x faster due to DFA state acceleration
+
+---
+
 ## [2026-01-15] - ReverseSuffix CharClass Plus Fix
 
 ### Changed
