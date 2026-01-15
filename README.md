@@ -31,8 +31,8 @@ All benchmarks run on **identical conditions**:
 | alpha_digit | 260 ms | 40.71 ms | **11.96 ms** | **6x** | 3.4x slower |
 | word_digit | 270 ms | 40.90 ms | **12.32 ms** | **7x** | 3.3x slower |
 | anchored | 0.05 ms | **0.03 ms** | 0.03 ms | **1.7x** | ~1x |
-| http_methods | 0.02 ms | 0.04 ms | 0.06 ms | 0.5x | **1.5x faster** |
-| anchored_php | 0.01 ms | 0.24 ms | 0.36 ms | — | **1.5x faster** |
+| http_methods | 152 ms | **3 ms** | TBD | **50x** | TBD |
+| anchored_php | 0.01 ms | 1 ms | TBD | — | — |
 
 > **coregex v0.11.0** — UseAnchoredLiteral 32-133x speedup (Issue #79). Run `make extreme` for 1800x demo.
 
@@ -45,12 +45,12 @@ All benchmarks run on **identical conditions**:
 - `literal_alt` **102x** (Teddy SIMD)
 - `ip` **73x** (DigitPrefilter)
 - `version` **68x** (DigitPrefilter)
+- `http_methods` **50x** (multiline log parsing with `(?m)^`)
 - `char_class` **14x** (CharClassSearcher)
 
-**Go coregex faster than Rust (5 patterns):**
+**Go coregex faster than Rust (4 patterns):**
 - `inner_literal`: **coregex 1.8x faster** (0.31ms vs 0.56ms)
 - `ip`: **coregex 1.8x faster** (6.7ms vs 12.1ms)
-- `http_methods`: **coregex 1.5x faster** (0.04ms vs 0.06ms)
 - `char_class`: **coregex 1.4x faster** (38ms vs 52ms)
 - `email`: **coregex 1.2x faster** (1.26ms vs 1.45ms)
 
@@ -75,7 +75,8 @@ All benchmarks run on **identical conditions**:
 **v0.11.0 (Current):**
 - UseAnchoredLiteral strategy: 32-133x speedup for `^prefix.*suffix$` patterns (Issue #79)
 - V11-002 ASCII runtime detection optimization
-- **6 patterns faster than Rust**: inner_literal (1.8x), ip (1.8x), http_methods (1.5x), anchored_php (1.5x), char_class (1.4x), email (1.2x)
+- **4 patterns faster than Rust**: inner_literal (1.8x), ip (1.8x), char_class (1.4x), email (1.2x)
+- `http_methods` **50x** (multiline log parsing)
 
 **Historical Improvements:**
 - v0.11.0: UseAnchoredLiteral 32-133x speedup (Issue #79)
@@ -152,6 +153,8 @@ The extreme speedup happens because:
 | uri | `[\w]+://[^/\s?#]+[^\s?#]+...` | URL with query/fragment | Memmem SIMD |
 | version | `\d+\.\d+\.\d+` | Version numbers | DigitPrefilter |
 | ip | `(?:(?:25[0-5]\|2[0-4][0-9]\|...)\.){3}...` | IPv4 validation | DigitPrefilter + LazyDFA |
+| http_methods | `(?m)^(GET\|POST\|PUT\|DELETE\|PATCH)` | Multiline log parsing | **50x** |
+| anchored_php | `^/.*[\w-]+\.php` | URL path matching | UseAnchoredLiteral |
 
 ## Running Benchmarks
 

@@ -26,9 +26,9 @@ var patterns = []Pattern{
 	// Composite patterns (concatenated char classes)
 	{"alpha_digit", `[a-zA-Z]+\d+`},
 	{"word_digit", `\w+[0-9]+`},
-	// Branch dispatch patterns (anchored alternations)
-	{"http_methods", `^(GET|POST|PUT|DELETE|PATCH)`},
-	// Issue #79: Anchored patterns with wildcards
+	// Branch dispatch patterns (anchored alternations) - multiline mode for log parsing
+	{"http_methods", `(?m)^(GET|POST|PUT|DELETE|PATCH)`},
+	// Issue #79: Anchored patterns with wildcards (single-string URL matching)
 	{"anchored_php", `^/.*[\w-]+\.php`},
 }
 

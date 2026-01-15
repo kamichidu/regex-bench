@@ -22,9 +22,9 @@ const PATTERNS: &[Pattern] = &[
     // Composite patterns (concatenated char classes)
     Pattern { name: "alpha_digit", pattern: r"[a-zA-Z]+\d+" },
     Pattern { name: "word_digit", pattern: r"\w+[0-9]+" },
-    // Branch dispatch patterns (anchored alternations)
-    Pattern { name: "http_methods", pattern: r"^(GET|POST|PUT|DELETE|PATCH)" },
-    // Issue #79: Anchored patterns with wildcards
+    // Branch dispatch patterns (anchored alternations) - multiline mode for log parsing
+    Pattern { name: "http_methods", pattern: r"(?m)^(GET|POST|PUT|DELETE|PATCH)" },
+    // Issue #79: Anchored patterns with wildcards (single-string URL matching)
     Pattern { name: "anchored_php", pattern: r"^/.*[\w-]+\.php" },
 ];
 

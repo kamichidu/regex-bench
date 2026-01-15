@@ -50,6 +50,22 @@ var (
 		"1.0.0", "2.1.3", "3.14.159", "10.20.30", "0.9.1", "4.5.6",
 		"1.2.3", "7.8.9", "12.0.1", "2.0.0", "5.4.3", "99.99.99",
 	}
+
+	// PHP paths for anchored pattern ^/.*[\w-]+\.php (Issue #79)
+	phpPaths = []string{
+		"/index.php",
+		"/admin/login.php",
+		"/api/v1/users.php",
+		"/includes/header.php",
+		"/pages/about-us.php",
+		"/wp-admin/admin-ajax.php",
+		"/app/controllers/home-controller.php",
+		"/modules/user-management.php",
+		"/config/settings.php",
+	}
+
+	// HTTP methods for anchored alternation ^(GET|POST|PUT|DELETE|PATCH)
+	httpMethods = []string{"GET", "POST", "PUT", "DELETE", "PATCH"}
 )
 
 func randomWord() string {
@@ -113,6 +129,16 @@ func generateContent() string {
 			// Version line (for digit-start DigitPrefilter test)
 			version := versions[rand.Intn(len(versions))]
 			line = fmt.Sprintf("Updated to version %s with %s", version, randomWords(6))
+
+		case lineNum%50 == 9:
+			// PHP path line (for anchored pattern ^/.*[\w-]+\.php - Issue #79)
+			phpPath := phpPaths[rand.Intn(len(phpPaths))]
+			line = fmt.Sprintf("%s %s", phpPath, randomWords(6))
+
+		case lineNum%55 == 10:
+			// HTTP method line (for anchored alternation ^(GET|POST|PUT|DELETE|PATCH))
+			method := httpMethods[rand.Intn(len(httpMethods))]
+			line = fmt.Sprintf("%s /api/resource HTTP/1.1 %s", method, randomWords(4))
 
 		default:
 			// Regular line with random content
