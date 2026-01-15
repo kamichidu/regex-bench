@@ -32,12 +32,13 @@ All benchmarks run on **identical conditions**:
 | word_digit | 270 ms | 40.90 ms | **12.32 ms** | **7x** | 3.3x slower |
 | anchored | 0.05 ms | **0.03 ms** | 0.03 ms | **1.7x** | ~1x |
 | http_methods | 0.02 ms | 0.04 ms | 0.06 ms | 0.5x | **1.5x faster** |
+| anchored_php | 0.01 ms | 0.24 ms | 0.36 ms | — | **1.5x faster** |
 
-> **coregex v0.10.10** — ReverseSuffix CharClass Plus fix. Run `make extreme` for 1800x demo.
+> **coregex v0.11.0** — UseAnchoredLiteral 32-133x speedup (Issue #79). Run `make extreme` for 1800x demo.
 
 ### Key Findings
 
-**Go coregex v0.10.10 vs Go stdlib:**
+**Go coregex v0.11.0 vs Go stdlib:**
 - Most patterns: **6-750x faster**
 - Best: `inner_literal` **750x**, `email` **206x**, `uri` **134x**, `suffix` **127x**
 - `multi_literal` **107x** (Aho-Corasick)
@@ -71,12 +72,13 @@ All benchmarks run on **identical conditions**:
 | **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, **5 patterns faster than Rust** | Teddy gap vs Rust |
 | **Rust regex** | Aho-Corasick (any count), mature DFA, overall fastest | inner_literal, ip, char_class, email, http_methods slower than coregex |
 
-**v0.10.10 (Current):**
-- CharClass Plus patterns (`[^\s]+`, `[\w]+`) now use ReverseSuffix optimization
-- Extreme benchmark: 613x-1820x speedups (was hanging before)
-- **5 patterns faster than Rust**: inner_literal (1.8x), ip (1.8x), http_methods (1.5x), char_class (1.4x), email (1.2x)
+**v0.11.0 (Current):**
+- UseAnchoredLiteral strategy: 32-133x speedup for `^prefix.*suffix$` patterns (Issue #79)
+- V11-002 ASCII runtime detection optimization
+- **6 patterns faster than Rust**: inner_literal (1.8x), ip (1.8x), http_methods (1.5x), anchored_php (1.5x), char_class (1.4x), email (1.2x)
 
 **Historical Improvements:**
+- v0.11.0: UseAnchoredLiteral 32-133x speedup (Issue #79)
 - v0.10.10: ReverseSuffix CharClass Plus fix
 - v0.10.9: UTF-8 optimization + fuzz-found bug fixes
 - v0.10.8: FindAll allocation fix for anchored patterns
