@@ -45,6 +45,8 @@ var patterns = []Pattern{
 	{"http_methods", `(?m)^(GET|POST|PUT|DELETE|PATCH)`},
 	// Issue #79: Anchored patterns with wildcards (single-string URL matching)
 	{"anchored_php", `^/.*[\w-]+\.php`},
+	// Issue #97: Multiline suffix patterns - UseMultilineReverseSuffix strategy (v0.11.1)
+	{"multiline_php", `(?m)^/.*\.php`},
 }
 
 func measure(data []byte, p Pattern) {

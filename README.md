@@ -33,8 +33,9 @@ All benchmarks run on **identical conditions**:
 | anchored | 0.05 ms | **0.03 ms** | 0.03 ms | **1.7x** | ~1x |
 | http_methods | 152 ms | **3 ms** | TBD | **50x** | TBD |
 | anchored_php | 0.01 ms | 1 ms | TBD | — | — |
+| multiline_php | 135 ms | **82 ms** | TBD | **1.6x** | TBD |
 
-> **coregex v0.11.0** — UseAnchoredLiteral 32-133x speedup (Issue #79). Run `make extreme` for 1800x demo.
+> **coregex v0.11.1** — UseMultilineReverseSuffix for `(?m)^.*\.php` patterns (Issue #97). Run `make extreme` for 1800x demo.
 
 ### Key Findings
 
@@ -155,6 +156,7 @@ The extreme speedup happens because:
 | ip | `(?:(?:25[0-5]\|2[0-4][0-9]\|...)\.){3}...` | IPv4 validation | DigitPrefilter + LazyDFA |
 | http_methods | `(?m)^(GET\|POST\|PUT\|DELETE\|PATCH)` | Multiline log parsing | **50x** |
 | anchored_php | `^/.*[\w-]+\.php` | URL path matching | UseAnchoredLiteral |
+| multiline_php | `(?m)^/.*\.php` | Multiline PHP paths | UseMultilineReverseSuffix |
 
 ## Running Benchmarks
 

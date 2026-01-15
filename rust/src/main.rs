@@ -26,6 +26,8 @@ const PATTERNS: &[Pattern] = &[
     Pattern { name: "http_methods", pattern: r"(?m)^(GET|POST|PUT|DELETE|PATCH)" },
     // Issue #79: Anchored patterns with wildcards (single-string URL matching)
     Pattern { name: "anchored_php", pattern: r"^/.*[\w-]+\.php" },
+    // Issue #97: Multiline suffix patterns - UseMultilineReverseSuffix strategy (v0.11.1)
+    Pattern { name: "multiline_php", pattern: r"(?m)^/.*\.php" },
 ];
 
 fn measure(data: &str, p: &Pattern) {
