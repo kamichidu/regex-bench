@@ -24,6 +24,8 @@ const PATTERNS: &[Pattern] = &[
     Pattern { name: "word_digit", pattern: r"\w+[0-9]+" },
     // Branch dispatch patterns (anchored alternations)
     Pattern { name: "http_methods", pattern: r"^(GET|POST|PUT|DELETE|PATCH)" },
+    // Issue #79: Anchored patterns with wildcards
+    Pattern { name: "anchored_php", pattern: r"^/.*[\w-]+\.php" },
 ];
 
 fn measure(data: &str, p: &Pattern) {

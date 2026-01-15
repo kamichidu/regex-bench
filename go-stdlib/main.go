@@ -28,6 +28,8 @@ var patterns = []Pattern{
 	{"word_digit", `\w+[0-9]+`},
 	// Branch dispatch patterns (anchored alternations)
 	{"http_methods", `^(GET|POST|PUT|DELETE|PATCH)`},
+	// Issue #79: Anchored patterns with wildcards
+	{"anchored_php", `^/.*[\w-]+\.php`},
 }
 
 func measure(data []byte, p Pattern) {
