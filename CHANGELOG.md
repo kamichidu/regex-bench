@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-01-15] - FindAll Anchored Pattern Fix
+
+### Changed
+- **Updated coregex v0.10.5 → v0.10.8**
+  - v0.10.8: FindAll 600x faster for anchored patterns (#92)
+  - v0.10.7: UTF-8 fixes + 100% stdlib API compatibility
+  - v0.10.6: CompositeSequenceDFA for overlapping patterns
+
+### Fixed
+- **Anchored patterns (`^...`) allocation fix**
+  - Before: 0.21 ms (huge allocation for 6MB input)
+  - After: 0.03 ms (smart allocation: cap=1 for anchored)
+  - Start-anchored patterns can only match at position 0
+
+### Results
+- **5 patterns now faster than Rust** (was 3):
+  - `inner_literal`: 1.8x faster (0.31ms vs 0.56ms)
+  - `ip`: 1.8x faster (6.7ms vs 12.1ms)
+  - `http_methods`: 1.5x faster
+  - `char_class`: 1.4x faster
+  - `email`: 1.2x faster
+
+---
+
 ## [2026-01-14] - Overlapping Char Classes Fix
 
 ### Changed

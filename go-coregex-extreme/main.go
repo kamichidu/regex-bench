@@ -3,10 +3,24 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 	"time"
 
 	"github.com/coregx/coregex"
 )
+
+func getCoregexVersion() string {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return "unknown"
+	}
+	for _, dep := range info.Deps {
+		if dep.Path == "github.com/coregx/coregex" {
+			return dep.Version
+		}
+	}
+	return "unknown"
+}
 
 // Extreme patterns - designed to show 1000-3000x speedup on no-match data
 type Pattern struct {
@@ -85,7 +99,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Go coregex EXTREME (no-match worst case) - input: %.2f MB\n", float64(len(data))/1024/1024)
+	fmt.Printf("Go coregex %s EXTREME (no-match worst case) - input: %.2f MB\n", getCoregexVersion(), float64(len(data))/1024/1024)
 	fmt.Println("─────────────────────────────────────────────────────────────────────")
 
 	for _, p := range patterns {
