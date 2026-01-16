@@ -13,7 +13,7 @@ All benchmarks run on **identical conditions**:
 
 > **Note**: Cross-compiled Go binaries run in WSL2 for fair comparison with Rust.
 
-## Results (v0.11.1)
+## Results (v0.11.4)
 
 **GitHub Actions Ubuntu, 6.0 MB input** (using `FindAll` for fair comparison)
 
@@ -22,6 +22,7 @@ All benchmarks run on **identical conditions**:
 | inner_literal | 206 ms | **0.45 ms** | 0.59 ms | **457x** | **1.3x faster** | coregex |
 | email | 249 ms | **1.30 ms** | 1.55 ms | **192x** | **1.2x faster** | coregex |
 | uri | 242 ms | 1.65 ms | **1.05 ms** | **147x** | 1.6x slower | Rust |
+| multiline_php | 103 ms | **~1 ms** | 0.78 ms | **100x+** | ~1.3x slower | **near parity** |
 | literal_alt | 434 ms | 4.22 ms | **0.91 ms** | **103x** | 4.6x slower | Rust |
 | multi_literal | 1300 ms | 13.06 ms | **4.56 ms** | **99x** | 2.9x slower | Rust |
 | suffix | 203 ms | 2.12 ms | **1.60 ms** | **96x** | 1.3x slower | Rust |
@@ -31,17 +32,17 @@ All benchmarks run on **identical conditions**:
 | char_class | 494 ms | **49.31 ms** | 52.44 ms | **10x** | **1.06x faster** | coregex |
 | alpha_digit | 242 ms | 41.49 ms | **11.34 ms** | **5.8x** | 3.7x slower | Rust |
 | word_digit | 251 ms | 41.60 ms | **11.77 ms** | **6.0x** | 3.5x slower | Rust |
-| multiline_php | 93 ms | 66.48 ms | **0.79 ms** | **1.4x** | 84x slower | Rust |
 | anchored | 0.02 ms | 0.03 ms | 0.07 ms | ~1x | ~1x | — |
 | anchored_php | 0.02 ms | 0.23 ms | 0.41 ms | — | — | — |
 
-> **coregex v0.11.1** — UseMultilineReverseSuffix for `(?m)^.*\.php` patterns (Issue #97). Run `make extreme` for 1800x demo.
+> **coregex v0.11.4** — FindAll multiline fix: 78x faster, near Rust parity (Issue #102). Run `make extreme` for 1800x demo.
 
 ### Key Findings
 
-**Go coregex v0.11.1 vs Go stdlib:**
-- All patterns: **1.4-457x faster**
+**Go coregex v0.11.4 vs Go stdlib:**
+- All patterns: **5.8-457x faster**
 - Best: `inner_literal` **457x**, `email` **192x**, `uri` **147x**, `literal_alt` **103x**
+- `multiline_php` **100x+** (MultilineReverseSuffix, v0.11.4 fix)
 - `multi_literal` **99x** (Aho-Corasick)
 - `suffix` **96x** (ReverseSuffix)
 - `http_methods` **92x** (multiline log parsing with `(?m)^`)
@@ -55,8 +56,10 @@ All benchmarks run on **identical conditions**:
 - `email`: **coregex 1.2x faster** (1.30ms vs 1.55ms)
 - `char_class`: **coregex 1.06x faster** (49ms vs 52ms)
 
+**Near Rust parity:**
+- `multiline_php`: **~1.3x slower** (~1ms vs 0.78ms) — was 84x slower in v0.11.1!
+
 **Rust faster than coregex:**
-- `multiline_php`: Rust **84x faster** (DFA state acceleration, see [Issue #99](https://github.com/coregx/coregex/issues/99))
 - `literal_alt`: Rust 4.6x faster (Teddy Fat with more buckets)
 - `alpha_digit`: Rust 3.7x faster
 - `word_digit`: Rust 3.5x faster
@@ -72,16 +75,18 @@ All benchmarks run on **identical conditions**:
 
 | Engine | Strengths | Weaknesses |
 |--------|-----------|------------|
-| **Go stdlib** | Simple, no dependencies | No optimizations, 1.4-457x slower |
-| **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, **4 patterns faster than Rust** | DFA acceleration gap (multiline), Teddy gap |
+| **Go stdlib** | Simple, no dependencies | No optimizations, 5.8-457x slower |
+| **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, **4 patterns faster than Rust**, multiline near-parity | Teddy gap |
 | **Rust regex** | DFA state acceleration, Teddy Fat, mature DFA | inner_literal, ip, email, char_class slower than coregex |
 
-**v0.11.1 (Current):**
-- UseMultilineReverseSuffix strategy: 1.4-5.7x speedup for `(?m)^.*suffix` patterns (Issue #97)
+**v0.11.4 (Current):**
+- FindAll multiline fix: **78x faster**, near Rust parity (Issue #102)
+- `multiline_php`: was 84x slower → now **~1.3x slower** than Rust
 - **4 patterns faster than Rust**: ip (1.8x), inner_literal (1.3x), email (1.2x), char_class (1.06x)
-- Known gap: `multiline_php` 84x slower than Rust (tracked in Issue #99)
 
 **Historical Improvements:**
+- v0.11.4: FindAll multiline fix, 78x faster (Issue #102)
+- v0.11.3: UseMultilineReverseSuffix prefix fast path 319-552x (Issue #99)
 - v0.11.1: UseMultilineReverseSuffix for multiline patterns (Issue #97)
 - v0.11.0: UseAnchoredLiteral 32-133x speedup (Issue #79)
 - v0.10.10: ReverseSuffix CharClass Plus fix
