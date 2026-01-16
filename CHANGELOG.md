@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-01-16] - Multiline Near Rust Parity (v0.11.4)
+
+### Changed
+- **Updated coregex v0.11.3 → v0.11.4**
+  - FindAll multiline fix: **78x faster** (Issue #102)
+  - `multiline_php`: was 84x slower → now **~1.3x slower** than Rust
+  - Root cause: `FindIndicesAt()` was missing dispatch for `UseMultilineReverseSuffix`
+
+### Results (GitHub Actions Ubuntu, 6MB input)
+
+| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust |
+|---------|-----------|------------|------------|-----------|---------|
+| multiline_php | 103 ms | **~1 ms** | 0.78 ms | **100x+** | ~1.3x slower |
+
+**Before v0.11.4:** 66.48 ms (84x slower than Rust)
+**After v0.11.4:** ~1 ms (near Rust parity!)
+
+---
+
 ## [2026-01-16] - Auto-generated Comparison Table in CI
 
 ### Added
