@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-02-01] - Issue #105 Fix: 8.6x Faster Than stdlib (v0.11.5)
+
+### Changed
+- **Updated coregex v0.11.4 → v0.11.5**
+  - Fixed checkHasWordBoundary catastrophic slowdown (Issue #105)
+  - Was 7,000,000x slower than stdlib on patterns with `\w{n,m}` quantifiers
+  - Now **8.6x faster than stdlib** on same patterns
+
+### Added
+- **New benchmark pattern: `word_repeat`**
+  - Pattern: `(\w{2,8})+`
+  - Tests word quantifiers in capture groups (Issue #105 regression test)
+
+### Results
+
+| Pattern | Before v0.11.5 | After v0.11.5 | stdlib | Speedup |
+|---------|----------------|---------------|--------|---------|
+| word_repeat (79KB) | 3m 22s | **3.6 µs** | 28.5 µs | **8.6x faster** |
+
+---
+
 ## [2026-01-16] - Multiline Near Rust Parity (v0.11.4)
 
 ### Changed

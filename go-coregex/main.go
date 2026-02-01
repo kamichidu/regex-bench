@@ -47,6 +47,8 @@ var patterns = []Pattern{
 	{"anchored_php", `^/.*[\w-]+\.php`},
 	// Issue #97: Multiline suffix patterns - UseMultilineReverseSuffix strategy (v0.11.1)
 	{"multiline_php", `(?m)^/.*\.php`},
+	// Issue #105: Word quantifiers in capture groups - was 7M x slower before v0.11.5
+	{"word_repeat", `(\w{2,8})+`},
 }
 
 func measure(data []byte, p Pattern) {

@@ -28,6 +28,8 @@ const PATTERNS: &[Pattern] = &[
     Pattern { name: "anchored_php", pattern: r"^/.*[\w-]+\.php" },
     // Issue #97: Multiline suffix patterns - UseMultilineReverseSuffix strategy (v0.11.1)
     Pattern { name: "multiline_php", pattern: r"(?m)^/.*\.php" },
+    // Issue #105: Word quantifiers in capture groups - was 7M x slower before v0.11.5
+    Pattern { name: "word_repeat", pattern: r"(\w{2,8})+" },
 ];
 
 fn measure(data: &str, p: &Pattern) {

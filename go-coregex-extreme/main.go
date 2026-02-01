@@ -50,6 +50,11 @@ var patterns = []Pattern{
 		Pattern: `\d{3}-\d{3}-\d{4}`,
 		Note:    "DigitPrefilter: phone numbers",
 	},
+	{
+		Name:    "word_repeat",
+		Pattern: `(\w{2,8})+`,
+		Note:    "Issue #105: word quantifiers in capture groups",
+	},
 }
 
 const iterations = 1000
