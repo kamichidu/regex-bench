@@ -1,0 +1,7 @@
+﻿2026-02-06T12:54:10.1008093Z ##[group]Run go run scripts/generate-3000x-input.go
+2026-02-06T12:54:10.1008675Z [36;1mgo run scripts/generate-3000x-input.go[0m
+2026-02-06T12:54:10.1034439Z shell: /usr/bin/bash -e {0}
+2026-02-06T12:54:10.1034782Z ##[endgroup]
+2026-02-06T12:54:17.4870362Z Generated input/no-digits-data.txt (6.00 MB)
+2026-02-06T12:54:17.4871251Z This file contains NO DIGITS - designed for 3000x+ IP pattern speedup.
+2026-02-06T12:54:17.4871866Z DigitPrefilter will skip entire file in microseconds.

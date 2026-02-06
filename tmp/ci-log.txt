@@ -1,0 +1,513 @@
+benchmark	Set up job	﻿2026-02-06T12:54:06.6167039Z Current runner version: '2.331.0'
+benchmark	Set up job	2026-02-06T12:54:06.6193225Z ##[group]Runner Image Provisioner
+benchmark	Set up job	2026-02-06T12:54:06.6194553Z Hosted Compute Agent
+benchmark	Set up job	2026-02-06T12:54:06.6195136Z Version: 20260123.484
+benchmark	Set up job	2026-02-06T12:54:06.6195687Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+benchmark	Set up job	2026-02-06T12:54:06.6196404Z Build Date: 2026-01-23T19:41:17Z
+benchmark	Set up job	2026-02-06T12:54:06.6197052Z Worker ID: {004dd123-3d94-4ef4-812c-19b0699f5596}
+benchmark	Set up job	2026-02-06T12:54:06.6197713Z Azure Region: westus
+benchmark	Set up job	2026-02-06T12:54:06.6198278Z ##[endgroup]
+benchmark	Set up job	2026-02-06T12:54:06.6199829Z ##[group]Operating System
+benchmark	Set up job	2026-02-06T12:54:06.6200416Z Ubuntu
+benchmark	Set up job	2026-02-06T12:54:06.6200812Z 24.04.3
+benchmark	Set up job	2026-02-06T12:54:06.6201351Z LTS
+benchmark	Set up job	2026-02-06T12:54:06.6201803Z ##[endgroup]
+benchmark	Set up job	2026-02-06T12:54:06.6202270Z ##[group]Runner Image
+benchmark	Set up job	2026-02-06T12:54:06.6202884Z Image: ubuntu-24.04
+benchmark	Set up job	2026-02-06T12:54:06.6203346Z Version: 20260126.10.1
+benchmark	Set up job	2026-02-06T12:54:06.6204506Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260126.10/images/ubuntu/Ubuntu2404-Readme.md
+benchmark	Set up job	2026-02-06T12:54:06.6206195Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260126.10
+benchmark	Set up job	2026-02-06T12:54:06.6207064Z ##[endgroup]
+benchmark	Set up job	2026-02-06T12:54:06.6208180Z ##[group]GITHUB_TOKEN Permissions
+benchmark	Set up job	2026-02-06T12:54:06.6210271Z Contents: read
+benchmark	Set up job	2026-02-06T12:54:06.6210915Z Metadata: read
+benchmark	Set up job	2026-02-06T12:54:06.6211378Z Packages: read
+benchmark	Set up job	2026-02-06T12:54:06.6211869Z ##[endgroup]
+benchmark	Set up job	2026-02-06T12:54:06.6214174Z Secret source: Actions
+benchmark	Set up job	2026-02-06T12:54:06.6214919Z Prepare workflow directory
+benchmark	Set up job	2026-02-06T12:54:06.6555840Z Prepare all required actions
+benchmark	Set up job	2026-02-06T12:54:06.6613357Z Getting action download info
+benchmark	Set up job	2026-02-06T12:54:07.1169879Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+benchmark	Set up job	2026-02-06T12:54:07.2368310Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+benchmark	Set up job	2026-02-06T12:54:08.3210190Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:4be9e76fd7c4901c61fb841f559994984270fce7)
+benchmark	Set up job	2026-02-06T12:54:09.0147147Z Complete job name: benchmark
+benchmark	Run actions/checkout@v4	﻿2026-02-06T12:54:09.0924436Z ##[group]Run actions/checkout@v4
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0925495Z with:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0925964Z   repository: kolkov/regex-bench
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0926881Z   token: ***
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0927382Z   ssh-strict: true
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0927846Z   ssh-user: git
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0928331Z   persist-credentials: true
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0928897Z   clean: true
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0929386Z   sparse-checkout-cone-mode: true
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0930015Z   fetch-depth: 1
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0930472Z   fetch-tags: false
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0930957Z   show-progress: true
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0931440Z   lfs: false
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0931897Z   submodules: false
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0932384Z   set-safe-directory: true
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.0933170Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2014375Z Syncing repository: kolkov/regex-bench
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2016529Z ##[group]Getting Git version info
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2017542Z Working directory is '/home/runner/work/regex-bench/regex-bench'
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2018936Z [command]/usr/bin/git version
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2143659Z git version 2.52.0
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2171665Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2194331Z Temporarily overriding HOME='/home/runner/work/_temp/61e91db5-49aa-4649-9905-ffd1fcbef958' before making global git config changes
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2196543Z Adding repository directory to the temporary git global config as a safe directory
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2200193Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/regex-bench/regex-bench
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2244894Z Deleting the contents of '/home/runner/work/regex-bench/regex-bench'
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2248305Z ##[group]Initializing the repository
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2254009Z [command]/usr/bin/git init /home/runner/work/regex-bench/regex-bench
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2368448Z hint: Using 'master' as the name for the initial branch. This default branch name
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2370443Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2372719Z hint: to use in all of your new repositories, which will suppress this warning,
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2374861Z hint: call:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2375665Z hint:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2376765Z hint: 	git config --global init.defaultBranch <name>
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2378203Z hint:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2379561Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2382030Z hint: 'development'. The just-created branch can be renamed via this command:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2384079Z hint:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2384908Z hint: 	git branch -m <name>
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2385921Z hint:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2387387Z hint: Disable this message with "git config set advice.defaultBranchName false"
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2390376Z Initialized empty Git repository in /home/runner/work/regex-bench/regex-bench/.git/
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2394210Z [command]/usr/bin/git remote add origin https://github.com/kolkov/regex-bench
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2423584Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2425339Z ##[group]Disabling automatic garbage collection
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2428433Z [command]/usr/bin/git config --local gc.auto 0
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2459868Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2461422Z ##[group]Setting up auth
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2468131Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2501928Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2890287Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.2925750Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.3154494Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.3195641Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.3420840Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.3456328Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.3457922Z ##[group]Fetching the repository
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.3467193Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ff03759fb7bcb1bf82a02ee7bc9bdb415a985f16:refs/remotes/pull/2/merge
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7796379Z From https://github.com/kolkov/regex-bench
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7797649Z  * [new ref]         ff03759fb7bcb1bf82a02ee7bc9bdb415a985f16 -> pull/2/merge
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7830343Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7831225Z ##[group]Determining the checkout info
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7832600Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7837468Z [command]/usr/bin/git sparse-checkout disable
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7878507Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7905476Z ##[group]Checking out the ref
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7909070Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/2/merge
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7972860Z Note: switching to 'refs/remotes/pull/2/merge'.
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7974281Z 
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7974908Z You are in 'detached HEAD' state. You can look around, make experimental
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7976414Z changes and commit them, and you can discard any commits you make in this
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7978968Z state without impacting any branches by switching back to a branch.
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7980428Z 
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7981415Z If you want to create a new branch to retain commits you create, you may
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7984003Z do so (now or later) by using -c with the switch command. Example:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7985311Z 
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7985706Z   git switch -c <new-branch-name>
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7986830Z 
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7987269Z Or undo this operation with:
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7988016Z 
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7988395Z   git switch -
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7988913Z 
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7989887Z Turn off this advice by setting config variable advice.detachedHead to false
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7991409Z 
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7993128Z HEAD is now at ff03759 Merge 02936e4c2662dd53f8e9ce4839dfbed47e5f5dfd into c329c82e19aa7525fbf56daea63fd9af4466fbac
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.7997250Z ##[endgroup]
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.8024482Z [command]/usr/bin/git log -1 --format=%H
+benchmark	Run actions/checkout@v4	2026-02-06T12:54:09.8048391Z ff03759fb7bcb1bf82a02ee7bc9bdb415a985f16
+benchmark	Set up Go	﻿2026-02-06T12:54:09.8321045Z ##[group]Run actions/setup-go@v5
+benchmark	Set up Go	2026-02-06T12:54:09.8321725Z with:
+benchmark	Set up Go	2026-02-06T12:54:09.8322124Z   go-version: 1.23
+benchmark	Set up Go	2026-02-06T12:54:09.8322590Z   check-latest: false
+benchmark	Set up Go	2026-02-06T12:54:09.8323312Z   token: ***
+benchmark	Set up Go	2026-02-06T12:54:09.8323727Z   cache: true
+benchmark	Set up Go	2026-02-06T12:54:09.8324308Z ##[endgroup]
+benchmark	Set up Go	2026-02-06T12:54:10.0002939Z Setup go version spec 1.23
+benchmark	Set up Go	2026-02-06T12:54:10.0273404Z Found in cache @ /opt/hostedtoolcache/go/1.23.12/x64
+benchmark	Set up Go	2026-02-06T12:54:10.0277916Z Added go to the path
+benchmark	Set up Go	2026-02-06T12:54:10.0282080Z Successfully set up Go version 1.23
+benchmark	Set up Go	2026-02-06T12:54:10.5302381Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOMODCACHE
+benchmark	Set up Go	2026-02-06T12:54:10.5335171Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOCACHE
+benchmark	Set up Go	2026-02-06T12:54:10.5358211Z /home/runner/go/pkg/mod
+benchmark	Set up Go	2026-02-06T12:54:10.5383606Z /home/runner/.cache/go-build
+benchmark	Set up Go	2026-02-06T12:54:10.5410769Z ##[warning]Restore cache failed: Dependencies file is not found in /home/runner/work/regex-bench/regex-bench. Supported file pattern: go.sum
+benchmark	Set up Go	2026-02-06T12:54:10.5439768Z go version go1.23.12 linux/amd64
+benchmark	Set up Go	2026-02-06T12:54:10.5440391Z 
+benchmark	Set up Go	2026-02-06T12:54:10.5441279Z ##[group]go env
+benchmark	Set up Go	2026-02-06T12:54:11.1929941Z GO111MODULE=''
+benchmark	Set up Go	2026-02-06T12:54:11.1930806Z GOARCH='amd64'
+benchmark	Set up Go	2026-02-06T12:54:11.1931240Z GOBIN=''
+benchmark	Set up Go	2026-02-06T12:54:11.1931686Z GOCACHE='/home/runner/.cache/go-build'
+benchmark	Set up Go	2026-02-06T12:54:11.1932386Z GOENV='/home/runner/.config/go/env'
+benchmark	Set up Go	2026-02-06T12:54:11.1932895Z GOEXE=''
+benchmark	Set up Go	2026-02-06T12:54:11.1933307Z GOEXPERIMENT=''
+benchmark	Set up Go	2026-02-06T12:54:11.1933949Z GOFLAGS=''
+benchmark	Set up Go	2026-02-06T12:54:11.1934398Z GOHOSTARCH='amd64'
+benchmark	Set up Go	2026-02-06T12:54:11.1934852Z GOHOSTOS='linux'
+benchmark	Set up Go	2026-02-06T12:54:11.1935337Z GOINSECURE=''
+benchmark	Set up Go	2026-02-06T12:54:11.1935815Z GOMODCACHE='/home/runner/go/pkg/mod'
+benchmark	Set up Go	2026-02-06T12:54:11.1936370Z GONOPROXY=''
+benchmark	Set up Go	2026-02-06T12:54:11.1936771Z GONOSUMDB=''
+benchmark	Set up Go	2026-02-06T12:54:11.1937212Z GOOS='linux'
+benchmark	Set up Go	2026-02-06T12:54:11.1937698Z GOPATH='/home/runner/go'
+benchmark	Set up Go	2026-02-06T12:54:11.1938173Z GOPRIVATE=''
+benchmark	Set up Go	2026-02-06T12:54:11.1938843Z GOPROXY='https://proxy.golang.org,direct'
+benchmark	Set up Go	2026-02-06T12:54:11.1939328Z GOROOT='/opt/hostedtoolcache/go/1.23.12/x64'
+benchmark	Set up Go	2026-02-06T12:54:11.1939677Z GOSUMDB='sum.golang.org'
+benchmark	Set up Go	2026-02-06T12:54:11.1939934Z GOTMPDIR=''
+benchmark	Set up Go	2026-02-06T12:54:11.1940165Z GOTOOLCHAIN='auto'
+benchmark	Set up Go	2026-02-06T12:54:11.1940531Z GOTOOLDIR='/opt/hostedtoolcache/go/1.23.12/x64/pkg/tool/linux_amd64'
+benchmark	Set up Go	2026-02-06T12:54:11.1940922Z GOVCS=''
+benchmark	Set up Go	2026-02-06T12:54:11.1941153Z GOVERSION='go1.23.12'
+benchmark	Set up Go	2026-02-06T12:54:11.1941390Z GODEBUG=''
+benchmark	Set up Go	2026-02-06T12:54:11.1941602Z GOTELEMETRY='local'
+benchmark	Set up Go	2026-02-06T12:54:11.1941933Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+benchmark	Set up Go	2026-02-06T12:54:11.1942266Z GCCGO='gccgo'
+benchmark	Set up Go	2026-02-06T12:54:11.1942540Z GOAMD64='v1'
+benchmark	Set up Go	2026-02-06T12:54:11.1942823Z AR='ar'
+benchmark	Set up Go	2026-02-06T12:54:11.1943022Z CC='gcc'
+benchmark	Set up Go	2026-02-06T12:54:11.1943229Z CXX='g++'
+benchmark	Set up Go	2026-02-06T12:54:11.1943435Z CGO_ENABLED='1'
+benchmark	Set up Go	2026-02-06T12:54:11.1943670Z GOMOD='/dev/null'
+benchmark	Set up Go	2026-02-06T12:54:11.1944220Z GOWORK=''
+benchmark	Set up Go	2026-02-06T12:54:11.1944457Z CGO_CFLAGS='-O2 -g'
+benchmark	Set up Go	2026-02-06T12:54:11.1944694Z CGO_CPPFLAGS=''
+benchmark	Set up Go	2026-02-06T12:54:11.1944933Z CGO_CXXFLAGS='-O2 -g'
+benchmark	Set up Go	2026-02-06T12:54:11.1945189Z CGO_FFLAGS='-O2 -g'
+benchmark	Set up Go	2026-02-06T12:54:11.1945430Z CGO_LDFLAGS='-O2 -g'
+benchmark	Set up Go	2026-02-06T12:54:11.1945689Z PKG_CONFIG='pkg-config'
+benchmark	Set up Go	2026-02-06T12:54:11.1946419Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build2400759171=/tmp/go-build -gno-record-gcc-switches'
+benchmark	Set up Go	2026-02-06T12:54:11.1947352Z 
+benchmark	Set up Go	2026-02-06T12:54:11.1948000Z ##[endgroup]
+benchmark	Set up Rust	﻿2026-02-06T12:54:11.2187388Z ##[group]Run dtolnay/rust-toolchain@stable
+benchmark	Set up Rust	2026-02-06T12:54:11.2187770Z with:
+benchmark	Set up Rust	2026-02-06T12:54:11.2187992Z   toolchain: stable
+benchmark	Set up Rust	2026-02-06T12:54:11.2188233Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.2312238Z ##[group]Run : parse toolchain version
+benchmark	Set up Rust	2026-02-06T12:54:11.2312680Z [36;1m: parse toolchain version[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2312991Z [36;1mif [[ -z $toolchain ]]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2313553Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2314314Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2314637Z [36;1m  exit 1[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2315000Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2315451Z [36;1m  if [[ Linux == macOS ]]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2316004Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2316598Z [36;1m  else[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2317023Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2317496Z [36;1m  fi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2317816Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2318366Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2318851Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2319395Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2319905Z [36;1melse[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2320184Z [36;1m  echo "toolchain=$toolchain" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2320493Z [36;1mfi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2360353Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.2360811Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.2361035Z   toolchain: stable
+benchmark	Set up Rust	2026-02-06T12:54:11.2361263Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.2510655Z ##[group]Run : construct rustup command line
+benchmark	Set up Rust	2026-02-06T12:54:11.2511065Z [36;1m: construct rustup command line[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2511542Z [36;1mecho "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2512195Z [36;1mecho "components=$(for c in ${components//,/ }; do echo -n ' --component' $c; done)" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2512702Z [36;1mecho "downgrade=" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2546452Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.2546825Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.2547034Z   targets: 
+benchmark	Set up Rust	2026-02-06T12:54:11.2547248Z   components: 
+benchmark	Set up Rust	2026-02-06T12:54:11.2547468Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.2650494Z ##[group]Run : set $CARGO_HOME
+benchmark	Set up Rust	2026-02-06T12:54:11.2650845Z [36;1m: set $CARGO_HOME[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2651190Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2685775Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.2686172Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.2785600Z ##[group]Run : install rustup if needed
+benchmark	Set up Rust	2026-02-06T12:54:11.2785977Z [36;1m: install rustup if needed[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2786295Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2787091Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2787870Z [36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2788166Z [36;1mfi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2823094Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.2823487Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.2823705Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.2824364Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.2924667Z ##[group]Run rustup toolchain install stable --profile minimal --no-self-update
+benchmark	Set up Rust	2026-02-06T12:54:11.2925512Z [36;1mrustup toolchain install stable --profile minimal --no-self-update[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.2962262Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.2962663Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.2962889Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.2963175Z   RUSTUP_PERMIT_COPY_RENAME: 1
+benchmark	Set up Rust	2026-02-06T12:54:11.2963439Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.5194386Z info: syncing channel updates for 'stable-x86_64-unknown-linux-gnu'
+benchmark	Set up Rust	2026-02-06T12:54:11.5542948Z 
+benchmark	Set up Rust	2026-02-06T12:54:11.5630757Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.93.0 (254b59607 2026-01-19)
+benchmark	Set up Rust	2026-02-06T12:54:11.5631278Z 
+benchmark	Set up Rust	2026-02-06T12:54:11.5685038Z ##[group]Run rustup default stable
+benchmark	Set up Rust	2026-02-06T12:54:11.5685382Z [36;1mrustup default stable[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.5721496Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.5721893Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.5722121Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.5722403Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.5834280Z info: using existing install for 'stable-x86_64-unknown-linux-gnu'
+benchmark	Set up Rust	2026-02-06T12:54:11.6144537Z info: default toolchain set to 'stable-x86_64-unknown-linux-gnu'
+benchmark	Set up Rust	2026-02-06T12:54:11.6145206Z 
+benchmark	Set up Rust	2026-02-06T12:54:11.6234851Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.93.0 (254b59607 2026-01-19)
+benchmark	Set up Rust	2026-02-06T12:54:11.6237345Z 
+benchmark	Set up Rust	2026-02-06T12:54:11.6290871Z ##[group]Run : create cachekey
+benchmark	Set up Rust	2026-02-06T12:54:11.6291152Z [36;1m: create cachekey[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6291636Z [36;1mDATE=$(rustc +stable --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6292264Z [36;1mHASH=$(rustc +stable --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6292748Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6327469Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.6327792Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.6327984Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.6328216Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.6776590Z ##[group]Run : disable incremental compilation
+benchmark	Set up Rust	2026-02-06T12:54:11.6776963Z [36;1m: disable incremental compilation[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6777264Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6777573Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6777826Z [36;1mfi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6811754Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.6812085Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.6812261Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.6812493Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.6900216Z ##[group]Run : enable colors in Cargo output
+benchmark	Set up Rust	2026-02-06T12:54:11.6900553Z [36;1m: enable colors in Cargo output[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6900844Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6901163Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6901441Z [36;1mfi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.6934230Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.6934547Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.6934726Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.6934953Z   CARGO_INCREMENTAL: 0
+benchmark	Set up Rust	2026-02-06T12:54:11.6935148Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.7023427Z ##[group]Run : enable Cargo sparse registry
+benchmark	Set up Rust	2026-02-06T12:54:11.7024029Z [36;1m: enable Cargo sparse registry[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7024384Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7025075Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7025778Z [36;1m  if rustc +stable --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7026343Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7027076Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7027703Z [36;1m  elif rustc +stable --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7028251Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7028747Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7029059Z [36;1m  fi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7029228Z [36;1mfi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7063491Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.7064046Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.7064250Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.7064500Z   CARGO_INCREMENTAL: 0
+benchmark	Set up Rust	2026-02-06T12:54:11.7064713Z   CARGO_TERM_COLOR: always
+benchmark	Set up Rust	2026-02-06T12:54:11.7064939Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.7458332Z ##[group]Run : work around spurious network errors in curl 8.0
+benchmark	Set up Rust	2026-02-06T12:54:11.7458816Z [36;1m: work around spurious network errors in curl 8.0[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7459378Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7459989Z [36;1mif rustc +stable --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7460420Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7460703Z [36;1mfi[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7495580Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.7495917Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.7496097Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.7496343Z   CARGO_INCREMENTAL: 0
+benchmark	Set up Rust	2026-02-06T12:54:11.7496545Z   CARGO_TERM_COLOR: always
+benchmark	Set up Rust	2026-02-06T12:54:11.7496752Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.7737134Z ##[group]Run rustc +stable --version --verbose
+benchmark	Set up Rust	2026-02-06T12:54:11.7737490Z [36;1mrustc +stable --version --verbose[0m
+benchmark	Set up Rust	2026-02-06T12:54:11.7772055Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+benchmark	Set up Rust	2026-02-06T12:54:11.7772401Z env:
+benchmark	Set up Rust	2026-02-06T12:54:11.7772576Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Set up Rust	2026-02-06T12:54:11.7772826Z   CARGO_INCREMENTAL: 0
+benchmark	Set up Rust	2026-02-06T12:54:11.7773018Z   CARGO_TERM_COLOR: always
+benchmark	Set up Rust	2026-02-06T12:54:11.7773219Z ##[endgroup]
+benchmark	Set up Rust	2026-02-06T12:54:11.7956457Z rustc 1.93.0 (254b59607 2026-01-19)
+benchmark	Set up Rust	2026-02-06T12:54:11.7957158Z binary: rustc
+benchmark	Set up Rust	2026-02-06T12:54:11.7957486Z commit-hash: 254b59607d4417e9dffbc307138ae5c86280fe4c
+benchmark	Set up Rust	2026-02-06T12:54:11.7957812Z commit-date: 2026-01-19
+benchmark	Set up Rust	2026-02-06T12:54:11.7958044Z host: x86_64-unknown-linux-gnu
+benchmark	Set up Rust	2026-02-06T12:54:11.7958293Z release: 1.93.0
+benchmark	Set up Rust	2026-02-06T12:54:11.7958611Z LLVM version: 21.1.8
+benchmark	Generate input data	﻿2026-02-06T12:54:11.8045403Z ##[group]Run go run scripts/generate-input.go
+benchmark	Generate input data	2026-02-06T12:54:11.8045805Z [36;1mgo run scripts/generate-input.go[0m
+benchmark	Generate input data	2026-02-06T12:54:11.8080999Z shell: /usr/bin/bash -e {0}
+benchmark	Generate input data	2026-02-06T12:54:11.8081239Z env:
+benchmark	Generate input data	2026-02-06T12:54:11.8081415Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Generate input data	2026-02-06T12:54:11.8081655Z   CARGO_INCREMENTAL: 0
+benchmark	Generate input data	2026-02-06T12:54:11.8081866Z   CARGO_TERM_COLOR: always
+benchmark	Generate input data	2026-02-06T12:54:11.8082067Z ##[endgroup]
+benchmark	Generate input data	2026-02-06T12:54:18.5482635Z Generated input/data.txt (6.00 MB)
+benchmark	Build Go stdlib	﻿2026-02-06T12:54:18.5681451Z ##[group]Run cd go-stdlib && go build -o ../bin/go-stdlib .
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5681899Z [36;1mcd go-stdlib && go build -o ../bin/go-stdlib .[0m
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5713297Z shell: /usr/bin/bash -e {0}
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5713535Z env:
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5713708Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5714178Z   CARGO_INCREMENTAL: 0
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5714383Z   CARGO_TERM_COLOR: always
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5714579Z ##[endgroup]
+benchmark	Build Go stdlib	2026-02-06T12:54:18.5800374Z go: downloading go1.25.0 (linux/amd64)
+benchmark	Build Go coregex	﻿2026-02-06T12:54:26.8206081Z ##[group]Run cd go-coregex && go build -o ../bin/go-coregex .
+benchmark	Build Go coregex	2026-02-06T12:54:26.8206799Z [36;1mcd go-coregex && go build -o ../bin/go-coregex .[0m
+benchmark	Build Go coregex	2026-02-06T12:54:26.8251844Z shell: /usr/bin/bash -e {0}
+benchmark	Build Go coregex	2026-02-06T12:54:26.8252242Z env:
+benchmark	Build Go coregex	2026-02-06T12:54:26.8252530Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Build Go coregex	2026-02-06T12:54:26.8253188Z   CARGO_INCREMENTAL: 0
+benchmark	Build Go coregex	2026-02-06T12:54:26.8253531Z   CARGO_TERM_COLOR: always
+benchmark	Build Go coregex	2026-02-06T12:54:26.8254078Z ##[endgroup]
+benchmark	Build Go coregex	2026-02-06T12:54:26.8348226Z go: downloading go1.25.4 (linux/amd64)
+benchmark	Build Go coregex	2026-02-06T12:54:30.3740563Z go: downloading github.com/coregx/coregex v0.12.1-0.20260206024753-bd3a3f6f5b5c
+benchmark	Build Go coregex	2026-02-06T12:54:30.8263230Z go: downloading github.com/coregx/ahocorasick v0.1.0
+benchmark	Build Go coregex	2026-02-06T12:54:30.8273479Z go: downloading golang.org/x/sys v0.40.0
+benchmark	Build Rust	﻿2026-02-06T12:54:36.8758814Z ##[group]Run cd rust && cargo build --release && cp target/release/benchmark ../bin/rust-benchmark
+benchmark	Build Rust	2026-02-06T12:54:36.8759448Z [36;1mcd rust && cargo build --release && cp target/release/benchmark ../bin/rust-benchmark[0m
+benchmark	Build Rust	2026-02-06T12:54:36.8790582Z shell: /usr/bin/bash -e {0}
+benchmark	Build Rust	2026-02-06T12:54:36.8790808Z env:
+benchmark	Build Rust	2026-02-06T12:54:36.8790975Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Build Rust	2026-02-06T12:54:36.8791213Z   CARGO_INCREMENTAL: 0
+benchmark	Build Rust	2026-02-06T12:54:36.8791421Z   CARGO_TERM_COLOR: always
+benchmark	Build Rust	2026-02-06T12:54:36.8791633Z ##[endgroup]
+benchmark	Build Rust	2026-02-06T12:54:37.2788883Z [1m[92m    Updating[0m crates.io index
+benchmark	Build Rust	2026-02-06T12:54:37.3847171Z [1m[92m     Locking[0m 5 packages to latest compatible versions
+benchmark	Build Rust	2026-02-06T12:54:37.3866989Z [1m[92m Downloading[0m crates ...
+benchmark	Build Rust	2026-02-06T12:54:37.4273074Z [1m[92m  Downloaded[0m aho-corasick v1.1.4
+benchmark	Build Rust	2026-02-06T12:54:37.4405191Z [1m[92m  Downloaded[0m memchr v2.7.6
+benchmark	Build Rust	2026-02-06T12:54:37.4468839Z [1m[92m  Downloaded[0m regex-automata v0.4.14
+benchmark	Build Rust	2026-02-06T12:54:37.4613190Z [1m[92m  Downloaded[0m regex v1.12.3
+benchmark	Build Rust	2026-02-06T12:54:37.4666116Z [1m[92m  Downloaded[0m regex-syntax v0.8.9
+benchmark	Build Rust	2026-02-06T12:54:37.5119082Z [1m[92m   Compiling[0m memchr v2.7.6
+benchmark	Build Rust	2026-02-06T12:54:37.5120173Z [1m[92m   Compiling[0m regex-syntax v0.8.9
+benchmark	Build Rust	2026-02-06T12:54:40.1281749Z [1m[92m   Compiling[0m aho-corasick v1.1.4
+benchmark	Build Rust	2026-02-06T12:54:41.7881315Z [1m[92m   Compiling[0m regex-automata v0.4.14
+benchmark	Build Rust	2026-02-06T12:54:43.6556918Z [1m[92m   Compiling[0m regex v1.12.3
+benchmark	Build Rust	2026-02-06T12:54:46.7409421Z [1m[92m   Compiling[0m benchmark v0.1.0 (/home/runner/work/regex-bench/regex-bench/rust)
+benchmark	Build Rust	2026-02-06T12:54:58.0478627Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 21.09s
+benchmark	Run benchmarks	﻿2026-02-06T12:54:58.0622207Z ##[group]Run # Run all benchmarks and save to files
+benchmark	Run benchmarks	2026-02-06T12:54:58.0622864Z [36;1m# Run all benchmarks and save to files[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0623379Z [36;1m./bin/go-stdlib input/data.txt > /tmp/stdlib.txt[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0624137Z [36;1m./bin/go-coregex input/data.txt > /tmp/coregex.txt[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0624705Z [36;1m./bin/rust-benchmark input/data.txt > /tmp/rust.txt[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0625158Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0625431Z [36;1m# Generate summary header[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0625941Z [36;1mecho "## Benchmark Results" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0626430Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0627065Z [36;1mecho "**Platform**: Ubuntu $(lsb_release -rs), $(uname -m)" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0628083Z [36;1mecho "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0628841Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0629252Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0629521Z [36;1m# Generate comparison table[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0629970Z [36;1mecho "### Comparison Table" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0630446Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0630809Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0631086Z [36;1m# Parse results and build table[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0631816Z [36;1mecho "| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0632983Z [36;1mecho "|---------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0637505Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0637957Z [36;1m# Extract patterns from stdlib output (skip header lines)[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0638965Z [36;1mgrep -E "^[a-z_]+\s+[0-9.]+ ms" /tmp/stdlib.txt | while read line; do[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0639641Z [36;1m  pattern=$(echo "$line" | awk '{print $1}')[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0640192Z [36;1m  std_ms=$(echo "$line" | awk '{print $2}')[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0640722Z [36;1m  std_matches=$(echo "$line" | awk '{print $4}')[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0641177Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0641448Z [36;1m  # Get coregex result[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0641903Z [36;1m  cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0642426Z [36;1m  cor_ms=$(echo "$cor_line" | awk '{print $2}')[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0642864Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0643094Z [36;1m  # Get rust result[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0643340Z [36;1m  rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0643652Z [36;1m  rus_ms=$(echo "$rus_line" | awk '{print $2}')[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0644187Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0644372Z [36;1m  # Calculate vs stdlib speedup[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0644647Z [36;1m  if [ -n "$cor_ms" ] && [ "$cor_ms" != "0" ]; then[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0644958Z [36;1m    speedup=$(echo "scale=0; $std_ms / $cor_ms" | bc)[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0645251Z [36;1m    if [ "$speedup" -ge 2 ]; then[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0645493Z [36;1m      vs_stdlib="**${speedup}x**"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0645711Z [36;1m    else[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0645879Z [36;1m      vs_stdlib="~1x"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0646069Z [36;1m    fi[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0646221Z [36;1m  else[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0646385Z [36;1m    vs_stdlib="—"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0646571Z [36;1m  fi[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0646722Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0646884Z [36;1m  # Calculate vs Rust comparison[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0647192Z [36;1m  if [ -n "$cor_ms" ] && [ -n "$rus_ms" ] && [ "$rus_ms" != "0" ]; then[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0647505Z [36;1m    # Check if coregex is faster[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0647780Z [36;1m    cor_faster=$(echo "$cor_ms < $rus_ms" | bc -l)[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0648059Z [36;1m    if [ "$cor_faster" -eq 1 ]; then[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0648345Z [36;1m      ratio=$(echo "scale=1; $rus_ms / $cor_ms" | bc)[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0648861Z [36;1m      vs_rust="**${ratio}x faster**"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0649110Z [36;1m      winner="coregex"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0649325Z [36;1m      cor_fmt="**${cor_ms} ms**"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0649562Z [36;1m      rus_fmt="${rus_ms} ms"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0649779Z [36;1m    else[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0649991Z [36;1m      ratio=$(echo "scale=1; $cor_ms / $rus_ms" | bc)[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0650275Z [36;1m      vs_rust="${ratio}x slower"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0650498Z [36;1m      winner="Rust"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0650700Z [36;1m      cor_fmt="${cor_ms} ms"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0650920Z [36;1m      rus_fmt="**${rus_ms} ms**"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0651141Z [36;1m    fi[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0651302Z [36;1m  else[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0651555Z [36;1m    vs_rust="—"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0651776Z [36;1m    winner="—"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0651972Z [36;1m    cor_fmt="${cor_ms} ms"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0652204Z [36;1m    rus_fmt="${rus_ms} ms"[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0652424Z [36;1m  fi[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0652578Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0652945Z [36;1m  echo "| $pattern | ${std_ms} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0653367Z [36;1mdone[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0653519Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0653685Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0654140Z [36;1mecho "---" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0654392Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0654613Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0654794Z [36;1m# Also show raw output for debugging[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0655064Z [36;1mecho "<details>" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0655609Z [36;1mecho "<summary>Raw Output (click to expand)</summary>" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0655985Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0656203Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0656393Z [36;1mecho "#### Go stdlib" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0656673Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0656947Z [36;1mcat /tmp/stdlib.txt >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0657218Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0657461Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0657672Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0657866Z [36;1mecho "#### Go coregex" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0658136Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0658411Z [36;1mcat /tmp/coregex.txt >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0658688Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0658934Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0659162Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0659348Z [36;1mecho "#### Rust regex" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0659624Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0659893Z [36;1mcat /tmp/rust.txt >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0660163Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0660382Z [36;1m[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0660569Z [36;1mecho "</details>" >> $GITHUB_STEP_SUMMARY[0m
+benchmark	Run benchmarks	2026-02-06T12:54:58.0692060Z shell: /usr/bin/bash -e {0}
+benchmark	Run benchmarks	2026-02-06T12:54:58.0692298Z env:
+benchmark	Run benchmarks	2026-02-06T12:54:58.0692471Z   CARGO_HOME: /home/runner/.cargo
+benchmark	Run benchmarks	2026-02-06T12:54:58.0692703Z   CARGO_INCREMENTAL: 0
+benchmark	Run benchmarks	2026-02-06T12:54:58.0692895Z   CARGO_TERM_COLOR: always
+benchmark	Run benchmarks	2026-02-06T12:54:58.0693093Z ##[endgroup]
+benchmark	Post Set up Go	﻿2026-02-06T12:55:04.5555190Z Post job cleanup.
+benchmark	Post Set up Go	2026-02-06T12:55:04.7148791Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOMODCACHE
+benchmark	Post Set up Go	2026-02-06T12:55:04.7186211Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOCACHE
+benchmark	Post Set up Go	2026-02-06T12:55:04.7210748Z /home/runner/go/pkg/mod
+benchmark	Post Set up Go	2026-02-06T12:55:04.7239750Z /home/runner/.cache/go-build
+benchmark	Post Set up Go	2026-02-06T12:55:04.7245335Z Primary key was not generated. Please check the log messages above for more errors or information
+benchmark	Post Run actions/checkout@v4	﻿2026-02-06T12:55:04.7373124Z Post job cleanup.
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8367940Z [command]/usr/bin/git version
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8405430Z git version 2.52.0
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8462482Z Temporarily overriding HOME='/home/runner/work/_temp/8c42deb9-183a-4573-a95b-23e2eb81f74c' before making global git config changes
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8466003Z Adding repository directory to the temporary git global config as a safe directory
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8470791Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/regex-bench/regex-bench
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8511564Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8545196Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8775830Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8798271Z http.https://github.com/.extraheader
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8811839Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.8844246Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.9070315Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+benchmark	Post Run actions/checkout@v4	2026-02-06T12:55:04.9104122Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+benchmark	Complete job	﻿2026-02-06T12:55:04.9438156Z Cleaning up orphan processes

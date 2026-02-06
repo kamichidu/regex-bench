@@ -1,0 +1,9 @@
+﻿2026-02-06T12:54:11.8045403Z ##[group]Run go run scripts/generate-input.go
+2026-02-06T12:54:11.8045805Z [36;1mgo run scripts/generate-input.go[0m
+2026-02-06T12:54:11.8080999Z shell: /usr/bin/bash -e {0}
+2026-02-06T12:54:11.8081239Z env:
+2026-02-06T12:54:11.8081415Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T12:54:11.8081655Z   CARGO_INCREMENTAL: 0
+2026-02-06T12:54:11.8081866Z   CARGO_TERM_COLOR: always
+2026-02-06T12:54:11.8082067Z ##[endgroup]
+2026-02-06T12:54:18.5482635Z Generated input/data.txt (6.00 MB)

@@ -1,0 +1,7 @@
+﻿2026-02-06T12:54:18.1015290Z ##[group]Run cd go-coregex-extreme && go build -o ../bin/go-coregex-extreme .
+2026-02-06T12:54:18.1015827Z [36;1mcd go-coregex-extreme && go build -o ../bin/go-coregex-extreme .[0m
+2026-02-06T12:54:18.1034742Z shell: /usr/bin/bash -e {0}
+2026-02-06T12:54:18.1035030Z ##[endgroup]
+2026-02-06T12:54:18.1160119Z go: downloading github.com/coregx/coregex v0.12.1-0.20260206024753-bd3a3f6f5b5c
+2026-02-06T12:54:18.4444215Z go: downloading github.com/coregx/ahocorasick v0.1.0
+2026-02-06T12:54:18.4446449Z go: downloading golang.org/x/sys v0.40.0

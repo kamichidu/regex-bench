@@ -1,0 +1,23 @@
+﻿2026-02-06T12:54:36.8758814Z ##[group]Run cd rust && cargo build --release && cp target/release/benchmark ../bin/rust-benchmark
+2026-02-06T12:54:36.8759448Z [36;1mcd rust && cargo build --release && cp target/release/benchmark ../bin/rust-benchmark[0m
+2026-02-06T12:54:36.8790582Z shell: /usr/bin/bash -e {0}
+2026-02-06T12:54:36.8790808Z env:
+2026-02-06T12:54:36.8790975Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T12:54:36.8791213Z   CARGO_INCREMENTAL: 0
+2026-02-06T12:54:36.8791421Z   CARGO_TERM_COLOR: always
+2026-02-06T12:54:36.8791633Z ##[endgroup]
+2026-02-06T12:54:37.2788883Z [1m[92m    Updating[0m crates.io index
+2026-02-06T12:54:37.3847171Z [1m[92m     Locking[0m 5 packages to latest compatible versions
+2026-02-06T12:54:37.3866989Z [1m[92m Downloading[0m crates ...
+2026-02-06T12:54:37.4273074Z [1m[92m  Downloaded[0m aho-corasick v1.1.4
+2026-02-06T12:54:37.4405191Z [1m[92m  Downloaded[0m memchr v2.7.6
+2026-02-06T12:54:37.4468839Z [1m[92m  Downloaded[0m regex-automata v0.4.14
+2026-02-06T12:54:37.4613190Z [1m[92m  Downloaded[0m regex v1.12.3
+2026-02-06T12:54:37.4666116Z [1m[92m  Downloaded[0m regex-syntax v0.8.9
+2026-02-06T12:54:37.5119082Z [1m[92m   Compiling[0m memchr v2.7.6
+2026-02-06T12:54:37.5120173Z [1m[92m   Compiling[0m regex-syntax v0.8.9
+2026-02-06T12:54:40.1281749Z [1m[92m   Compiling[0m aho-corasick v1.1.4
+2026-02-06T12:54:41.7881315Z [1m[92m   Compiling[0m regex-automata v0.4.14
+2026-02-06T12:54:43.6556918Z [1m[92m   Compiling[0m regex v1.12.3
+2026-02-06T12:54:46.7409421Z [1m[92m   Compiling[0m benchmark v0.1.0 (/home/runner/work/regex-bench/regex-bench/rust)
+2026-02-06T12:54:58.0478627Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 21.09s

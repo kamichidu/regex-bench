@@ -1,0 +1,4 @@
+﻿2026-02-06T12:54:17.5006622Z ##[group]Run cd go-stdlib-extreme && go build -o ../bin/go-stdlib-extreme .
+2026-02-06T12:54:17.5007145Z [36;1mcd go-stdlib-extreme && go build -o ../bin/go-stdlib-extreme .[0m
+2026-02-06T12:54:17.5028538Z shell: /usr/bin/bash -e {0}
+2026-02-06T12:54:17.5028812Z ##[endgroup]
