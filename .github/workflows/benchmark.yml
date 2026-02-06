@@ -36,10 +36,10 @@ jobs:
 
       - name: Run benchmarks
         run: |
-          # Run all benchmarks and save to files
-          ./bin/go-stdlib input/data.txt > /tmp/stdlib.txt
-          ./bin/go-coregex input/data.txt > /tmp/coregex.txt
-          ./bin/rust-benchmark input/data.txt > /tmp/rust.txt
+          # Run all benchmarks and save to files (tee to stdout for log visibility)
+          ./bin/go-stdlib input/data.txt | tee /tmp/stdlib.txt
+          ./bin/go-coregex input/data.txt | tee /tmp/coregex.txt
+          ./bin/rust-benchmark input/data.txt | tee /tmp/rust.txt
 
           # Generate summary header
           echo "## Benchmark Results" >> $GITHUB_STEP_SUMMARY
