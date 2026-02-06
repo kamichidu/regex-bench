@@ -33,15 +33,20 @@ const PATTERNS: &[Pattern] = &[
 ];
 
 fn measure(data: &str, p: &Pattern) {
-    let start = Instant::now();
-
+    // Compile (measured separately)
+    let compile_start = Instant::now();
     let re = Regex::new(p.pattern).expect("Invalid regex");
+    let compile_elapsed = compile_start.elapsed();
+
+    // Search only
+    let search_start = Instant::now();
     let count = re.find_iter(data).count();
+    let search_elapsed = search_start.elapsed();
 
-    let elapsed = start.elapsed();
-    let ms = elapsed.as_secs_f64() * 1000.0;
+    let compile_ms = compile_elapsed.as_secs_f64() * 1000.0;
+    let search_ms = search_elapsed.as_secs_f64() * 1000.0;
 
-    println!("{:<15} {:>10.2} ms  {:>6} matches", p.name, ms, count);
+    println!("{:<15} {:>10.2} {:>10.2} {:>6}", p.name, compile_ms, search_ms, count);
 }
 
 fn main() {
@@ -55,7 +60,8 @@ fn main() {
     let size_mb = data.len() as f64 / 1024.0 / 1024.0;
 
     println!("Rust regex (input: {:.2} MB)", size_mb);
-    println!("─────────────────────────────────────────");
+    println!("{:<15} {:>10} {:>10} {:>6}", "pattern", "compile", "search", "matches");
+    println!("─────────────────────────────────────────────────");
 
     for p in PATTERNS {
         measure(&data, p);

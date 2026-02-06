@@ -36,44 +36,42 @@ jobs:
 
       - name: Run benchmarks
         run: |
-          # Run all benchmarks and save to files (tee to stdout for log visibility)
+          # Run all benchmarks (tee to stdout for log visibility)
           ./bin/go-stdlib input/data.txt | tee /tmp/stdlib.txt
+          echo ""
           ./bin/go-coregex input/data.txt | tee /tmp/coregex.txt
+          echo ""
           ./bin/rust-benchmark input/data.txt | tee /tmp/rust.txt
 
-          # Generate summary header
+          # Generate summary
           echo "## Benchmark Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Platform**: Ubuntu $(lsb_release -rs), $(uname -m)" >> $GITHUB_STEP_SUMMARY
           echo "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Generate comparison table
-          echo "### Comparison Table" >> $GITHUB_STEP_SUMMARY
+          # Search time comparison table (the main metric)
+          echo "### Search Time Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-
-          # Parse results and build table
           echo "| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY
 
-          # Extract patterns from stdlib output (skip header lines)
-          grep -E "^[a-z_]+\s+[0-9.]+ ms" /tmp/stdlib.txt | while read line; do
+          # New format: pattern compile search matches
+          # Extract search time (column 3) from each output
+          grep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do
             pattern=$(echo "$line" | awk '{print $1}')
-            std_ms=$(echo "$line" | awk '{print $2}')
-            std_matches=$(echo "$line" | awk '{print $4}')
+            std_search=$(echo "$line" | awk '{print $3}')
 
-            # Get coregex result
             cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)
-            cor_ms=$(echo "$cor_line" | awk '{print $2}')
+            cor_search=$(echo "$cor_line" | awk '{print $3}')
 
-            # Get rust result
             rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)
-            rus_ms=$(echo "$rus_line" | awk '{print $2}')
+            rus_search=$(echo "$rus_line" | awk '{print $3}')
 
-            # Calculate vs stdlib speedup
-            if [ -n "$cor_ms" ] && [ "$cor_ms" != "0" ]; then
-              speedup=$(echo "scale=0; $std_ms / $cor_ms" | bc)
-              if [ "$speedup" -ge 2 ]; then
+            # vs stdlib speedup
+            if [ -n "$cor_search" ] && [ "$cor_search" != "0.00" ]; then
+              speedup=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
+              if [ "$speedup" -ge 2 ] 2>/dev/null; then
                 vs_stdlib="**${speedup}x**"
               else
                 vs_stdlib="~1x"
@@ -82,38 +80,58 @@ jobs:
               vs_stdlib="—"
             fi
 
-            # Calculate vs Rust comparison
-            if [ -n "$cor_ms" ] && [ -n "$rus_ms" ] && [ "$rus_ms" != "0" ]; then
-              # Check if coregex is faster
-              cor_faster=$(echo "$cor_ms < $rus_ms" | bc -l)
-              if [ "$cor_faster" -eq 1 ]; then
-                ratio=$(echo "scale=1; $rus_ms / $cor_ms" | bc)
+            # vs Rust comparison
+            if [ -n "$cor_search" ] && [ -n "$rus_search" ] && [ "$rus_search" != "0.00" ] && [ "$cor_search" != "0.00" ]; then
+              cor_faster=$(echo "$cor_search < $rus_search" | bc -l 2>/dev/null || echo "0")
+              if [ "$cor_faster" -eq 1 ] 2>/dev/null; then
+                ratio=$(echo "scale=1; $rus_search / $cor_search" | bc)
                 vs_rust="**${ratio}x faster**"
                 winner="coregex"
-                cor_fmt="**${cor_ms} ms**"
-                rus_fmt="${rus_ms} ms"
+                cor_fmt="**${cor_search} ms**"
+                rus_fmt="${rus_search} ms"
               else
-                ratio=$(echo "scale=1; $cor_ms / $rus_ms" | bc)
+                ratio=$(echo "scale=1; $cor_search / $rus_search" | bc)
                 vs_rust="${ratio}x slower"
                 winner="Rust"
-                cor_fmt="${cor_ms} ms"
-                rus_fmt="**${rus_ms} ms**"
+                cor_fmt="${cor_search} ms"
+                rus_fmt="**${rus_search} ms**"
               fi
             else
-              vs_rust="—"
+              vs_rust="~same"
               winner="—"
-              cor_fmt="${cor_ms} ms"
-              rus_fmt="${rus_ms} ms"
+              cor_fmt="${cor_search} ms"
+              rus_fmt="${rus_search} ms"
             fi
 
-            echo "| $pattern | ${std_ms} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY
+            echo "| $pattern | ${std_search} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY
+          done
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Compile time comparison table
+          echo "### Compile Time Comparison" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Pattern | Go stdlib | Go coregex | Rust regex |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-----------|------------|------------|" >> $GITHUB_STEP_SUMMARY
+
+          grep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do
+            pattern=$(echo "$line" | awk '{print $1}')
+            std_compile=$(echo "$line" | awk '{print $2}')
+
+            cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)
+            cor_compile=$(echo "$cor_line" | awk '{print $2}')
+
+            rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)
+            rus_compile=$(echo "$rus_line" | awk '{print $2}')
+
+            echo "| $pattern | ${std_compile} ms | ${cor_compile} ms | ${rus_compile} ms |" >> $GITHUB_STEP_SUMMARY
           done
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Also show raw output for debugging
+          # Raw output
           echo "<details>" >> $GITHUB_STEP_SUMMARY
           echo "<summary>Raw Output (click to expand)</summary>" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
