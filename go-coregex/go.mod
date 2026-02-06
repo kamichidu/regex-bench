@@ -2,7 +2,7 @@ module github.com/kolkov/regex-bench/go-coregex
 
 go 1.25.4
 
-require github.com/coregx/coregex v0.12.1-0.20260206180556-e0e1856d1409
+require github.com/coregx/coregex v0.12.1-0.20260206193038-c654b08f3ccb
 
 require (
 	github.com/coregx/ahocorasick v0.1.0 // indirect
