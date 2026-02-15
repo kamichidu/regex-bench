@@ -1,0 +1,185 @@
+﻿2026-02-06T15:04:13.5760175Z ##[group]Run # Run all benchmarks (tee to stdout for log visibility)
+2026-02-06T15:04:13.5761144Z [36;1m# Run all benchmarks (tee to stdout for log visibility)[0m
+2026-02-06T15:04:13.5761861Z [36;1m./bin/go-stdlib input/data.txt | tee /tmp/stdlib.txt[0m
+2026-02-06T15:04:13.5762409Z [36;1mecho ""[0m
+2026-02-06T15:04:13.5762873Z [36;1m./bin/go-coregex input/data.txt | tee /tmp/coregex.txt[0m
+2026-02-06T15:04:13.5763645Z [36;1mecho ""[0m
+2026-02-06T15:04:13.5764120Z [36;1m./bin/rust-benchmark input/data.txt | tee /tmp/rust.txt[0m
+2026-02-06T15:04:13.5764748Z [36;1m[0m
+2026-02-06T15:04:13.5765157Z [36;1m# Generate summary[0m
+2026-02-06T15:04:13.5769017Z [36;1mecho "## Benchmark Results" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5769624Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5770360Z [36;1mecho "**Platform**: Ubuntu $(lsb_release -rs), $(uname -m)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5771545Z [36;1mecho "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5772086Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5772331Z [36;1m[0m
+2026-02-06T15:04:13.5772547Z [36;1m# Search time comparison table (the main metric)[0m
+2026-02-06T15:04:13.5772894Z [36;1mecho "### Search Time Comparison" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5773412Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5773860Z [36;1mecho "| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5774484Z [36;1mecho "|---------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5774867Z [36;1m[0m
+2026-02-06T15:04:13.5775267Z [36;1m# New format: pattern compile search matches[0m
+2026-02-06T15:04:13.5775579Z [36;1m# Extract search time (column 3) from each output[0m
+2026-02-06T15:04:13.5775921Z [36;1mgrep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do[0m
+2026-02-06T15:04:13.5776275Z [36;1m  pattern=$(echo "$line" | awk '{print $1}')[0m
+2026-02-06T15:04:13.5776571Z [36;1m  std_search=$(echo "$line" | awk '{print $3}')[0m
+2026-02-06T15:04:13.5776819Z [36;1m[0m
+2026-02-06T15:04:13.5777032Z [36;1m  cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)[0m
+2026-02-06T15:04:13.5777353Z [36;1m  cor_search=$(echo "$cor_line" | awk '{print $3}')[0m
+2026-02-06T15:04:13.5777709Z [36;1m[0m
+2026-02-06T15:04:13.5778026Z [36;1m  rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)[0m
+2026-02-06T15:04:13.5778575Z [36;1m  rus_search=$(echo "$rus_line" | awk '{print $3}')[0m
+2026-02-06T15:04:13.5779021Z [36;1m[0m
+2026-02-06T15:04:13.5779219Z [36;1m  # vs stdlib speedup[0m
+2026-02-06T15:04:13.5779536Z [36;1m  if [ -n "$cor_search" ] && [ "$cor_search" != "0.00" ]; then[0m
+2026-02-06T15:04:13.5779980Z [36;1m    speedup=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null || echo "0")[0m
+2026-02-06T15:04:13.5780385Z [36;1m    if [ "$speedup" -ge 2 ] 2>/dev/null; then[0m
+2026-02-06T15:04:13.5780669Z [36;1m      vs_stdlib="**${speedup}x**"[0m
+2026-02-06T15:04:13.5780911Z [36;1m    else[0m
+2026-02-06T15:04:13.5781089Z [36;1m      vs_stdlib="~1x"[0m
+2026-02-06T15:04:13.5781284Z [36;1m    fi[0m
+2026-02-06T15:04:13.5781436Z [36;1m  else[0m
+2026-02-06T15:04:13.5781603Z [36;1m    vs_stdlib="—"[0m
+2026-02-06T15:04:13.5781802Z [36;1m  fi[0m
+2026-02-06T15:04:13.5781954Z [36;1m[0m
+2026-02-06T15:04:13.5782115Z [36;1m  # vs Rust comparison[0m
+2026-02-06T15:04:13.5782508Z [36;1m  if [ -n "$cor_search" ] && [ -n "$rus_search" ] && [ "$rus_search" != "0.00" ] && [ "$cor_search" != "0.00" ]; then[0m
+2026-02-06T15:04:13.5783052Z [36;1m    cor_faster=$(echo "$cor_search < $rus_search" | bc -l 2>/dev/null || echo "0")[0m
+2026-02-06T15:04:13.5783750Z [36;1m    if [ "$cor_faster" -eq 1 ] 2>/dev/null; then[0m
+2026-02-06T15:04:13.5784088Z [36;1m      ratio=$(echo "scale=1; $rus_search / $cor_search" | bc)[0m
+2026-02-06T15:04:13.5784406Z [36;1m      vs_rust="**${ratio}x faster**"[0m
+2026-02-06T15:04:13.5784868Z [36;1m      winner="coregex"[0m
+2026-02-06T15:04:13.5785097Z [36;1m      cor_fmt="**${cor_search} ms**"[0m
+2026-02-06T15:04:13.5785336Z [36;1m      rus_fmt="${rus_search} ms"[0m
+2026-02-06T15:04:13.5785570Z [36;1m    else[0m
+2026-02-06T15:04:13.5785801Z [36;1m      ratio=$(echo "scale=1; $cor_search / $rus_search" | bc)[0m
+2026-02-06T15:04:13.5786108Z [36;1m      vs_rust="${ratio}x slower"[0m
+2026-02-06T15:04:13.5786340Z [36;1m      winner="Rust"[0m
+2026-02-06T15:04:13.5786544Z [36;1m      cor_fmt="${cor_search} ms"[0m
+2026-02-06T15:04:13.5786795Z [36;1m      rus_fmt="**${rus_search} ms**"[0m
+2026-02-06T15:04:13.5787023Z [36;1m    fi[0m
+2026-02-06T15:04:13.5787184Z [36;1m  else[0m
+2026-02-06T15:04:13.5787349Z [36;1m    vs_rust="~same"[0m
+2026-02-06T15:04:13.5787556Z [36;1m    winner="—"[0m
+2026-02-06T15:04:13.5787754Z [36;1m    cor_fmt="${cor_search} ms"[0m
+2026-02-06T15:04:13.5787991Z [36;1m    rus_fmt="${rus_search} ms"[0m
+2026-02-06T15:04:13.5788216Z [36;1m  fi[0m
+2026-02-06T15:04:13.5788368Z [36;1m[0m
+2026-02-06T15:04:13.5788755Z [36;1m  echo "| $pattern | ${std_search} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5789203Z [36;1mdone[0m
+2026-02-06T15:04:13.5789358Z [36;1m[0m
+2026-02-06T15:04:13.5789519Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5789744Z [36;1m[0m
+2026-02-06T15:04:13.5789906Z [36;1m# Compile time comparison table[0m
+2026-02-06T15:04:13.5790216Z [36;1mecho "### Compile Time Comparison" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5790533Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5790887Z [36;1mecho "| Pattern | Go stdlib | Go coregex | Rust regex |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5791529Z [36;1mecho "|---------|-----------|------------|------------|" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5791854Z [36;1m[0m
+2026-02-06T15:04:13.5792080Z [36;1mgrep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do[0m
+2026-02-06T15:04:13.5792422Z [36;1m  pattern=$(echo "$line" | awk '{print $1}')[0m
+2026-02-06T15:04:13.5792727Z [36;1m  std_compile=$(echo "$line" | awk '{print $2}')[0m
+2026-02-06T15:04:13.5792985Z [36;1m[0m
+2026-02-06T15:04:13.5793472Z [36;1m  cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)[0m
+2026-02-06T15:04:13.5793900Z [36;1m  cor_compile=$(echo "$cor_line" | awk '{print $2}')[0m
+2026-02-06T15:04:13.5794170Z [36;1m[0m
+2026-02-06T15:04:13.5794373Z [36;1m  rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)[0m
+2026-02-06T15:04:13.5794688Z [36;1m  rus_compile=$(echo "$rus_line" | awk '{print $2}')[0m
+2026-02-06T15:04:13.5794946Z [36;1m[0m
+2026-02-06T15:04:13.5795291Z [36;1m  echo "| $pattern | ${std_compile} ms | ${cor_compile} ms | ${rus_compile} ms |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5795704Z [36;1mdone[0m
+2026-02-06T15:04:13.5795857Z [36;1m[0m
+2026-02-06T15:04:13.5796021Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5796278Z [36;1mecho "---" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5796521Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5796737Z [36;1m[0m
+2026-02-06T15:04:13.5796891Z [36;1m# Raw output[0m
+2026-02-06T15:04:13.5797100Z [36;1mecho "<details>" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5797493Z [36;1mecho "<summary>Raw Output (click to expand)</summary>" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5797864Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5798081Z [36;1m[0m
+2026-02-06T15:04:13.5798267Z [36;1mecho "#### Go stdlib" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5798540Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5798813Z [36;1mcat /tmp/stdlib.txt >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5799092Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5799340Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5799552Z [36;1m[0m
+2026-02-06T15:04:13.5799888Z [36;1mecho "#### Go coregex" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800158Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800430Z [36;1mcat /tmp/coregex.txt >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800702Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800940Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5801160Z [36;1m[0m
+2026-02-06T15:04:13.5801347Z [36;1mecho "#### Rust regex" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5801626Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5801889Z [36;1mcat /tmp/rust.txt >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5802162Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5802377Z [36;1m[0m
+2026-02-06T15:04:13.5802563Z [36;1mecho "</details>" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5833523Z shell: /usr/bin/bash -e {0}
+2026-02-06T15:04:13.5833755Z env:
+2026-02-06T15:04:13.5833926Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:04:13.5834177Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:04:13.5834370Z   CARGO_TERM_COLOR: always
+2026-02-06T15:04:13.5834570Z ##[endgroup]
+2026-02-06T15:04:13.5910961Z Go stdlib (input: 6.00 MB)
+2026-02-06T15:04:13.5911430Z pattern            compile     search matches
+2026-02-06T15:04:13.5912151Z ─────────────────────────────────────────────────
+2026-02-06T15:04:14.0626258Z literal_alt           0.03     471.36    983
+2026-02-06T15:04:15.4625981Z multi_literal         0.05    1399.94  27052
+2026-02-06T15:04:15.4626542Z anchored              0.03       0.01      1
+2026-02-06T15:04:15.6939839Z inner_literal         0.01     231.30    336
+2026-02-06T15:04:15.9282883Z suffix                0.02     234.27   2212
+2026-02-06T15:04:16.4370626Z char_class            0.01     508.77 1296450
+2026-02-06T15:04:16.6977507Z email                 0.03     260.64    656
+2026-02-06T15:04:16.9551771Z uri                   0.03     257.32    820
+2026-02-06T15:04:17.1231618Z version               0.02     168.01   2731
+2026-02-06T15:04:17.6160311Z ip                    0.07     492.74   1093
+2026-02-06T15:04:17.8769369Z alpha_digit           0.02     260.90    225
+2026-02-06T15:04:18.1475043Z word_digit            0.01     270.51   3804
+2026-02-06T15:04:18.2535179Z http_methods          0.02     105.92   1713
+2026-02-06T15:04:18.2535637Z anchored_php          0.03       0.00      0
+2026-02-06T15:04:18.3570285Z multiline_php         0.01     103.42   1966
+2026-02-06T15:04:19.0444220Z word_repeat           0.02     687.39 1239756
+2026-02-06T15:04:19.0473706Z 
+2026-02-06T15:04:19.0505406Z Go coregex v0.12.1-0.20260206024753-bd3a3f6f5b5c (input: 6.00 MB)
+2026-02-06T15:04:19.0506053Z pattern            compile     search matches
+2026-02-06T15:04:19.0506847Z ─────────────────────────────────────────────────
+2026-02-06T15:04:19.0548854Z literal_alt           0.06       4.32    983
+2026-02-06T15:04:19.0678183Z multi_literal         0.03      12.83  27052
+2026-02-06T15:04:19.0680780Z anchored              0.03       0.23      1
+2026-02-06T15:04:19.0690512Z inner_literal         0.68       0.33    336
+2026-02-06T15:04:19.0701025Z suffix                0.15       0.90   2212
+2026-02-06T15:04:19.1047280Z char_class            0.01      34.47 1296450
+2026-02-06T15:04:19.1053544Z email                 0.14       0.58    656
+2026-02-06T15:04:19.1062078Z uri                   0.19       0.66    820
+2026-02-06T15:04:19.1079195Z version               0.05       1.65   2731
+2026-02-06T15:04:19.1101551Z ip                    0.09       2.13   1093
+2026-02-06T15:04:19.1355718Z alpha_digit           0.02      25.33    225
+2026-02-06T15:04:19.1611534Z word_digit            0.05      25.52   3804
+2026-02-06T15:04:19.1620537Z http_methods          0.07       0.86   1713
+2026-02-06T15:04:19.1621035Z anchored_php          0.04       0.00      0
+2026-02-06T15:04:19.1628380Z multiline_php         0.06       0.67   1966
+2026-02-06T15:04:19.5246224Z word_repeat           0.04     361.58 1239756
+2026-02-06T15:04:19.5260390Z 
+2026-02-06T15:04:19.5308073Z Rust regex (input: 6.00 MB)
+2026-02-06T15:04:19.5308850Z pattern            compile     search matches
+2026-02-06T15:04:19.5309653Z ─────────────────────────────────────────────────
+2026-02-06T15:04:19.5316427Z literal_alt           0.14       0.68    983
+2026-02-06T15:04:19.5365616Z multi_literal         0.20       4.71  27052
+2026-02-06T15:04:19.5366116Z anchored              0.03       0.01      1
+2026-02-06T15:04:19.5372237Z inner_literal         0.30       0.32    336
+2026-02-06T15:04:19.5386406Z suffix                0.30       1.10   2212
+2026-02-06T15:04:19.5921892Z char_class            0.42      52.99 1296450
+2026-02-06T15:04:19.5937763Z email                 1.28       0.36    656
+2026-02-06T15:04:19.5948905Z uri                   0.67       0.38    820
+2026-02-06T15:04:19.5958521Z version               0.20       0.74   2731
+2026-02-06T15:04:19.6079609Z ip                    0.19      11.90   1093
+2026-02-06T15:04:19.6199193Z alpha_digit           0.11      11.83    225
+2026-02-06T15:04:19.6324327Z word_digit            0.50      12.01   3804
+2026-02-06T15:04:19.6331518Z http_methods          0.12       0.61   1713
+2026-02-06T15:04:19.6336270Z anchored_php          0.45       0.01      0
+2026-02-06T15:04:19.6344300Z multiline_php         0.11       0.69   1966
+2026-02-06T15:04:19.6882701Z word_repeat           2.82      50.85 1239756
+2026-02-06T15:04:19.7297944Z Runtime error (func=(main), adr=9): Divide by zero

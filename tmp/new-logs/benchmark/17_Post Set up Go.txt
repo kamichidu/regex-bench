@@ -1,0 +1,6 @@
+﻿2026-02-06T15:04:20.2206090Z Post job cleanup.
+2026-02-06T15:04:20.3798712Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOMODCACHE
+2026-02-06T15:04:20.3836546Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOCACHE
+2026-02-06T15:04:20.3861458Z /home/runner/go/pkg/mod
+2026-02-06T15:04:20.3889700Z /home/runner/.cache/go-build
+2026-02-06T15:04:20.3894914Z Primary key was not generated. Please check the log messages above for more errors or information

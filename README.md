@@ -13,61 +13,62 @@ All benchmarks run on **identical conditions**:
 
 > **Note**: Cross-compiled Go binaries run in WSL2 for fair comparison with Rust.
 
-## Results (v0.11.4)
+## Results (v0.12.1)
 
 **GitHub Actions Ubuntu, 6.0 MB input** (using `FindAll` for fair comparison)
 
 | Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |
 |---------|-----------|------------|------------|-----------|---------|--------|
-| inner_literal | 206 ms | **0.45 ms** | 0.59 ms | **457x** | **1.3x faster** | coregex |
-| email | 249 ms | **1.30 ms** | 1.55 ms | **192x** | **1.2x faster** | coregex |
-| uri | 242 ms | 1.65 ms | **1.05 ms** | **147x** | 1.6x slower | Rust |
-| multiline_php | 103 ms | **~1 ms** | 0.78 ms | **100x+** | ~1.3x slower | **near parity** |
-| literal_alt | 434 ms | 4.22 ms | **0.91 ms** | **103x** | 4.6x slower | Rust |
-| multi_literal | 1300 ms | 13.06 ms | **4.56 ms** | **99x** | 2.9x slower | Rust |
-| suffix | 203 ms | 2.12 ms | **1.60 ms** | **96x** | 1.3x slower | Rust |
-| http_methods | 95 ms | 1.04 ms | **0.72 ms** | **92x** | 1.4x slower | Rust |
-| ip | 468 ms | **6.37 ms** | 11.55 ms | **73x** | **1.8x faster** | coregex |
-| version | 154 ms | 2.78 ms | **0.91 ms** | **55x** | 3.1x slower | Rust |
-| char_class | 494 ms | **49.31 ms** | 52.44 ms | **10x** | **1.06x faster** | coregex |
-| alpha_digit | 242 ms | 41.49 ms | **11.34 ms** | **5.8x** | 3.7x slower | Rust |
-| word_digit | 251 ms | 41.60 ms | **11.77 ms** | **6.0x** | 3.5x slower | Rust |
-| anchored | 0.02 ms | 0.03 ms | 0.07 ms | ~1x | ~1x | — |
-| anchored_php | 0.02 ms | 0.23 ms | 0.41 ms | — | — | — |
+| inner_literal | 232 ms | **0.25 ms** | 0.31 ms | **926x** | **1.2x faster** | coregex |
+| email | 260 ms | **0.61 ms** | 0.37 ms | **426x** | 1.6x slower | Rust |
+| uri | 256 ms | 0.67 ms | **0.42 ms** | **382x** | 1.6x slower | Rust |
+| suffix | 234 ms | **0.89 ms** | 1.09 ms | **263x** | **1.2x faster** | coregex |
+| ip | 507 ms | **2.16 ms** | 12.05 ms | **235x** | **5.6x faster** | coregex |
+| multiline_php | 103 ms | **0.66 ms** | 0.67 ms | **156x** | **~same** | **parity** |
+| http_methods | 106 ms | 0.93 ms | **0.66 ms** | **114x** | 1.4x slower | Rust |
+| literal_alt | 481 ms | 4.25 ms | **0.60 ms** | **113x** | 7.1x slower | Rust |
+| multi_literal | 1402 ms | 12.60 ms | **4.63 ms** | **111x** | 2.7x slower | Rust |
+| version | 168 ms | 1.59 ms | **0.72 ms** | **106x** | 2.2x slower | Rust |
+| char_class | 560 ms | **41.33 ms** | 50.61 ms | **13.6x** | **1.2x faster** | coregex |
+| alpha_digit | 261 ms | 25.37 ms | **11.94 ms** | **10x** | 2.1x slower | Rust |
+| word_digit | 270 ms | 25.66 ms | **12.14 ms** | **10.5x** | 2.1x slower | Rust |
+| word_repeat | 654 ms | 184 ms | **49 ms** | **3.6x** | 3.7x slower | Rust |
+| anchored | 0.00 ms | 0.02 ms | 0.01 ms | ~1x | ~1x | — |
+| anchored_php | 0.00 ms | 0.01 ms | 0.01 ms | ~1x | ~1x | — |
 
-> **coregex v0.11.4** — FindAll multiline fix: 78x faster, near Rust parity (Issue #102). Run `make extreme` for 1800x demo.
+> **coregex v0.12.1** — Bidirectional DFA fallback, bounded repetitions fix (#115), AVX2 Teddy fix (#74). Run `make extreme` for 2500x demo.
 
 ### Key Findings
 
-**Go coregex v0.11.4 vs Go stdlib:**
-- All patterns: **5.8-457x faster**
-- Best: `inner_literal` **457x**, `email` **192x**, `uri` **147x**, `literal_alt` **103x**
-- `multiline_php` **100x+** (MultilineReverseSuffix, v0.11.4 fix)
-- `multi_literal` **99x** (Aho-Corasick)
-- `suffix` **96x** (ReverseSuffix)
-- `http_methods` **92x** (multiline log parsing with `(?m)^`)
-- `ip` **73x** (DigitPrefilter)
-- `version` **55x** (DigitPrefilter)
-- `char_class` **10x** (CharClassSearcher)
+**Go coregex v0.12.1 vs Go stdlib:**
+- All patterns: **3.6-926x faster**
+- Best: `inner_literal` **926x**, `email` **426x**, `uri` **382x**, `suffix` **263x**
+- `ip` **235x** (DigitPrefilter)
+- `multiline_php` **156x** (MultilineReverseSuffix, Rust parity!)
+- `http_methods` **114x**, `literal_alt` **113x**, `multi_literal` **111x**
+- `version` **106x** (DigitPrefilter)
+- `char_class` **13.6x** (CharClassSearcher)
+- `word_repeat` **3.6x** (bidirectional DFA fallback, new in v0.12.1)
 
 **Go coregex faster than Rust (4 patterns):**
-- `ip`: **coregex 1.8x faster** (6.4ms vs 11.6ms)
-- `inner_literal`: **coregex 1.3x faster** (0.45ms vs 0.59ms)
-- `email`: **coregex 1.2x faster** (1.30ms vs 1.55ms)
-- `char_class`: **coregex 1.06x faster** (49ms vs 52ms)
+- `ip`: **coregex 5.6x faster** (2.2ms vs 12.1ms)
+- `inner_literal`: **coregex 1.2x faster** (0.25ms vs 0.31ms)
+- `suffix`: **coregex 1.2x faster** (0.89ms vs 1.09ms)
+- `char_class`: **coregex 1.2x faster** (41ms vs 51ms)
 
-**Near Rust parity:**
-- `multiline_php`: **~1.3x slower** (~1ms vs 0.78ms) — was 84x slower in v0.11.1!
+**Rust parity:**
+- `multiline_php`: **~same** (0.66ms vs 0.67ms) — was 84x slower in v0.11.1!
 
 **Rust faster than coregex:**
-- `literal_alt`: Rust 4.6x faster (Teddy Fat with more buckets)
-- `alpha_digit`: Rust 3.7x faster
-- `word_digit`: Rust 3.5x faster
-- `version`: Rust 3.1x faster
-- `multi_literal`: Rust 2.9x faster
+- `literal_alt`: Rust 7.1x faster (Teddy Fat with more buckets)
+- `word_repeat`: Rust 3.7x faster (DFA state acceleration)
+- `multi_literal`: Rust 2.7x faster
+- `version`: Rust 2.2x faster
+- `alpha_digit`: Rust 2.1x faster
+- `word_digit`: Rust 2.1x faster
+- `email`: Rust 1.6x faster
 - `uri`: Rust 1.6x faster
 - `http_methods`: Rust 1.4x faster
-- `suffix`: Rust 1.3x faster
 
 > **Note**: Rust regex has 10+ years of development. coregex optimizations are targeted, not universal.
 
@@ -75,16 +76,20 @@ All benchmarks run on **identical conditions**:
 
 | Engine | Strengths | Weaknesses |
 |--------|-----------|------------|
-| **Go stdlib** | Simple, no dependencies | No optimizations, 5.8-457x slower |
-| **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, **4 patterns faster than Rust**, multiline near-parity | Teddy gap |
-| **Rust regex** | DFA state acceleration, Teddy Fat, mature DFA | inner_literal, ip, email, char_class slower than coregex |
+| **Go stdlib** | Simple, no dependencies | No optimizations, 3.6-926x slower |
+| **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, bidirectional DFA, **4 patterns faster than Rust**, multiline Rust parity | Teddy gap, word_repeat |
+| **Rust regex** | DFA state acceleration, Teddy Fat, mature DFA | inner_literal, ip, suffix, char_class slower than coregex |
 
-**v0.11.4 (Current):**
-- FindAll multiline fix: **78x faster**, near Rust parity (Issue #102)
-- `multiline_php`: was 84x slower → now **~1.3x slower** than Rust
-- **4 patterns faster than Rust**: ip (1.8x), inner_literal (1.3x), email (1.2x), char_class (1.06x)
+**v0.12.1 (Current):**
+- Bidirectional DFA fallback for BoundedBacktracker on large inputs
+- Bounded repetitions fix: **2500ms → 0.5ms** (Issue #115)
+- CompositeSequenceDFA overmatching fix, AVX2 Teddy assembly fix (#74)
+- **4 patterns faster than Rust**: ip (5.6x), inner_literal (1.2x), suffix (1.2x), char_class (1.2x)
+- `multiline_php`: Rust parity (0.66ms vs 0.67ms)
 
 **Historical Improvements:**
+- v0.12.1: Bidirectional DFA fallback, bounded repetitions fix (#115), AVX2 Teddy fix (#74)
+- v0.12.0: Anti-quadratic guard, DFA loop unrolling, DFA cache clear & continue
 - v0.11.4: FindAll multiline fix, 78x faster (Issue #102)
 - v0.11.3: UseMultilineReverseSuffix prefix fast path 319-552x (Issue #99)
 - v0.11.1: UseMultilineReverseSuffix for multiline patterns (Issue #97)
@@ -106,14 +111,14 @@ make extreme       # Run on no-match data (~300-560x)
 make extreme-3000x # Run on no-digits data (1000-3000x)
 ```
 
-**GitHub Actions Ubuntu results** (6 MB no-digits data, v0.10.10):
+**GitHub Actions Ubuntu results** (6 MB no-digits data, v0.12.1):
 
 | Pattern | Go stdlib | Go coregex | Speedup |
 |---------|-----------|------------|---------|
-| ip_nomatch | 392 ms | 215 µs | **1820x** |
-| suffix_find | 226 ms | 218 µs | **1037x** |
-| inner_nomatch | 210 ms | 254 µs | **826x** |
-| phone_nomatch | 132 ms | 216 µs | **613x** |
+| ip_nomatch | 422 ms | 166 µs | **2542x** |
+| suffix_find | 245 ms | 126 µs | **1945x** |
+| phone_nomatch | 143 ms | 166 µs | **863x** |
+| inner_nomatch | 229 ms | 382 µs | **598x** |
 
 [![Extreme Benchmark](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml/badge.svg)](https://github.com/kolkov/regex-bench/actions/workflows/extreme-benchmark.yml)
 
@@ -165,6 +170,7 @@ The extreme speedup happens because:
 | http_methods | `(?m)^(GET\|POST\|PUT\|DELETE\|PATCH)` | Multiline log parsing | BranchDispatch |
 | anchored_php | `^/.*[\w-]+\.php` | URL path matching | UseAnchoredLiteral |
 | multiline_php | `(?m)^/.*\.php` | Multiline PHP paths | UseMultilineReverseSuffix |
+| word_repeat | `(\w{2,8})+` | Word quantifiers | BoundedBacktracker + DFA fallback |
 
 ## Running Benchmarks
 

@@ -1,0 +1,80 @@
+﻿2026-02-06T12:54:19.6954060Z ##[group]Run echo "## EXTREME Benchmark Results (3000x+ Speedups)" >> $GITHUB_STEP_SUMMARY
+2026-02-06T12:54:19.6955214Z [36;1mecho "## EXTREME Benchmark Results (3000x+ Speedups)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6955892Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6956614Z [36;1mecho "**What is this?** This benchmark uses data with **NO DIGITS** (0-9)." >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6957688Z [36;1mecho "This is the **worst case for stdlib** (must scan entire 6MB file byte-by-byte)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6958802Z [36;1mecho "and **best case for coregex DigitPrefilter** (skips entire file in microseconds)." >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6959575Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6960400Z [36;1mecho "**Platform**: Ubuntu $(lsb_release -rs), $(uname -m)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6961271Z [36;1mecho "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6962026Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6962403Z [36;1m[0m
+2026-02-06T12:54:19.6962766Z [36;1mecho "### Go stdlib (baseline)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6963299Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6964028Z [36;1m./bin/go-stdlib-extreme input/no-digits-data.txt | tee stdlib.txt | tee -a $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6964754Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6965186Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6965603Z [36;1m[0m
+2026-02-06T12:54:19.6965995Z [36;1mecho "### Go coregex (optimized)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6966514Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6967309Z [36;1m./bin/go-coregex-extreme input/no-digits-data.txt | tee coregex.txt | tee -a $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6968036Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6968435Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6968844Z [36;1m[0m
+2026-02-06T12:54:19.6969191Z [36;1mecho "### Speedup Calculation" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6969718Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6971882Z [36;1mecho "| Pattern | stdlib | coregex | Speedup |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6972660Z [36;1mecho "|---------|--------|---------|---------|" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6973447Z [36;1m[0m
+2026-02-06T12:54:19.6973807Z [36;1m# Parse results and calculate speedups[0m
+2026-02-06T12:54:19.6974311Z [36;1mwhile IFS= read -r line; do[0m
+2026-02-06T12:54:19.6974791Z [36;1m  pattern=$(echo "$line" | awk '{print $1}')[0m
+2026-02-06T12:54:19.6975386Z [36;1m  stdlib_time=$(grep "^$pattern " stdlib.txt | awk '{print $2}')[0m
+2026-02-06T12:54:19.6976052Z [36;1m  stdlib_unit=$(grep "^$pattern " stdlib.txt | awk '{print $3}')[0m
+2026-02-06T12:54:19.6976757Z [36;1m  coregex_time=$(grep "^$pattern " coregex.txt | awk '{print $2}')[0m
+2026-02-06T12:54:19.6977525Z [36;1m  coregex_unit=$(grep "^$pattern " coregex.txt | awk '{print $3}')[0m
+2026-02-06T12:54:19.6978063Z [36;1m[0m
+2026-02-06T12:54:19.6978371Z [36;1m  # Convert to ms for comparison[0m
+2026-02-06T12:54:19.6978795Z [36;1m  if [ "$stdlib_unit" = "ms" ]; then[0m
+2026-02-06T12:54:19.6979176Z [36;1m    stdlib_ms=$stdlib_time[0m
+2026-02-06T12:54:19.6979527Z [36;1m  else[0m
+2026-02-06T12:54:19.6980033Z [36;1m    stdlib_ms=$(echo "$stdlib_time / 1000" | bc -l)[0m
+2026-02-06T12:54:19.6980495Z [36;1m  fi[0m
+2026-02-06T12:54:19.6980769Z [36;1m[0m
+2026-02-06T12:54:19.6981070Z [36;1m  if [ "$coregex_unit" = "ms" ]; then[0m
+2026-02-06T12:54:19.6981487Z [36;1m    coregex_ms=$coregex_time[0m
+2026-02-06T12:54:19.6981913Z [36;1m  elif [ "$coregex_unit" = "µs" ]; then[0m
+2026-02-06T12:54:19.6982375Z [36;1m    coregex_ms=$(echo "$coregex_time / 1000" | bc -l)[0m
+2026-02-06T12:54:19.6982829Z [36;1m  else[0m
+2026-02-06T12:54:19.6983690Z [36;1m    coregex_ms=$(echo "$coregex_time / 1000000" | bc -l)[0m
+2026-02-06T12:54:19.6984158Z [36;1m  fi[0m
+2026-02-06T12:54:19.6984454Z [36;1m[0m
+2026-02-06T12:54:19.6984909Z [36;1m  speedup=$(echo "$stdlib_ms / $coregex_ms" | bc -l | xargs printf "%.0f")[0m
+2026-02-06T12:54:19.6985484Z [36;1m[0m
+2026-02-06T12:54:19.6986196Z [36;1m  echo "| $pattern | ${stdlib_time} ${stdlib_unit} | ${coregex_time} ${coregex_unit} | **${speedup}x** |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6987155Z [36;1mdone < <(grep -v "^Go\|^─" coregex.txt | head -4)[0m
+2026-02-06T12:54:19.6987643Z [36;1m[0m
+2026-02-06T12:54:19.6987945Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6988692Z [36;1mecho "> **Note**: This benchmark shows 800-1000x on 6MB data. For 3000x+ on 1MB:" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6989748Z [36;1mecho '> `go test -bench="BenchmarkIPRegex_Find/.*no_ips" ./meta/...`' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6990671Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6991454Z [36;1mecho "The 3324x speedup occurs in coregex's internal \`go test -bench\` which:" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6992369Z [36;1mecho "- Uses 1MB input (less OS overhead)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6993080Z [36;1mecho "- Runs thousands of iterations (precise timing)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.6993782Z [36;1mecho "- Linux kernel (lower latency)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T12:54:19.7021953Z shell: /usr/bin/bash -e {0}
+2026-02-06T12:54:19.7022479Z ##[endgroup]
+2026-02-06T12:54:19.7234493Z Go stdlib EXTREME (no-match worst case) - input: 6.00 MB
+2026-02-06T12:54:19.7235673Z ─────────────────────────────────────────────────────────────────────
+2026-02-06T12:54:22.0990595Z ip_nomatch          395.11 ms  match: no
+2026-02-06T12:54:23.3522572Z inner_nomatch       208.82 ms  match: no
+2026-02-06T12:54:24.7146533Z suffix_find         226.61 ms  match: no
+2026-02-06T12:54:25.5051787Z phone_nomatch       131.69 ms  match: no
+2026-02-06T12:54:25.5052270Z word_repeat            329 ns  match: yes
+2026-02-06T12:54:25.5097699Z Go coregex v0.12.1-0.20260206024753-bd3a3f6f5b5c EXTREME (no-match worst case) - input: 6.00 MB
+2026-02-06T12:54:25.5099158Z ─────────────────────────────────────────────────────────────────────
+2026-02-06T12:54:25.7626085Z ip_nomatch          249.56 µs  match: no
+2026-02-06T12:54:26.0383200Z inner_nomatch       272.32 µs  match: no
+2026-02-06T12:54:26.2473346Z suffix_find         206.62 µs  match: no
+2026-02-06T12:54:26.4541240Z phone_nomatch       204.62 µs  match: no
+2026-02-06T12:54:26.4542899Z word_repeat            269 ns  match: yes

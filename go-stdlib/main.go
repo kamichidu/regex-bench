@@ -37,16 +37,20 @@ var patterns = []Pattern{
 }
 
 func measure(data []byte, p Pattern) {
-	start := time.Now()
-
+	// Compile (measured separately)
+	compileStart := time.Now()
 	re := regexp.MustCompile(p.Pattern)
+	compileElapsed := time.Since(compileStart)
+
+	// Search only
+	searchStart := time.Now()
 	matches := re.FindAll(data, -1)
-	count := len(matches)
+	searchElapsed := time.Since(searchStart)
 
-	elapsed := time.Since(start)
-	ms := float64(elapsed) / float64(time.Millisecond)
+	compileMs := float64(compileElapsed) / float64(time.Millisecond)
+	searchMs := float64(searchElapsed) / float64(time.Millisecond)
 
-	fmt.Printf("%-15s %10.2f ms  %6d matches\n", p.Name, ms, count)
+	fmt.Printf("%-15s %10.2f %10.2f %6d\n", p.Name, compileMs, searchMs, len(matches))
 }
 
 func main() {
@@ -62,7 +66,8 @@ func main() {
 	}
 
 	fmt.Printf("Go stdlib (input: %.2f MB)\n", float64(len(data))/1024/1024)
-	fmt.Println("─────────────────────────────────────────")
+	fmt.Printf("%-15s %10s %10s %6s\n", "pattern", "compile", "search", "matches")
+	fmt.Println("─────────────────────────────────────────────────")
 
 	for _, p := range patterns {
 		measure(data, p)

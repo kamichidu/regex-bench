@@ -1,0 +1,9 @@
+﻿2026-02-06T12:54:18.5681451Z ##[group]Run cd go-stdlib && go build -o ../bin/go-stdlib .
+2026-02-06T12:54:18.5681899Z [36;1mcd go-stdlib && go build -o ../bin/go-stdlib .[0m
+2026-02-06T12:54:18.5713297Z shell: /usr/bin/bash -e {0}
+2026-02-06T12:54:18.5713535Z env:
+2026-02-06T12:54:18.5713708Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T12:54:18.5714178Z   CARGO_INCREMENTAL: 0
+2026-02-06T12:54:18.5714383Z   CARGO_TERM_COLOR: always
+2026-02-06T12:54:18.5714579Z ##[endgroup]
+2026-02-06T12:54:18.5800374Z go: downloading go1.25.0 (linux/amd64)

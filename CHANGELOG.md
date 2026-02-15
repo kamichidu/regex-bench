@@ -9,6 +9,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-02-15] - Bidirectional DFA Fallback, Bounded Repetitions Fix (v0.12.1)
+
+### Changed
+- **Updated coregex v0.11.5 → v0.12.1**
+  - v0.12.1: Bounded repetitions ReverseSuffix fix (#115), AVX2 Teddy fix (#74)
+  - v0.12.0: Anti-quadratic guard, DFA loop unrolling, DFA cache clear & continue
+  - Bidirectional DFA fallback for BoundedBacktracker on large inputs
+  - Digit-run skip optimization for `\d+`-leading patterns
+  - CompositeSequenceDFA overmatching fix
+
+### Results (GitHub Actions Ubuntu, 6MB input)
+
+| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |
+|---------|-----------|------------|------------|-----------|---------|--------|
+| inner_literal | 232 ms | **0.25 ms** | 0.31 ms | **926x** | **1.2x faster** | coregex |
+| email | 260 ms | **0.61 ms** | 0.37 ms | **426x** | 1.6x slower | Rust |
+| uri | 256 ms | 0.67 ms | **0.42 ms** | **382x** | 1.6x slower | Rust |
+| suffix | 234 ms | **0.89 ms** | 1.09 ms | **263x** | **1.2x faster** | coregex |
+| ip | 507 ms | **2.16 ms** | 12.05 ms | **235x** | **5.6x faster** | coregex |
+| multiline_php | 103 ms | **0.66 ms** | 0.67 ms | **156x** | **~same** | parity |
+| char_class | 560 ms | **41 ms** | 51 ms | **13.6x** | **1.2x faster** | coregex |
+| word_repeat | 654 ms | 184 ms | **49 ms** | **3.6x** | 3.7x slower | Rust |
+
+**Summary:**
+- coregex wins: inner_literal, suffix, ip, char_class (4 patterns)
+- Rust parity: multiline_php (0.66ms vs 0.67ms)
+- Rust wins: literal_alt, multi_literal, email, uri, version, http_methods, word_repeat (7 patterns)
+- Extreme: ip_nomatch **2542x**, suffix_find **1945x**, phone_nomatch **863x**
+
+---
+
 ## [2026-02-01] - Issue #105 Fix: 8.6x Faster Than stdlib (v0.11.5)
 
 ### Changed

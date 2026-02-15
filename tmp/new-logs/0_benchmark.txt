@@ -1,0 +1,591 @@
+﻿2026-02-06T15:03:21.1398775Z Current runner version: '2.331.0'
+2026-02-06T15:03:21.1423171Z ##[group]Runner Image Provisioner
+2026-02-06T15:03:21.1424173Z Hosted Compute Agent
+2026-02-06T15:03:21.1424727Z Version: 20260123.484
+2026-02-06T15:03:21.1425393Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+2026-02-06T15:03:21.1426093Z Build Date: 2026-01-23T19:41:17Z
+2026-02-06T15:03:21.1426714Z Worker ID: {2a170386-f3bd-4505-b15b-2c482bc0903f}
+2026-02-06T15:03:21.1427488Z Azure Region: westus
+2026-02-06T15:03:21.1427990Z ##[endgroup]
+2026-02-06T15:03:21.1429403Z ##[group]Operating System
+2026-02-06T15:03:21.1430084Z Ubuntu
+2026-02-06T15:03:21.1430531Z 24.04.3
+2026-02-06T15:03:21.1430988Z LTS
+2026-02-06T15:03:21.1431472Z ##[endgroup]
+2026-02-06T15:03:21.1431991Z ##[group]Runner Image
+2026-02-06T15:03:21.1432510Z Image: ubuntu-24.04
+2026-02-06T15:03:21.1433044Z Version: 20260126.10.1
+2026-02-06T15:03:21.1434377Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260126.10/images/ubuntu/Ubuntu2404-Readme.md
+2026-02-06T15:03:21.1435953Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260126.10
+2026-02-06T15:03:21.1436830Z ##[endgroup]
+2026-02-06T15:03:21.1437870Z ##[group]GITHUB_TOKEN Permissions
+2026-02-06T15:03:21.1439983Z Contents: read
+2026-02-06T15:03:21.1440512Z Metadata: read
+2026-02-06T15:03:21.1441005Z Packages: read
+2026-02-06T15:03:21.1441598Z ##[endgroup]
+2026-02-06T15:03:21.1443942Z Secret source: Actions
+2026-02-06T15:03:21.1444641Z Prepare workflow directory
+2026-02-06T15:03:21.1768156Z Prepare all required actions
+2026-02-06T15:03:21.1806114Z Getting action download info
+2026-02-06T15:03:21.7034924Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-02-06T15:03:21.8468925Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+2026-02-06T15:03:22.9729676Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:4be9e76fd7c4901c61fb841f559994984270fce7)
+2026-02-06T15:03:23.7238743Z Complete job name: benchmark
+2026-02-06T15:03:23.8073080Z ##[group]Run actions/checkout@v4
+2026-02-06T15:03:23.8074543Z with:
+2026-02-06T15:03:23.8075331Z   repository: kolkov/regex-bench
+2026-02-06T15:03:23.8076458Z   token: ***
+2026-02-06T15:03:23.8077130Z   ssh-strict: true
+2026-02-06T15:03:23.8077837Z   ssh-user: git
+2026-02-06T15:03:23.8078565Z   persist-credentials: true
+2026-02-06T15:03:23.8079366Z   clean: true
+2026-02-06T15:03:23.8080096Z   sparse-checkout-cone-mode: true
+2026-02-06T15:03:23.8080972Z   fetch-depth: 1
+2026-02-06T15:03:23.8081660Z   fetch-tags: false
+2026-02-06T15:03:23.8082374Z   show-progress: true
+2026-02-06T15:03:23.8083110Z   lfs: false
+2026-02-06T15:03:23.8083997Z   submodules: false
+2026-02-06T15:03:23.8084721Z   set-safe-directory: true
+2026-02-06T15:03:23.8085802Z ##[endgroup]
+2026-02-06T15:03:23.9179976Z Syncing repository: kolkov/regex-bench
+2026-02-06T15:03:23.9182567Z ##[group]Getting Git version info
+2026-02-06T15:03:23.9184053Z Working directory is '/home/runner/work/regex-bench/regex-bench'
+2026-02-06T15:03:23.9185929Z [command]/usr/bin/git version
+2026-02-06T15:03:23.9276538Z git version 2.52.0
+2026-02-06T15:03:23.9302181Z ##[endgroup]
+2026-02-06T15:03:23.9317135Z Temporarily overriding HOME='/home/runner/work/_temp/a78e749f-20bc-40fd-9686-fe6245e704c8' before making global git config changes
+2026-02-06T15:03:23.9319889Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-06T15:03:23.9322531Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/regex-bench/regex-bench
+2026-02-06T15:03:23.9363660Z Deleting the contents of '/home/runner/work/regex-bench/regex-bench'
+2026-02-06T15:03:23.9367433Z ##[group]Initializing the repository
+2026-02-06T15:03:23.9371383Z [command]/usr/bin/git init /home/runner/work/regex-bench/regex-bench
+2026-02-06T15:03:23.9497299Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-02-06T15:03:23.9499936Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-02-06T15:03:23.9503441Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-02-06T15:03:23.9505025Z hint: call:
+2026-02-06T15:03:23.9505674Z hint:
+2026-02-06T15:03:23.9506673Z hint: 	git config --global init.defaultBranch <name>
+2026-02-06T15:03:23.9507755Z hint:
+2026-02-06T15:03:23.9509200Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-02-06T15:03:23.9510863Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-02-06T15:03:23.9512167Z hint:
+2026-02-06T15:03:23.9512822Z hint: 	git branch -m <name>
+2026-02-06T15:03:23.9514168Z hint:
+2026-02-06T15:03:23.9515251Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-02-06T15:03:23.9517157Z Initialized empty Git repository in /home/runner/work/regex-bench/regex-bench/.git/
+2026-02-06T15:03:23.9520053Z [command]/usr/bin/git remote add origin https://github.com/kolkov/regex-bench
+2026-02-06T15:03:23.9552006Z ##[endgroup]
+2026-02-06T15:03:23.9553525Z ##[group]Disabling automatic garbage collection
+2026-02-06T15:03:23.9556105Z [command]/usr/bin/git config --local gc.auto 0
+2026-02-06T15:03:23.9584660Z ##[endgroup]
+2026-02-06T15:03:23.9585883Z ##[group]Setting up auth
+2026-02-06T15:03:23.9591364Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-06T15:03:23.9621177Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-06T15:03:24.0032837Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-06T15:03:24.0063103Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-06T15:03:24.0284803Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-02-06T15:03:24.0323734Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-02-06T15:03:24.0547122Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-02-06T15:03:24.0581226Z ##[endgroup]
+2026-02-06T15:03:24.0582505Z ##[group]Fetching the repository
+2026-02-06T15:03:24.0590965Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8850d09c7c88cecea0f7897b3f298afa8e8be354:refs/remotes/pull/2/merge
+2026-02-06T15:03:24.5869976Z From https://github.com/kolkov/regex-bench
+2026-02-06T15:03:24.5871511Z  * [new ref]         8850d09c7c88cecea0f7897b3f298afa8e8be354 -> pull/2/merge
+2026-02-06T15:03:24.5905267Z ##[endgroup]
+2026-02-06T15:03:24.5906719Z ##[group]Determining the checkout info
+2026-02-06T15:03:24.5908178Z ##[endgroup]
+2026-02-06T15:03:24.5912008Z [command]/usr/bin/git sparse-checkout disable
+2026-02-06T15:03:24.5955460Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-02-06T15:03:24.5982042Z ##[group]Checking out the ref
+2026-02-06T15:03:24.5985802Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/2/merge
+2026-02-06T15:03:24.6050947Z Note: switching to 'refs/remotes/pull/2/merge'.
+2026-02-06T15:03:24.6051999Z 
+2026-02-06T15:03:24.6052942Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-02-06T15:03:24.6055328Z changes and commit them, and you can discard any commits you make in this
+2026-02-06T15:03:24.6058240Z state without impacting any branches by switching back to a branch.
+2026-02-06T15:03:24.6059979Z 
+2026-02-06T15:03:24.6061079Z If you want to create a new branch to retain commits you create, you may
+2026-02-06T15:03:24.6063940Z do so (now or later) by using -c with the switch command. Example:
+2026-02-06T15:03:24.6065562Z 
+2026-02-06T15:03:24.6066154Z   git switch -c <new-branch-name>
+2026-02-06T15:03:24.6067527Z 
+2026-02-06T15:03:24.6068067Z Or undo this operation with:
+2026-02-06T15:03:24.6068989Z 
+2026-02-06T15:03:24.6069450Z   git switch -
+2026-02-06T15:03:24.6070102Z 
+2026-02-06T15:03:24.6071109Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-02-06T15:03:24.6072156Z 
+2026-02-06T15:03:24.6073570Z HEAD is now at 8850d09 Merge 3554c5d8a539f2fe4213add81d8482bd0fb14e74 into c329c82e19aa7525fbf56daea63fd9af4466fbac
+2026-02-06T15:03:24.6077929Z ##[endgroup]
+2026-02-06T15:03:24.6096508Z [command]/usr/bin/git log -1 --format=%H
+2026-02-06T15:03:24.6118556Z 8850d09c7c88cecea0f7897b3f298afa8e8be354
+2026-02-06T15:03:24.6401991Z ##[group]Run actions/setup-go@v5
+2026-02-06T15:03:24.6402866Z with:
+2026-02-06T15:03:24.6403681Z   go-version: 1.23
+2026-02-06T15:03:24.6404369Z   check-latest: false
+2026-02-06T15:03:24.6405336Z   token: ***
+2026-02-06T15:03:24.6405967Z   cache: true
+2026-02-06T15:03:24.6406614Z ##[endgroup]
+2026-02-06T15:03:24.8078044Z Setup go version spec 1.23
+2026-02-06T15:03:24.8345249Z Found in cache @ /opt/hostedtoolcache/go/1.23.12/x64
+2026-02-06T15:03:24.8349916Z Added go to the path
+2026-02-06T15:03:24.8355167Z Successfully set up Go version 1.23
+2026-02-06T15:03:25.7565449Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOMODCACHE
+2026-02-06T15:03:25.7597295Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOCACHE
+2026-02-06T15:03:25.7621564Z /home/runner/go/pkg/mod
+2026-02-06T15:03:25.7651353Z /home/runner/.cache/go-build
+2026-02-06T15:03:25.7676341Z ##[warning]Restore cache failed: Dependencies file is not found in /home/runner/work/regex-bench/regex-bench. Supported file pattern: go.sum
+2026-02-06T15:03:25.7704546Z go version go1.23.12 linux/amd64
+2026-02-06T15:03:25.7704802Z 
+2026-02-06T15:03:25.7705192Z ##[group]go env
+2026-02-06T15:03:25.9138509Z GO111MODULE=''
+2026-02-06T15:03:25.9138887Z GOARCH='amd64'
+2026-02-06T15:03:25.9139162Z GOBIN=''
+2026-02-06T15:03:25.9139445Z GOCACHE='/home/runner/.cache/go-build'
+2026-02-06T15:03:25.9139812Z GOENV='/home/runner/.config/go/env'
+2026-02-06T15:03:25.9140111Z GOEXE=''
+2026-02-06T15:03:25.9140339Z GOEXPERIMENT=''
+2026-02-06T15:03:25.9140607Z GOFLAGS=''
+2026-02-06T15:03:25.9140839Z GOHOSTARCH='amd64'
+2026-02-06T15:03:25.9141087Z GOHOSTOS='linux'
+2026-02-06T15:03:25.9141311Z GOINSECURE=''
+2026-02-06T15:03:25.9141578Z GOMODCACHE='/home/runner/go/pkg/mod'
+2026-02-06T15:03:25.9141863Z GONOPROXY=''
+2026-02-06T15:03:25.9142082Z GONOSUMDB=''
+2026-02-06T15:03:25.9142294Z GOOS='linux'
+2026-02-06T15:03:25.9142541Z GOPATH='/home/runner/go'
+2026-02-06T15:03:25.9142835Z GOPRIVATE=''
+2026-02-06T15:03:25.9143146Z GOPROXY='https://proxy.golang.org,direct'
+2026-02-06T15:03:25.9144074Z GOROOT='/opt/hostedtoolcache/go/1.23.12/x64'
+2026-02-06T15:03:25.9144431Z GOSUMDB='sum.golang.org'
+2026-02-06T15:03:25.9144704Z GOTMPDIR=''
+2026-02-06T15:03:25.9144939Z GOTOOLCHAIN='auto'
+2026-02-06T15:03:25.9145325Z GOTOOLDIR='/opt/hostedtoolcache/go/1.23.12/x64/pkg/tool/linux_amd64'
+2026-02-06T15:03:25.9145767Z GOVCS=''
+2026-02-06T15:03:25.9146002Z GOVERSION='go1.23.12'
+2026-02-06T15:03:25.9146247Z GODEBUG=''
+2026-02-06T15:03:25.9146469Z GOTELEMETRY='local'
+2026-02-06T15:03:25.9146804Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+2026-02-06T15:03:25.9147122Z GCCGO='gccgo'
+2026-02-06T15:03:25.9147344Z GOAMD64='v1'
+2026-02-06T15:03:25.9147556Z AR='ar'
+2026-02-06T15:03:25.9147755Z CC='gcc'
+2026-02-06T15:03:25.9147954Z CXX='g++'
+2026-02-06T15:03:25.9148165Z CGO_ENABLED='1'
+2026-02-06T15:03:25.9148383Z GOMOD='/dev/null'
+2026-02-06T15:03:25.9148606Z GOWORK=''
+2026-02-06T15:03:25.9148823Z CGO_CFLAGS='-O2 -g'
+2026-02-06T15:03:25.9149069Z CGO_CPPFLAGS=''
+2026-02-06T15:03:25.9149316Z CGO_CXXFLAGS='-O2 -g'
+2026-02-06T15:03:25.9149556Z CGO_FFLAGS='-O2 -g'
+2026-02-06T15:03:25.9149792Z CGO_LDFLAGS='-O2 -g'
+2026-02-06T15:03:25.9150040Z PKG_CONFIG='pkg-config'
+2026-02-06T15:03:25.9150791Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build1586152217=/tmp/go-build -gno-record-gcc-switches'
+2026-02-06T15:03:25.9151627Z 
+2026-02-06T15:03:25.9152157Z ##[endgroup]
+2026-02-06T15:03:25.9397168Z ##[group]Run dtolnay/rust-toolchain@stable
+2026-02-06T15:03:25.9397537Z with:
+2026-02-06T15:03:25.9397766Z   toolchain: stable
+2026-02-06T15:03:25.9398005Z ##[endgroup]
+2026-02-06T15:03:25.9518791Z ##[group]Run : parse toolchain version
+2026-02-06T15:03:25.9519228Z [36;1m: parse toolchain version[0m
+2026-02-06T15:03:25.9519548Z [36;1mif [[ -z $toolchain ]]; then[0m
+2026-02-06T15:03:25.9520135Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+2026-02-06T15:03:25.9520729Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+2026-02-06T15:03:25.9521060Z [36;1m  exit 1[0m
+2026-02-06T15:03:25.9521423Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+2026-02-06T15:03:25.9521863Z [36;1m  if [[ Linux == macOS ]]; then[0m
+2026-02-06T15:03:25.9522471Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9523027Z [36;1m  else[0m
+2026-02-06T15:03:25.9523629Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9524117Z [36;1m  fi[0m
+2026-02-06T15:03:25.9524452Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+2026-02-06T15:03:25.9525008Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9525494Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+2026-02-06T15:03:25.9526029Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9526539Z [36;1melse[0m
+2026-02-06T15:03:25.9526837Z [36;1m  echo "toolchain=$toolchain" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9527201Z [36;1mfi[0m
+2026-02-06T15:03:25.9563849Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:25.9564243Z env:
+2026-02-06T15:03:25.9564463Z   toolchain: stable
+2026-02-06T15:03:25.9564692Z ##[endgroup]
+2026-02-06T15:03:25.9699461Z ##[group]Run : construct rustup command line
+2026-02-06T15:03:25.9699844Z [36;1m: construct rustup command line[0m
+2026-02-06T15:03:25.9700328Z [36;1mecho "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9700990Z [36;1mecho "components=$(for c in ${components//,/ }; do echo -n ' --component' $c; done)" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9701546Z [36;1mecho "downgrade=" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:25.9730110Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:25.9730495Z env:
+2026-02-06T15:03:25.9730698Z   targets: 
+2026-02-06T15:03:25.9730923Z   components: 
+2026-02-06T15:03:25.9731149Z ##[endgroup]
+2026-02-06T15:03:25.9821301Z ##[group]Run : set $CARGO_HOME
+2026-02-06T15:03:25.9821633Z [36;1m: set $CARGO_HOME[0m
+2026-02-06T15:03:25.9821995Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV[0m
+2026-02-06T15:03:25.9851316Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:25.9851699Z ##[endgroup]
+2026-02-06T15:03:25.9938996Z ##[group]Run : install rustup if needed
+2026-02-06T15:03:25.9939331Z [36;1m: install rustup if needed[0m
+2026-02-06T15:03:25.9939658Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+2026-02-06T15:03:25.9940448Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y[0m
+2026-02-06T15:03:25.9941235Z [36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH[0m
+2026-02-06T15:03:25.9941528Z [36;1mfi[0m
+2026-02-06T15:03:25.9969917Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:25.9970284Z env:
+2026-02-06T15:03:25.9970497Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:25.9970926Z ##[endgroup]
+2026-02-06T15:03:26.0058963Z ##[group]Run rustup toolchain install stable --profile minimal --no-self-update
+2026-02-06T15:03:26.0059557Z [36;1mrustup toolchain install stable --profile minimal --no-self-update[0m
+2026-02-06T15:03:26.0087664Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.0088022Z env:
+2026-02-06T15:03:26.0088242Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.0088533Z   RUSTUP_PERMIT_COPY_RENAME: 1
+2026-02-06T15:03:26.0088794Z ##[endgroup]
+2026-02-06T15:03:26.3261311Z info: syncing channel updates for 'stable-x86_64-unknown-linux-gnu'
+2026-02-06T15:03:26.4122146Z 
+2026-02-06T15:03:26.4211855Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.93.0 (254b59607 2026-01-19)
+2026-02-06T15:03:26.4212442Z 
+2026-02-06T15:03:26.4266088Z ##[group]Run rustup default stable
+2026-02-06T15:03:26.4266360Z [36;1mrustup default stable[0m
+2026-02-06T15:03:26.4297249Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.4297566Z env:
+2026-02-06T15:03:26.4297752Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.4297974Z ##[endgroup]
+2026-02-06T15:03:26.4402299Z info: using existing install for 'stable-x86_64-unknown-linux-gnu'
+2026-02-06T15:03:26.4710549Z info: default toolchain set to 'stable-x86_64-unknown-linux-gnu'
+2026-02-06T15:03:26.4711042Z 
+2026-02-06T15:03:26.4797627Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.93.0 (254b59607 2026-01-19)
+2026-02-06T15:03:26.4798209Z 
+2026-02-06T15:03:26.4846460Z ##[group]Run : create cachekey
+2026-02-06T15:03:26.4846718Z [36;1m: create cachekey[0m
+2026-02-06T15:03:26.4847191Z [36;1mDATE=$(rustc +stable --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+2026-02-06T15:03:26.4847811Z [36;1mHASH=$(rustc +stable --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+2026-02-06T15:03:26.4848278Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+2026-02-06T15:03:26.4879315Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.4879640Z env:
+2026-02-06T15:03:26.4879811Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.4880039Z ##[endgroup]
+2026-02-06T15:03:26.5523636Z ##[group]Run : disable incremental compilation
+2026-02-06T15:03:26.5524228Z [36;1m: disable incremental compilation[0m
+2026-02-06T15:03:26.5524791Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+2026-02-06T15:03:26.5525359Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+2026-02-06T15:03:26.5525854Z [36;1mfi[0m
+2026-02-06T15:03:26.5571370Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.5571906Z env:
+2026-02-06T15:03:26.5572193Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.5572605Z ##[endgroup]
+2026-02-06T15:03:26.5666513Z ##[group]Run : enable colors in Cargo output
+2026-02-06T15:03:26.5666832Z [36;1m: enable colors in Cargo output[0m
+2026-02-06T15:03:26.5667117Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+2026-02-06T15:03:26.5667448Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+2026-02-06T15:03:26.5667709Z [36;1mfi[0m
+2026-02-06T15:03:26.5695669Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.5695977Z env:
+2026-02-06T15:03:26.5696155Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.5696378Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:26.5696567Z ##[endgroup]
+2026-02-06T15:03:26.5769441Z ##[group]Run : enable Cargo sparse registry
+2026-02-06T15:03:26.5769743Z [36;1m: enable Cargo sparse registry[0m
+2026-02-06T15:03:26.5770076Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+2026-02-06T15:03:26.5770749Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+2026-02-06T15:03:26.5771444Z [36;1m  if rustc +stable --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+2026-02-06T15:03:26.5771967Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-02-06T15:03:26.5772776Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+2026-02-06T15:03:26.5773537Z [36;1m  elif rustc +stable --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+2026-02-06T15:03:26.5774108Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-02-06T15:03:26.5774598Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+2026-02-06T15:03:26.5774903Z [36;1m  fi[0m
+2026-02-06T15:03:26.5775066Z [36;1mfi[0m
+2026-02-06T15:03:26.5802636Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.5802946Z env:
+2026-02-06T15:03:26.5803121Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.5803610Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:26.5803811Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:26.5804003Z ##[endgroup]
+2026-02-06T15:03:26.6176169Z ##[group]Run : work around spurious network errors in curl 8.0
+2026-02-06T15:03:26.6176598Z [36;1m: work around spurious network errors in curl 8.0[0m
+2026-02-06T15:03:26.6177129Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+2026-02-06T15:03:26.6177740Z [36;1mif rustc +stable --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+2026-02-06T15:03:26.6178175Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+2026-02-06T15:03:26.6178452Z [36;1mfi[0m
+2026-02-06T15:03:26.6210001Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.6210309Z env:
+2026-02-06T15:03:26.6210476Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.6210709Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:26.6210901Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:26.6211099Z ##[endgroup]
+2026-02-06T15:03:26.6435450Z ##[group]Run rustc +stable --version --verbose
+2026-02-06T15:03:26.6435778Z [36;1mrustc +stable --version --verbose[0m
+2026-02-06T15:03:26.6467299Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-02-06T15:03:26.6467635Z env:
+2026-02-06T15:03:26.6467815Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.6468044Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:26.6468230Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:26.6468421Z ##[endgroup]
+2026-02-06T15:03:26.6644897Z rustc 1.93.0 (254b59607 2026-01-19)
+2026-02-06T15:03:26.6646077Z binary: rustc
+2026-02-06T15:03:26.6651806Z commit-hash: 254b59607d4417e9dffbc307138ae5c86280fe4c
+2026-02-06T15:03:26.6652362Z commit-date: 2026-01-19
+2026-02-06T15:03:26.6652762Z host: x86_64-unknown-linux-gnu
+2026-02-06T15:03:26.6653141Z release: 1.93.0
+2026-02-06T15:03:26.6653659Z LLVM version: 21.1.8
+2026-02-06T15:03:26.6719799Z ##[group]Run go run scripts/generate-input.go
+2026-02-06T15:03:26.6720159Z [36;1mgo run scripts/generate-input.go[0m
+2026-02-06T15:03:26.6755373Z shell: /usr/bin/bash -e {0}
+2026-02-06T15:03:26.6755758Z env:
+2026-02-06T15:03:26.6756063Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:26.6756475Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:26.6756852Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:26.6757200Z ##[endgroup]
+2026-02-06T15:03:33.8516266Z Generated input/data.txt (6.00 MB)
+2026-02-06T15:03:33.8712148Z ##[group]Run cd go-stdlib && go build -o ../bin/go-stdlib .
+2026-02-06T15:03:33.8712575Z [36;1mcd go-stdlib && go build -o ../bin/go-stdlib .[0m
+2026-02-06T15:03:33.8744671Z shell: /usr/bin/bash -e {0}
+2026-02-06T15:03:33.8744898Z env:
+2026-02-06T15:03:33.8745070Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:33.8745305Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:33.8745501Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:33.8745699Z ##[endgroup]
+2026-02-06T15:03:33.8825932Z go: downloading go1.25.0 (linux/amd64)
+2026-02-06T15:03:42.2382520Z ##[group]Run cd go-coregex && go build -o ../bin/go-coregex .
+2026-02-06T15:03:42.2382959Z [36;1mcd go-coregex && go build -o ../bin/go-coregex .[0m
+2026-02-06T15:03:42.2414986Z shell: /usr/bin/bash -e {0}
+2026-02-06T15:03:42.2415217Z env:
+2026-02-06T15:03:42.2415393Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:42.2415780Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:42.2415980Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:42.2416171Z ##[endgroup]
+2026-02-06T15:03:42.2493566Z go: downloading go1.25.4 (linux/amd64)
+2026-02-06T15:03:45.9192355Z go: downloading github.com/coregx/coregex v0.12.1-0.20260206024753-bd3a3f6f5b5c
+2026-02-06T15:03:46.0103647Z go: downloading github.com/coregx/ahocorasick v0.1.0
+2026-02-06T15:03:46.0107066Z go: downloading golang.org/x/sys v0.40.0
+2026-02-06T15:03:51.8475609Z ##[group]Run cd rust && cargo build --release && cp target/release/benchmark ../bin/rust-benchmark
+2026-02-06T15:03:51.8476762Z [36;1mcd rust && cargo build --release && cp target/release/benchmark ../bin/rust-benchmark[0m
+2026-02-06T15:03:51.8508227Z shell: /usr/bin/bash -e {0}
+2026-02-06T15:03:51.8508459Z env:
+2026-02-06T15:03:51.8508640Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:51.8508881Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:51.8509078Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:51.8509284Z ##[endgroup]
+2026-02-06T15:03:52.9352123Z [1m[92m    Updating[0m crates.io index
+2026-02-06T15:03:53.1064654Z [1m[92m     Locking[0m 5 packages to latest compatible versions
+2026-02-06T15:03:53.1117114Z [1m[92m Downloading[0m crates ...
+2026-02-06T15:03:53.1692262Z [1m[92m  Downloaded[0m memchr v2.7.6
+2026-02-06T15:03:53.1942830Z [1m[92m  Downloaded[0m regex v1.12.3
+2026-02-06T15:03:53.2001135Z [1m[92m  Downloaded[0m aho-corasick v1.1.4
+2026-02-06T15:03:53.2102537Z [1m[92m  Downloaded[0m regex-syntax v0.8.9
+2026-02-06T15:03:53.2185792Z [1m[92m  Downloaded[0m regex-automata v0.4.14
+2026-02-06T15:03:53.2615745Z [1m[92m   Compiling[0m memchr v2.7.6
+2026-02-06T15:03:53.2617488Z [1m[92m   Compiling[0m regex-syntax v0.8.9
+2026-02-06T15:03:56.1576347Z [1m[92m   Compiling[0m aho-corasick v1.1.4
+2026-02-06T15:03:57.2649951Z [1m[92m   Compiling[0m regex-automata v0.4.14
+2026-02-06T15:03:59.3772665Z [1m[92m   Compiling[0m regex v1.12.3
+2026-02-06T15:04:02.3300132Z [1m[92m   Compiling[0m benchmark v0.1.0 (/home/runner/work/regex-bench/regex-bench/rust)
+2026-02-06T15:04:13.5609065Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 21.31s
+2026-02-06T15:04:13.5760193Z ##[group]Run # Run all benchmarks (tee to stdout for log visibility)
+2026-02-06T15:04:13.5761150Z [36;1m# Run all benchmarks (tee to stdout for log visibility)[0m
+2026-02-06T15:04:13.5761868Z [36;1m./bin/go-stdlib input/data.txt | tee /tmp/stdlib.txt[0m
+2026-02-06T15:04:13.5762415Z [36;1mecho ""[0m
+2026-02-06T15:04:13.5762878Z [36;1m./bin/go-coregex input/data.txt | tee /tmp/coregex.txt[0m
+2026-02-06T15:04:13.5763652Z [36;1mecho ""[0m
+2026-02-06T15:04:13.5764127Z [36;1m./bin/rust-benchmark input/data.txt | tee /tmp/rust.txt[0m
+2026-02-06T15:04:13.5764755Z [36;1m[0m
+2026-02-06T15:04:13.5765163Z [36;1m# Generate summary[0m
+2026-02-06T15:04:13.5769032Z [36;1mecho "## Benchmark Results" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5769630Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5770376Z [36;1mecho "**Platform**: Ubuntu $(lsb_release -rs), $(uname -m)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5771589Z [36;1mecho "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5772089Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5772334Z [36;1m[0m
+2026-02-06T15:04:13.5772550Z [36;1m# Search time comparison table (the main metric)[0m
+2026-02-06T15:04:13.5772897Z [36;1mecho "### Search Time Comparison" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5773415Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5773863Z [36;1mecho "| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5774486Z [36;1mecho "|---------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5774869Z [36;1m[0m
+2026-02-06T15:04:13.5775270Z [36;1m# New format: pattern compile search matches[0m
+2026-02-06T15:04:13.5775581Z [36;1m# Extract search time (column 3) from each output[0m
+2026-02-06T15:04:13.5775928Z [36;1mgrep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do[0m
+2026-02-06T15:04:13.5776277Z [36;1m  pattern=$(echo "$line" | awk '{print $1}')[0m
+2026-02-06T15:04:13.5776573Z [36;1m  std_search=$(echo "$line" | awk '{print $3}')[0m
+2026-02-06T15:04:13.5776821Z [36;1m[0m
+2026-02-06T15:04:13.5777034Z [36;1m  cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)[0m
+2026-02-06T15:04:13.5777355Z [36;1m  cor_search=$(echo "$cor_line" | awk '{print $3}')[0m
+2026-02-06T15:04:13.5777713Z [36;1m[0m
+2026-02-06T15:04:13.5778031Z [36;1m  rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)[0m
+2026-02-06T15:04:13.5778579Z [36;1m  rus_search=$(echo "$rus_line" | awk '{print $3}')[0m
+2026-02-06T15:04:13.5779023Z [36;1m[0m
+2026-02-06T15:04:13.5779222Z [36;1m  # vs stdlib speedup[0m
+2026-02-06T15:04:13.5779538Z [36;1m  if [ -n "$cor_search" ] && [ "$cor_search" != "0.00" ]; then[0m
+2026-02-06T15:04:13.5779983Z [36;1m    speedup=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null || echo "0")[0m
+2026-02-06T15:04:13.5780391Z [36;1m    if [ "$speedup" -ge 2 ] 2>/dev/null; then[0m
+2026-02-06T15:04:13.5780672Z [36;1m      vs_stdlib="**${speedup}x**"[0m
+2026-02-06T15:04:13.5780913Z [36;1m    else[0m
+2026-02-06T15:04:13.5781091Z [36;1m      vs_stdlib="~1x"[0m
+2026-02-06T15:04:13.5781286Z [36;1m    fi[0m
+2026-02-06T15:04:13.5781444Z [36;1m  else[0m
+2026-02-06T15:04:13.5781606Z [36;1m    vs_stdlib="—"[0m
+2026-02-06T15:04:13.5781804Z [36;1m  fi[0m
+2026-02-06T15:04:13.5781955Z [36;1m[0m
+2026-02-06T15:04:13.5782117Z [36;1m  # vs Rust comparison[0m
+2026-02-06T15:04:13.5782510Z [36;1m  if [ -n "$cor_search" ] && [ -n "$rus_search" ] && [ "$rus_search" != "0.00" ] && [ "$cor_search" != "0.00" ]; then[0m
+2026-02-06T15:04:13.5783055Z [36;1m    cor_faster=$(echo "$cor_search < $rus_search" | bc -l 2>/dev/null || echo "0")[0m
+2026-02-06T15:04:13.5783760Z [36;1m    if [ "$cor_faster" -eq 1 ] 2>/dev/null; then[0m
+2026-02-06T15:04:13.5784090Z [36;1m      ratio=$(echo "scale=1; $rus_search / $cor_search" | bc)[0m
+2026-02-06T15:04:13.5784604Z [36;1m      vs_rust="**${ratio}x faster**"[0m
+2026-02-06T15:04:13.5784871Z [36;1m      winner="coregex"[0m
+2026-02-06T15:04:13.5785099Z [36;1m      cor_fmt="**${cor_search} ms**"[0m
+2026-02-06T15:04:13.5785338Z [36;1m      rus_fmt="${rus_search} ms"[0m
+2026-02-06T15:04:13.5785573Z [36;1m    else[0m
+2026-02-06T15:04:13.5785803Z [36;1m      ratio=$(echo "scale=1; $cor_search / $rus_search" | bc)[0m
+2026-02-06T15:04:13.5786111Z [36;1m      vs_rust="${ratio}x slower"[0m
+2026-02-06T15:04:13.5786342Z [36;1m      winner="Rust"[0m
+2026-02-06T15:04:13.5786548Z [36;1m      cor_fmt="${cor_search} ms"[0m
+2026-02-06T15:04:13.5786797Z [36;1m      rus_fmt="**${rus_search} ms**"[0m
+2026-02-06T15:04:13.5787025Z [36;1m    fi[0m
+2026-02-06T15:04:13.5787186Z [36;1m  else[0m
+2026-02-06T15:04:13.5787351Z [36;1m    vs_rust="~same"[0m
+2026-02-06T15:04:13.5787558Z [36;1m    winner="—"[0m
+2026-02-06T15:04:13.5787756Z [36;1m    cor_fmt="${cor_search} ms"[0m
+2026-02-06T15:04:13.5788001Z [36;1m    rus_fmt="${rus_search} ms"[0m
+2026-02-06T15:04:13.5788218Z [36;1m  fi[0m
+2026-02-06T15:04:13.5788370Z [36;1m[0m
+2026-02-06T15:04:13.5788758Z [36;1m  echo "| $pattern | ${std_search} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5789205Z [36;1mdone[0m
+2026-02-06T15:04:13.5789360Z [36;1m[0m
+2026-02-06T15:04:13.5789521Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5789746Z [36;1m[0m
+2026-02-06T15:04:13.5789915Z [36;1m# Compile time comparison table[0m
+2026-02-06T15:04:13.5790218Z [36;1mecho "### Compile Time Comparison" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5790535Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5790890Z [36;1mecho "| Pattern | Go stdlib | Go coregex | Rust regex |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5791533Z [36;1mecho "|---------|-----------|------------|------------|" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5791856Z [36;1m[0m
+2026-02-06T15:04:13.5792087Z [36;1mgrep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do[0m
+2026-02-06T15:04:13.5792424Z [36;1m  pattern=$(echo "$line" | awk '{print $1}')[0m
+2026-02-06T15:04:13.5792729Z [36;1m  std_compile=$(echo "$line" | awk '{print $2}')[0m
+2026-02-06T15:04:13.5792986Z [36;1m[0m
+2026-02-06T15:04:13.5793475Z [36;1m  cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)[0m
+2026-02-06T15:04:13.5793902Z [36;1m  cor_compile=$(echo "$cor_line" | awk '{print $2}')[0m
+2026-02-06T15:04:13.5794172Z [36;1m[0m
+2026-02-06T15:04:13.5794375Z [36;1m  rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)[0m
+2026-02-06T15:04:13.5794690Z [36;1m  rus_compile=$(echo "$rus_line" | awk '{print $2}')[0m
+2026-02-06T15:04:13.5794948Z [36;1m[0m
+2026-02-06T15:04:13.5795293Z [36;1m  echo "| $pattern | ${std_compile} ms | ${cor_compile} ms | ${rus_compile} ms |" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5795706Z [36;1mdone[0m
+2026-02-06T15:04:13.5795859Z [36;1m[0m
+2026-02-06T15:04:13.5796027Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5796280Z [36;1mecho "---" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5796530Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5796739Z [36;1m[0m
+2026-02-06T15:04:13.5796893Z [36;1m# Raw output[0m
+2026-02-06T15:04:13.5797102Z [36;1mecho "<details>" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5797495Z [36;1mecho "<summary>Raw Output (click to expand)</summary>" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5797865Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5798082Z [36;1m[0m
+2026-02-06T15:04:13.5798269Z [36;1mecho "#### Go stdlib" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5798541Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5798815Z [36;1mcat /tmp/stdlib.txt >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5799093Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5799342Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5799689Z [36;1m[0m
+2026-02-06T15:04:13.5799890Z [36;1mecho "#### Go coregex" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800160Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800433Z [36;1mcat /tmp/coregex.txt >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800704Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5800942Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5801162Z [36;1m[0m
+2026-02-06T15:04:13.5801350Z [36;1mecho "#### Rust regex" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5801628Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5801891Z [36;1mcat /tmp/rust.txt >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5802164Z [36;1mecho '```' >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5802379Z [36;1m[0m
+2026-02-06T15:04:13.5802566Z [36;1mecho "</details>" >> $GITHUB_STEP_SUMMARY[0m
+2026-02-06T15:04:13.5833531Z shell: /usr/bin/bash -e {0}
+2026-02-06T15:04:13.5833757Z env:
+2026-02-06T15:04:13.5833938Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:04:13.5834179Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:04:13.5834372Z   CARGO_TERM_COLOR: always
+2026-02-06T15:04:13.5834572Z ##[endgroup]
+2026-02-06T15:04:13.5910979Z Go stdlib (input: 6.00 MB)
+2026-02-06T15:04:13.5911435Z pattern            compile     search matches
+2026-02-06T15:04:13.5912156Z ─────────────────────────────────────────────────
+2026-02-06T15:04:14.0626301Z literal_alt           0.03     471.36    983
+2026-02-06T15:04:15.4626025Z multi_literal         0.05    1399.94  27052
+2026-02-06T15:04:15.4626546Z anchored              0.03       0.01      1
+2026-02-06T15:04:15.6939890Z inner_literal         0.01     231.30    336
+2026-02-06T15:04:15.9282922Z suffix                0.02     234.27   2212
+2026-02-06T15:04:16.4370667Z char_class            0.01     508.77 1296450
+2026-02-06T15:04:16.6977541Z email                 0.03     260.64    656
+2026-02-06T15:04:16.9551809Z uri                   0.03     257.32    820
+2026-02-06T15:04:17.1231675Z version               0.02     168.01   2731
+2026-02-06T15:04:17.6160355Z ip                    0.07     492.74   1093
+2026-02-06T15:04:17.8769408Z alpha_digit           0.02     260.90    225
+2026-02-06T15:04:18.1475077Z word_digit            0.01     270.51   3804
+2026-02-06T15:04:18.2535221Z http_methods          0.02     105.92   1713
+2026-02-06T15:04:18.2535640Z anchored_php          0.03       0.00      0
+2026-02-06T15:04:18.3570328Z multiline_php         0.01     103.42   1966
+2026-02-06T15:04:19.0444263Z word_repeat           0.02     687.39 1239756
+2026-02-06T15:04:19.0473719Z 
+2026-02-06T15:04:19.0505425Z Go coregex v0.12.1-0.20260206024753-bd3a3f6f5b5c (input: 6.00 MB)
+2026-02-06T15:04:19.0506058Z pattern            compile     search matches
+2026-02-06T15:04:19.0506852Z ─────────────────────────────────────────────────
+2026-02-06T15:04:19.0548866Z literal_alt           0.06       4.32    983
+2026-02-06T15:04:19.0678215Z multi_literal         0.03      12.83  27052
+2026-02-06T15:04:19.0680841Z anchored              0.03       0.23      1
+2026-02-06T15:04:19.0690524Z inner_literal         0.68       0.33    336
+2026-02-06T15:04:19.0701033Z suffix                0.15       0.90   2212
+2026-02-06T15:04:19.1047318Z char_class            0.01      34.47 1296450
+2026-02-06T15:04:19.1053553Z email                 0.14       0.58    656
+2026-02-06T15:04:19.1062086Z uri                   0.19       0.66    820
+2026-02-06T15:04:19.1079205Z version               0.05       1.65   2731
+2026-02-06T15:04:19.1101560Z ip                    0.09       2.13   1093
+2026-02-06T15:04:19.1355748Z alpha_digit           0.02      25.33    225
+2026-02-06T15:04:19.1611566Z word_digit            0.05      25.52   3804
+2026-02-06T15:04:19.1620548Z http_methods          0.07       0.86   1713
+2026-02-06T15:04:19.1621044Z anchored_php          0.04       0.00      0
+2026-02-06T15:04:19.1628391Z multiline_php         0.06       0.67   1966
+2026-02-06T15:04:19.5246268Z word_repeat           0.04     361.58 1239756
+2026-02-06T15:04:19.5260407Z 
+2026-02-06T15:04:19.5308364Z Rust regex (input: 6.00 MB)
+2026-02-06T15:04:19.5308856Z pattern            compile     search matches
+2026-02-06T15:04:19.5309658Z ─────────────────────────────────────────────────
+2026-02-06T15:04:19.5316439Z literal_alt           0.14       0.68    983
+2026-02-06T15:04:19.5365629Z multi_literal         0.20       4.71  27052
+2026-02-06T15:04:19.5366129Z anchored              0.03       0.01      1
+2026-02-06T15:04:19.5372249Z inner_literal         0.30       0.32    336
+2026-02-06T15:04:19.5386422Z suffix                0.30       1.10   2212
+2026-02-06T15:04:19.5921925Z char_class            0.42      52.99 1296450
+2026-02-06T15:04:19.5937783Z email                 1.28       0.36    656
+2026-02-06T15:04:19.5948920Z uri                   0.67       0.38    820
+2026-02-06T15:04:19.5958533Z version               0.20       0.74   2731
+2026-02-06T15:04:19.6079621Z ip                    0.19      11.90   1093
+2026-02-06T15:04:19.6199208Z alpha_digit           0.11      11.83    225
+2026-02-06T15:04:19.6324411Z word_digit            0.50      12.01   3804
+2026-02-06T15:04:19.6331531Z http_methods          0.12       0.61   1713
+2026-02-06T15:04:19.6336292Z anchored_php          0.45       0.01      0
+2026-02-06T15:04:19.6344311Z multiline_php         0.11       0.69   1966
+2026-02-06T15:04:19.6882744Z word_repeat           2.82      50.85 1239756
+2026-02-06T15:04:19.7297990Z Runtime error (func=(main), adr=9): Divide by zero
+2026-02-06T15:04:20.2206103Z Post job cleanup.
+2026-02-06T15:04:20.3798736Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOMODCACHE
+2026-02-06T15:04:20.3836567Z [command]/opt/hostedtoolcache/go/1.23.12/x64/bin/go env GOCACHE
+2026-02-06T15:04:20.3861476Z /home/runner/go/pkg/mod
+2026-02-06T15:04:20.3889717Z /home/runner/.cache/go-build
+2026-02-06T15:04:20.3894925Z Primary key was not generated. Please check the log messages above for more errors or information
+2026-02-06T15:04:20.4022809Z Post job cleanup.
+2026-02-06T15:04:20.4972399Z [command]/usr/bin/git version
+2026-02-06T15:04:20.5015558Z git version 2.52.0
+2026-02-06T15:04:20.5066743Z Temporarily overriding HOME='/home/runner/work/_temp/7e91c591-7faf-46f9-a944-0b2115346268' before making global git config changes
+2026-02-06T15:04:20.5068111Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-06T15:04:20.5073335Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/regex-bench/regex-bench
+2026-02-06T15:04:20.5110548Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-06T15:04:20.5145291Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-06T15:04:20.5381078Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-06T15:04:20.5404415Z http.https://github.com/.extraheader
+2026-02-06T15:04:20.5418426Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-02-06T15:04:20.5450397Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-06T15:04:20.5674787Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-02-06T15:04:20.5706606Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-02-06T15:04:20.6032714Z Cleaning up orphan processes

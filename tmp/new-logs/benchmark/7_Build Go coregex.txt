@@ -1,0 +1,12 @@
+﻿2026-02-06T15:03:42.2382506Z ##[group]Run cd go-coregex && go build -o ../bin/go-coregex .
+2026-02-06T15:03:42.2382956Z [36;1mcd go-coregex && go build -o ../bin/go-coregex .[0m
+2026-02-06T15:03:42.2414979Z shell: /usr/bin/bash -e {0}
+2026-02-06T15:03:42.2415213Z env:
+2026-02-06T15:03:42.2415391Z   CARGO_HOME: /home/runner/.cargo
+2026-02-06T15:03:42.2415777Z   CARGO_INCREMENTAL: 0
+2026-02-06T15:03:42.2415977Z   CARGO_TERM_COLOR: always
+2026-02-06T15:03:42.2416169Z ##[endgroup]
+2026-02-06T15:03:42.2493550Z go: downloading go1.25.4 (linux/amd64)
+2026-02-06T15:03:45.9192308Z go: downloading github.com/coregx/coregex v0.12.1-0.20260206024753-bd3a3f6f5b5c
+2026-02-06T15:03:46.0103600Z go: downloading github.com/coregx/ahocorasick v0.1.0
+2026-02-06T15:03:46.0107043Z go: downloading golang.org/x/sys v0.40.0
