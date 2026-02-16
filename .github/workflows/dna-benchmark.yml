@@ -54,8 +54,8 @@ jobs:
 
           echo "### Search Time Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Pattern | Regex | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|-------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Pattern | Regex | Strategy | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|----------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY
 
           # Pattern regexes for display
           declare -A regexes
@@ -75,6 +75,7 @@ jobs:
 
             cor_line=$(grep "^${pattern} " /tmp/coregex.txt)
             cor_search=$(echo "$cor_line" | awk '{print $3}')
+            strategy=$(echo "$cor_line" | awk '{print $5}')
 
             rus_line=$(grep "^${pattern} " /tmp/rust.txt)
             rus_search=$(echo "$rus_line" | awk '{print $3}')
@@ -83,13 +84,19 @@ jobs:
 
             # vs stdlib speedup
             if [ -n "$cor_search" ] && [ -n "$std_search" ]; then
-              speedup=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null)
-              if [ "$speedup" -gt 2 ] 2>/dev/null; then
-                vs_stdlib="**${speedup}x**"
-              elif [ "$speedup" -gt 0 ] 2>/dev/null; then
-                vs_stdlib="~1x"
+              cor_ms_int=$(echo "$cor_search * 1000" | bc | cut -d. -f1)
+              std_ms_int=$(echo "$std_search * 1000" | bc | cut -d. -f1)
+              if [ "$cor_ms_int" -le "$std_ms_int" ] 2>/dev/null; then
+                speedup=$(echo "scale=1; $std_search / $cor_search" | bc 2>/dev/null)
+                speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null)
+                if [ "$speedup_int" -gt 2 ] 2>/dev/null; then
+                  vs_stdlib="**${speedup}x faster**"
+                else
+                  vs_stdlib="~1x"
+                fi
               else
-                vs_stdlib="—"
+                slowdown=$(echo "scale=1; $cor_search / $std_search" | bc 2>/dev/null)
+                vs_stdlib="${slowdown}x slower"
               fi
             else
               vs_stdlib="—"
@@ -119,7 +126,7 @@ jobs:
               rus_fmt="${rus_search} ms"
             fi
 
-            echo "| $pattern | \`$regex\` | ${std_search} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY
+            echo "| $pattern | \`$regex\` | $strategy | ${std_search} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY
           done
 
           echo "" >> $GITHUB_STEP_SUMMARY

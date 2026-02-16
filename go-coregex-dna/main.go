@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/coregx/coregex"
+	"github.com/coregx/coregex/meta"
 )
 
 func getCoregexVersion() string {
@@ -46,6 +47,10 @@ func measure(data []byte, p Pattern) {
 	re := coregex.MustCompile(p.Pattern)
 	compileElapsed := time.Since(compileStart)
 
+	// Get strategy from meta engine
+	engine, _ := meta.Compile(p.Pattern)
+	strategy := engine.Strategy().String()
+
 	searchStart := time.Now()
 	matches := re.FindAll(data, -1)
 	searchElapsed := time.Since(searchStart)
@@ -53,7 +58,7 @@ func measure(data []byte, p Pattern) {
 	compileMs := float64(compileElapsed) / float64(time.Millisecond)
 	searchMs := float64(searchElapsed) / float64(time.Millisecond)
 
-	fmt.Printf("%-15s %10.2f %10.2f %6d\n", p.Name, compileMs, searchMs, len(matches))
+	fmt.Printf("%-15s %10.2f %10.2f %6d %s\n", p.Name, compileMs, searchMs, len(matches), strategy)
 }
 
 func main() {
@@ -69,7 +74,7 @@ func main() {
 	}
 
 	fmt.Printf("Go coregex %s regexdna (input: %.2f MB)\n", getCoregexVersion(), float64(len(data))/1024/1024)
-	fmt.Printf("%-15s %10s %10s %6s\n", "pattern", "compile", "search", "matches")
+	fmt.Printf("%-15s %10s %10s %6s %s\n", "pattern", "compile", "search", "matches", "strategy")
 	fmt.Println("─────────────────────────────────────────────────")
 
 	for _, p := range patterns {
