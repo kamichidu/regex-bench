@@ -80,7 +80,7 @@ jobs:
             rus_line=$(grep "^${pattern} " /tmp/rust.txt)
             rus_search=$(echo "$rus_line" | awk '{print $3}')
 
-            regex="${regexes[$pattern]}"
+            regex="${regexes[$pattern]//|/\\|}"
 
             # vs stdlib speedup
             if [ -n "$cor_search" ] && [ -n "$std_search" ]; then
