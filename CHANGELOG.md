@@ -9,6 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-03-10] - BoundedBacktracker Span Fix, DFA FindAll Optimization (v0.12.6)
+
+### Changed
+- **Updated coregex v0.12.1 → v0.12.6**
+  - v0.12.6: BoundedBacktracker span-based CanHandle, ReplaceAllStringFunc O(n), DFA FindAll early termination (#127)
+  - v0.12.5: Non-greedy quantifier fix (PikeVM DFS-ordering), ReverseSuffix correctness (#124)
+  - v0.12.4: Test coverage 80%+, CI improvements
+  - v0.12.3: Cross-product literal expansion, 110x regexdna speedup (#119)
+  - v0.12.2: ReverseSuffixSet safety guard, matchStartZero fix (#116)
+
+### Changes vs v0.12.1 (previous benchmark run)
+
+| Pattern | v0.12.1 | v0.12.6 | Delta |
+|---------|---------|---------|-------|
+| email | 0.61 ms | 0.58 ms | ~5% faster |
+| multiline_php | 0.66 ms | 0.65 ms | stable |
+| word_repeat | 184 ms | 187 ms | stable (noise) |
+
+No regressions detected. All other patterns within noise margin.
+
+**Summary:**
+- coregex wins vs Rust: inner_literal, suffix, ip, char_class (4 patterns)
+- Rust parity: multiline_php (0.65ms vs 0.66ms)
+- Rust wins: literal_alt, multi_literal, email, uri, version, alpha_digit, word_digit, http_methods, word_repeat (9 patterns)
+- Main gap: Teddy SIMD (Go/asm boundary overhead) — blocked on Go 1.26 archsimd
+- Full table: see CI Job Summary
+
+---
+
 ## [2026-02-15] - Bidirectional DFA Fallback, Bounded Repetitions Fix (v0.12.1)
 
 ### Changed
