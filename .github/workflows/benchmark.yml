@@ -58,7 +58,7 @@ jobs:
 
           # New format: pattern compile search matches
           # Extract search time (column 3) from each output
-          grep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do
+          grep -E "^[a-z_]+\s" /tmp/stdlib.txt | grep -v "^pattern " | while read line; do
             pattern=$(echo "$line" | awk '{print $1}')
             std_search=$(echo "$line" | awk '{print $3}')
 
@@ -114,7 +114,7 @@ jobs:
           echo "| Pattern | Go stdlib | Go coregex | Rust regex |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|-----------|------------|------------|" >> $GITHUB_STEP_SUMMARY
 
-          grep -E "^[a-z_]+\s" /tmp/stdlib.txt | while read line; do
+          grep -E "^[a-z_]+\s" /tmp/stdlib.txt | grep -v "^pattern " | while read line; do
             pattern=$(echo "$line" | awk '{print $1}')
             std_compile=$(echo "$line" | awk '{print $2}')
 
