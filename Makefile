@@ -1,8 +1,9 @@
-.PHONY: all build run clean generate extreme extreme-3000x
+.PHONY: all build run clean generate extreme extreme-3000x langarena
 
 INPUT = input/data.txt
 INPUT_NOMATCH = input/no-match-data.txt
 INPUT_NODIGITS = input/no-digits-data.txt
+INPUT_LANGARENA = input/langarena-data.txt
 
 all: generate build run
 
@@ -81,6 +82,35 @@ run-extreme-3000x: $(INPUT_NODIGITS)
 	@./bin/go-coregex-extreme.exe $(INPUT_NODIGITS)
 	@echo ""
 
+# LANGARENA benchmarks: 13 real-world LogParser patterns from kostya/LangArena
+langarena: generate-langarena build-langarena run-langarena
+
+generate-langarena:
+	@echo "Generating LangArena input data..."
+	@go run scripts/generate-langarena-input.go
+
+build-langarena: build-go-stdlib-langarena build-go-coregex-langarena
+
+build-go-stdlib-langarena:
+	@echo "Building go-stdlib-langarena..."
+	@cd go-stdlib-langarena && go build -ldflags "-s -w" -o ../bin/go-stdlib-langarena.exe .
+
+build-go-coregex-langarena:
+	@echo "Building go-coregex-langarena..."
+	@cd go-coregex-langarena && go mod tidy && go build -ldflags "-s -w" -o ../bin/go-coregex-langarena.exe .
+
+run-langarena: $(INPUT_LANGARENA)
+	@echo ""
+	@echo "==============================================================================="
+	@echo "LANGARENA: 13 LogParser patterns (https://kostya.github.io/LangArena/)"
+	@echo "==============================================================================="
+	@echo ""
+	@./bin/go-stdlib-langarena.exe $(INPUT_LANGARENA)
+	@echo ""
+	@echo "==============================================================================="
+	@./bin/go-coregex-langarena.exe $(INPUT_LANGARENA)
+	@echo ""
+
 clean:
 	@rm -rf bin/*.exe input/*.txt
 
@@ -92,3 +122,6 @@ $(INPUT_NOMATCH):
 
 $(INPUT_NODIGITS):
 	@$(MAKE) generate-nodigits
+
+$(INPUT_LANGARENA):
+	@$(MAKE) generate-langarena

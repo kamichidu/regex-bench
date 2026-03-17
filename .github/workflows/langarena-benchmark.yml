@@ -1,4 +1,7 @@
-name: Benchmark
+name: LangArena Benchmark (LogParser)
+
+# 13 patterns from https://kostya.github.io/LangArena/ (Etc::LogParser)
+# Real-world Apache log parsing patterns that expose Go regex weakness vs Rust.
 
 on:
   push:
@@ -8,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  benchmark:
+  langarena-benchmark:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,94 +20,101 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: '1.25'
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Generate input data
-        run: go run scripts/generate-input.go
+      - name: Generate LangArena input data
+        run: go run scripts/generate-langarena-input.go
 
-      - name: Build Go stdlib
-        run: cd go-stdlib && go build -o ../bin/go-stdlib .
+      - name: Build Go stdlib LangArena
+        run: cd go-stdlib-langarena && go build -o ../bin/go-stdlib-langarena .
 
-      - name: Build Go coregex
-        run: cd go-coregex && go build -o ../bin/go-coregex .
+      - name: Build Go coregex LangArena
+        run: cd go-coregex-langarena && go build -o ../bin/go-coregex-langarena .
 
-      - name: Build Rust
-        run: cd rust && cargo build --release && cp target/release/benchmark ../bin/rust-benchmark
+      - name: Build Rust LangArena
+        run: cd rust-langarena && cargo build --release && cp target/release/langarena-benchmark ../bin/rust-langarena
 
-      - name: Run benchmarks
+      - name: Run LangArena benchmarks
         run: |
-          # Run all benchmarks (tee to stdout for log visibility)
-          ./bin/go-stdlib input/data.txt | tee /tmp/stdlib.txt
-          echo ""
-          ./bin/go-coregex input/data.txt | tee /tmp/coregex.txt
-          echo ""
-          ./bin/rust-benchmark input/data.txt | tee /tmp/rust.txt
-
-          # Generate summary
-          echo "## Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "## LangArena LogParser Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**13 patterns from [LangArena](https://kostya.github.io/LangArena/) (Etc::LogParser) — real-world Apache log parsing on 6 MB generated data.**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Platform**: Ubuntu $(lsb_release -rs), $(uname -m)" >> $GITHUB_STEP_SUMMARY
           echo "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Search time comparison table (the main metric)
+          ./bin/go-stdlib-langarena input/langarena-data.txt | tee /tmp/stdlib.txt
+          echo ""
+          ./bin/go-coregex-langarena input/langarena-data.txt | tee /tmp/coregex.txt
+          echo ""
+          ./bin/rust-langarena input/langarena-data.txt | tee /tmp/rust.txt
+
           echo "### Search Time Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY
 
-          # New format: pattern compile search matches
-          # Extract search time (column 3) from each output
           grep -E "^[a-z_]+\s" /tmp/stdlib.txt | grep -v "^pattern " | while read line; do
             pattern=$(echo "$line" | awk '{print $1}')
             std_search=$(echo "$line" | awk '{print $3}')
 
-            cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)
+            cor_line=$(grep "^${pattern} " /tmp/coregex.txt)
             cor_search=$(echo "$cor_line" | awk '{print $3}')
 
-            rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)
+            rus_line=$(grep "^${pattern} " /tmp/rust.txt)
             rus_search=$(echo "$rus_line" | awk '{print $3}')
 
             # vs stdlib speedup
-            if [ -n "$cor_search" ] && [ "$cor_search" != "0.00" ]; then
-              speedup_frac=$(echo "scale=1; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
-              speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
-              if [ "$speedup_int" -ge 2 ] 2>/dev/null; then
-                vs_stdlib="**${speedup_int}x**"
-              else
-                # Check if 1.5x+ (meaningful speedup)
-                frac=$(echo "scale=0; $std_search * 10 / $cor_search" | bc 2>/dev/null || echo "0")
-                if [ "$frac" -ge 15 ] 2>/dev/null; then
-                  vs_stdlib="${speedup_frac}x"
+            if [ -n "$cor_search" ] && [ -n "$std_search" ]; then
+              cor_ms_int=$(echo "$cor_search * 1000" | bc | cut -d. -f1)
+              std_ms_int=$(echo "$std_search * 1000" | bc | cut -d. -f1)
+              if [ "$cor_ms_int" -le "$std_ms_int" ] 2>/dev/null; then
+                speedup=$(echo "scale=1; $std_search / $cor_search" | bc 2>/dev/null)
+                speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null)
+                if [ "$speedup_int" -ge 2 ] 2>/dev/null; then
+                  vs_stdlib="**${speedup}x faster**"
+                elif [ "$speedup_int" -eq 1 ] 2>/dev/null; then
+                  # Check if it's 1.5x+ (meaningful speedup)
+                  frac=$(echo "scale=0; $std_search * 10 / $cor_search" | bc 2>/dev/null)
+                  if [ "$frac" -ge 15 ] 2>/dev/null; then
+                    vs_stdlib="${speedup}x faster"
+                  else
+                    vs_stdlib="~1x"
+                  fi
                 else
                   vs_stdlib="~1x"
                 fi
+              else
+                slowdown=$(echo "scale=1; $cor_search / $std_search" | bc 2>/dev/null)
+                vs_stdlib="${slowdown}x slower"
               fi
             else
               vs_stdlib="—"
             fi
 
             # vs Rust comparison
-            if [ -n "$cor_search" ] && [ -n "$rus_search" ] && [ "$rus_search" != "0.00" ] && [ "$cor_search" != "0.00" ]; then
-              cor_faster=$(echo "$cor_search < $rus_search" | bc -l 2>/dev/null || echo "0")
-              if [ "$cor_faster" -eq 1 ] 2>/dev/null; then
-                ratio=$(echo "scale=1; $rus_search / $cor_search" | bc)
+            if [ -n "$cor_search" ] && [ -n "$rus_search" ]; then
+              cor_int=$(echo "$cor_search * 1000" | bc | cut -d. -f1)
+              rus_int=$(echo "$rus_search * 1000" | bc | cut -d. -f1)
+              if [ "$cor_int" -le "$rus_int" ] 2>/dev/null; then
+                ratio=$(echo "scale=1; $rus_search / $cor_search" | bc 2>/dev/null)
                 vs_rust="**${ratio}x faster**"
                 winner="coregex"
                 cor_fmt="**${cor_search} ms**"
                 rus_fmt="${rus_search} ms"
               else
-                ratio=$(echo "scale=1; $cor_search / $rus_search" | bc)
+                ratio=$(echo "scale=1; $cor_search / $rus_search" | bc 2>/dev/null)
                 vs_rust="${ratio}x slower"
                 winner="Rust"
                 cor_fmt="${cor_search} ms"
                 rus_fmt="**${rus_search} ms**"
               fi
             else
-              vs_rust="~same"
+              vs_rust="—"
               winner="—"
               cor_fmt="${cor_search} ms"
               rus_fmt="${rus_search} ms"
@@ -125,15 +135,17 @@ jobs:
             pattern=$(echo "$line" | awk '{print $1}')
             std_compile=$(echo "$line" | awk '{print $2}')
 
-            cor_line=$(grep "^${pattern}\s" /tmp/coregex.txt)
+            cor_line=$(grep "^${pattern} " /tmp/coregex.txt)
             cor_compile=$(echo "$cor_line" | awk '{print $2}')
 
-            rus_line=$(grep "^${pattern}\s" /tmp/rust.txt)
+            rus_line=$(grep "^${pattern} " /tmp/rust.txt)
             rus_compile=$(echo "$rus_line" | awk '{print $2}')
 
             echo "| $pattern | ${std_compile} ms | ${cor_compile} ms | ${rus_compile} ms |" >> $GITHUB_STEP_SUMMARY
           done
 
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> Patterns from [LangArena LogParser](https://kostya.github.io/LangArena/). Reported by [@kostya](https://github.com/kostya) in [coregex#116](https://github.com/coregx/coregex/issues/116)." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
