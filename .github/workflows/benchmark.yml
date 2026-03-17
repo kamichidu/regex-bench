@@ -70,11 +70,18 @@ jobs:
 
             # vs stdlib speedup
             if [ -n "$cor_search" ] && [ "$cor_search" != "0.00" ]; then
-              speedup=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
-              if [ "$speedup" -ge 2 ] 2>/dev/null; then
-                vs_stdlib="**${speedup}x**"
+              speedup_frac=$(echo "scale=1; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
+              speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
+              if [ "$speedup_int" -ge 2 ] 2>/dev/null; then
+                vs_stdlib="**${speedup_int}x**"
               else
-                vs_stdlib="~1x"
+                # Check if 1.5x+ (meaningful speedup)
+                frac=$(echo "scale=0; $std_search * 10 / $cor_search" | bc 2>/dev/null || echo "0")
+                if [ "$frac" -ge 15 ] 2>/dev/null; then
+                  vs_stdlib="${speedup_frac}x"
+                else
+                  vs_stdlib="~1x"
+                fi
               fi
             else
               vs_stdlib="—"

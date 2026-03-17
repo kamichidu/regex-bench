@@ -75,8 +75,16 @@ jobs:
               if [ "$cor_ms_int" -le "$std_ms_int" ] 2>/dev/null; then
                 speedup=$(echo "scale=1; $std_search / $cor_search" | bc 2>/dev/null)
                 speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null)
-                if [ "$speedup_int" -gt 2 ] 2>/dev/null; then
+                if [ "$speedup_int" -ge 2 ] 2>/dev/null; then
                   vs_stdlib="**${speedup}x faster**"
+                elif [ "$speedup_int" -eq 1 ] 2>/dev/null; then
+                  # Check if it's 1.5x+ (meaningful speedup)
+                  frac=$(echo "scale=0; $std_search * 10 / $cor_search" | bc 2>/dev/null)
+                  if [ "$frac" -ge 15 ] 2>/dev/null; then
+                    vs_stdlib="${speedup}x faster"
+                  else
+                    vs_stdlib="~1x"
+                  fi
                 else
                   vs_stdlib="~1x"
                 fi
