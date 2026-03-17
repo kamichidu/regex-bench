@@ -3,6 +3,7 @@ input/
 *.exe
 .idea/
 rust/target/
+rust-*/target/
 gosh.log
 Cargo.lock
 tmpclaude-*
