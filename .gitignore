@@ -3,8 +3,7 @@ input/
 *.exe
 .idea/
 rust/target/
-rust-dna/target/
-rust-langarena/target/
+rust-*/target/
 gosh.log
 Cargo.lock
 tmpclaude-*
