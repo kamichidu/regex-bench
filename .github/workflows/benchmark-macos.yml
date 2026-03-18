@@ -66,7 +66,7 @@ jobs:
             rus_search=$(echo "$rus_line" | awk '{print $3}')
 
             # vs stdlib speedup
-            if [ -n "$cor_search" ] && [ -n "$std_search" ]; then
+            if [ -n "$cor_search" ] && [ -n "$std_search" ] && [ "$cor_search" != "0.00" ]; then
               speedup_frac=$(echo "scale=1; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
               speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null || echo "0")
               if [ "$speedup_int" -ge 2 ] 2>/dev/null; then
@@ -84,7 +84,7 @@ jobs:
             fi
 
             # vs Rust comparison
-            if [ -n "$cor_search" ] && [ -n "$rus_search" ]; then
+            if [ -n "$cor_search" ] && [ -n "$rus_search" ] && [ "$cor_search" != "0.00" ] && [ "$rus_search" != "0.00" ]; then
               cor_int=$(echo "$cor_search * 1000" | bc | cut -d. -f1)
               rus_int=$(echo "$rus_search * 1000" | bc | cut -d. -f1)
               if [ "$cor_int" -le "$rus_int" ] 2>/dev/null; then
