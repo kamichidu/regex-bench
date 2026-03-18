@@ -25,9 +25,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Generate input data
-        run: |
-          mkdir -p input
-          go run scripts/gen_data.go
+        run: go run scripts/generate-input.go
 
       - name: Build Go stdlib
         run: cd go-stdlib && go build -o ../bin/go-stdlib .
