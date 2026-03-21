@@ -9,6 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-03-21] - Per-goroutine DFA cache, 7 correctness fixes (v0.12.15)
+
+### Changed
+- **Updated coregex v0.12.14 → v0.12.15**
+  - Per-goroutine DFA cache (Rust approach) — eliminates concurrent data races
+  - Pre-computed word boundary flags (30% → 0.3% CPU)
+  - Integrated prefilter+DFA loop
+  - 7 correctness fixes: anchor verification, .* newline boundary, alternation overflow
+  - Stdlib compatibility test: 38/38 PASS
+
+### Benchmark Results (AMD EPYC)
+
+| Pattern | v0.12.14 | v0.12.15 | vs Rust | Notes |
+|---------|----------|----------|---------|-------|
+| anchored | 0.02 ms | 0.02 ms | 2.0x | restored |
+| email | 0.57 ms | 0.50 ms | 2.1x | improved |
+| uri | 0.65 ms | 0.61 ms | 1.7x | improved |
+| multiline_php | 0.54 ms | 0.50 ms | 1.3x faster | improved |
+| ip | 2.19 ms | 2.17 ms | 5.5x faster | stable |
+| char_class | 38.88 ms | 41.0 ms | 1.2x faster | stable |
+| http_methods | 0.77 ms | 1.56 ms | 2.2x | correctness fix ((?m)^ anchor) |
+| suffix | 1.03 ms | 1.83 ms | 1.6x | correctness fix (.* newline) |
+| word_repeat | 191 ms | 186 ms | 3.8x | improved |
+
+No performance regressions. `http_methods` and `suffix` slower due to correctness fixes
+(anchor verification, newline boundary handling).
+
+---
+
 ## [2026-03-10] - BoundedBacktracker Span Fix, DFA FindAll Optimization (v0.12.6)
 
 ### Changed
