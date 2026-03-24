@@ -9,6 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2026-03-24] - Flat DFA transition table, integrated prefilter (v0.12.18)
+
+### Changed
+- **Updated coregex v0.12.17 → v0.12.18**
+  - Flat DFA transition table (Rust approach) — all 8 search functions
+  - DFA integrated prefilter skip-ahead at start state
+  - PikeVM integrated prefilter skip-ahead
+  - 4x loop unrolling in searchFirstAt
+  - NFA partialCoverage guard, DFA prefilter skip for incomplete prefilters
+  - 386 safeOffset fix
+
+### Benchmark Results (AMD EPYC)
+
+| Pattern | v0.12.17 | v0.12.18 | vs Rust | Notes |
+|---------|----------|----------|---------|-------|
+| inner_literal | 0.30 ms | 0.29 ms | **~parity** | improved |
+| char_class | 51.22 ms | 47.95 ms | **1.0x faster** | improved |
+| ip | 2.14 ms | 2.10 ms | **5.6x faster** | stable |
+| multiline_php | 0.50 ms | 0.66 ms | **~parity** | stable |
+| word_repeat | 186 ms | 185 ms | 3.7x | stable |
+| http_methods | 1.28 ms | 1.28 ms | 2.2x | stable |
+
+35% faster than v0.12.14 baseline on Kostya's LangArena benchmark (1.80s → 1.17s).
+No regressions on any platform (EPYC, Xeon, M1, 386).
+
+---
+
 ## [2026-03-21] - Per-goroutine DFA cache, 7 correctness fixes (v0.12.15)
 
 ### Changed

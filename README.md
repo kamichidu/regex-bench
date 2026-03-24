@@ -13,59 +13,59 @@ All benchmarks run on **identical conditions**:
 
 > **Note**: Cross-compiled Go binaries run in WSL2 for fair comparison with Rust.
 
-## Results (v0.12.15)
+## Results (v0.12.18)
 
 **GitHub Actions Ubuntu (AMD EPYC), 6.0 MB input** (using `FindAll` for fair comparison)
 
 | Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |
 |---------|-----------|------------|------------|-----------|---------|--------|
-| inner_literal | 234 ms | **0.35 ms** | 0.28 ms | **667x** | 1.2x slower | Rust |
-| email | 262 ms | **0.50 ms** | 0.23 ms | **523x** | 2.1x slower | Rust |
-| uri | 258 ms | 0.61 ms | **0.35 ms** | **422x** | 1.7x slower | Rust |
-| ip | 497 ms | **2.17 ms** | 12.0 ms | **229x** | **5.5x faster** | coregex |
-| multiline_php | 104 ms | **0.50 ms** | 0.68 ms | **207x** | **1.3x faster** | coregex |
-| suffix | 236 ms | 1.83 ms | **1.08 ms** | **128x** | 1.6x slower | Rust |
-| literal_alt | 475 ms | 4.37 ms | **0.61 ms** | **108x** | 7.1x slower | Rust |
-| multi_literal | 1412 ms | 12.76 ms | **4.70 ms** | **110x** | 2.7x slower | Rust |
-| version | 169 ms | 1.62 ms | **0.71 ms** | **104x** | 2.2x slower | Rust |
-| http_methods | 107 ms | 1.56 ms | **0.70 ms** | **68x** | 2.2x slower | Rust |
-| char_class | 579 ms | **41.0 ms** | 50.1 ms | **14x** | **1.2x faster** | coregex |
-| alpha_digit | 262 ms | 25.74 ms | **11.96 ms** | **10x** | 2.1x slower | Rust |
-| word_digit | 271 ms | 26.09 ms | **11.96 ms** | **10x** | 2.1x slower | Rust |
-| word_repeat | 652 ms | 186 ms | **48 ms** | **3x** | 3.8x slower | Rust |
-| anchored | 0.00 ms | 0.02 ms | 0.01 ms | ~1x | 2.0x slower | — |
-| anchored_php | 0.00 ms | 0.00 ms | 0.01 ms | — | ~same | — |
+| inner_literal | 231 ms | **0.29 ms** | 0.29 ms | **797x** | **~parity** | **parity** |
+| email | 261 ms | **0.54 ms** | 0.31 ms | **482x** | 1.7x slower | Rust |
+| uri | 262 ms | 0.84 ms | **0.35 ms** | **311x** | 2.4x slower | Rust |
+| ip | 498 ms | **2.10 ms** | 12.0 ms | **237x** | **5.6x faster** | coregex |
+| multiline_php | 103 ms | **0.66 ms** | 0.66 ms | **156x** | **~parity** | **parity** |
+| suffix | 234 ms | 1.83 ms | **1.07 ms** | **128x** | 1.7x slower | Rust |
+| literal_alt | 475 ms | 4.35 ms | **0.69 ms** | **109x** | 6.3x slower | Rust |
+| multi_literal | 1391 ms | 12.64 ms | **4.72 ms** | **110x** | 2.6x slower | Rust |
+| version | 169 ms | 1.81 ms | **0.70 ms** | **93x** | 2.5x slower | Rust |
+| http_methods | 107 ms | 1.28 ms | **0.58 ms** | **83x** | 2.2x slower | Rust |
+| char_class | 554 ms | **47.95 ms** | 50.07 ms | **11x** | **1.0x faster** | coregex |
+| alpha_digit | 277 ms | 25.83 ms | **12.27 ms** | **10x** | 2.1x slower | Rust |
+| word_digit | 280 ms | 26.22 ms | **11.97 ms** | **10x** | 2.1x slower | Rust |
+| word_repeat | 641 ms | 185 ms | **49 ms** | **3x** | 3.7x slower | Rust |
+| anchored | 0.01 ms | 0.03 ms | 0.01 ms | ~1x | 3.0x slower | — |
+| anchored_php | 0.00 ms | 0.01 ms | 0.01 ms | ~1x | ~same | — |
 
-> **coregex v0.12.15** — Per-goroutine DFA cache, 7 correctness fixes, 38/38 stdlib compat test. Run `make extreme` for 2500x demo.
+> **coregex v0.12.18** — Flat DFA transition table, integrated prefilter skip-ahead in DFA+PikeVM, 4x loop unrolling. 35% faster than v0.12.14 baseline. Run `make extreme` for 2500x demo.
 
 ### Key Findings
 
-**Go coregex v0.12.15 vs Go stdlib:**
-- All patterns: **3-667x faster**
-- Best: `inner_literal` **667x**, `email` **523x**, `uri` **422x**
-- `ip` **229x** (DigitPrefilter)
-- `multiline_php` **207x** (MultilineReverseSuffix, **faster than Rust!**)
-- `suffix` **128x**, `literal_alt` **108x**, `multi_literal` **110x**
-- `http_methods` **68x** (UseNFA with prefilter, correct (?m)^ anchor handling)
-- `char_class` **14x** (CharClassSearcher)
-- `word_repeat` **3x** (bidirectional DFA fallback)
+**Go coregex v0.12.18 vs Go stdlib:**
+- All patterns: **3-797x faster**
+- Best: `inner_literal` **797x**, `email` **482x**, `uri` **311x**
+- `ip` **237x** (DigitPrefilter)
+- `multiline_php` **156x** (MultilineReverseSuffix, **Rust parity!**)
+- `suffix` **128x**, `literal_alt` **109x**, `multi_literal` **110x**
+- `http_methods` **83x** (UseTeddy with lineAnchorWrapper)
+- `char_class` **11x** (CharClassSearcher, **faster than Rust!**)
+- `word_repeat` **3x** (flat DFA with 4x unrolling)
 
-**Go coregex faster than Rust (4 patterns):**
-- `ip`: **coregex 5.5x faster** (2.2ms vs 12.0ms)
-- `multiline_php`: **coregex 1.3x faster** (0.50ms vs 0.68ms)
-- `char_class`: **coregex 1.2x faster** (41ms vs 50ms)
-- `anchored_php`: **~same** (0.00ms vs 0.01ms)
+**Go coregex faster than or at parity with Rust (4 patterns):**
+- `ip`: **coregex 5.6x faster** (2.1ms vs 12.0ms)
+- `char_class`: **coregex 1.0x faster** (48ms vs 50ms)
+- `inner_literal`: **~parity** (0.29ms vs 0.29ms)
+- `multiline_php`: **~parity** (0.66ms vs 0.66ms)
 
 **Rust faster than coregex:**
-- `literal_alt`: Rust 7.1x faster (Teddy with more buckets)
-- `word_repeat`: Rust 3.8x faster (DFA state acceleration)
-- `multi_literal`: Rust 2.7x faster
-- `version`: Rust 2.2x faster
-- `http_methods`: Rust 2.2x faster (correctness fix: NFA verifies (?m)^ anchor)
+- `literal_alt`: Rust 6.3x faster (Teddy with more buckets)
+- `word_repeat`: Rust 3.7x faster (DFA state acceleration)
+- `multi_literal`: Rust 2.6x faster
+- `version`: Rust 2.5x faster
+- `uri`: Rust 2.4x slower
+- `http_methods`: Rust 2.2x faster
 - `alpha_digit`, `word_digit`: Rust 2.1x faster
-- `email`: Rust 2.1x faster
-- `uri`: Rust 1.7x faster
-- `suffix`: Rust 1.6x faster
+- `email`: Rust 1.7x faster
+- `suffix`: Rust 1.7x faster
 
 > **Note**: Rust regex has 10+ years of development. coregex optimizations are targeted, not universal.
 
@@ -74,18 +74,21 @@ All benchmarks run on **identical conditions**:
 | Engine | Strengths | Weaknesses |
 |--------|-----------|------------|
 | **Go stdlib** | Simple, no dependencies | No optimizations, 3.6-926x slower |
-| **Go coregex** | Reverse search, SIMD prefilters, Aho-Corasick, bidirectional DFA, **4 patterns faster than Rust**, multiline Rust parity | Teddy gap, word_repeat |
-| **Rust regex** | DFA state acceleration, Teddy Fat, mature DFA | inner_literal, ip, suffix, char_class slower than coregex |
+| **Go coregex** | Flat DFA, reverse search, SIMD prefilters, Aho-Corasick, bidirectional DFA, **4 patterns at Rust parity or faster** | Teddy Go/ASM gap, word_repeat |
+| **Rust regex** | DFA state acceleration, Teddy Fat, mature DFA | ip, char_class slower than coregex |
 
-**v0.12.15 (Current):**
-- Per-goroutine DFA cache (Rust approach) — concurrent thread safety
-- 7 correctness fixes (anchor verification, newline boundaries, alternation overflow)
-- Stdlib compatibility test: 38/38 patterns match Go stdlib regexp
-- **4 patterns faster than Rust**: ip (5.5x), multiline_php (1.3x), char_class (1.2x), anchored_php
-- Pre-computed word boundary flags: 30% → 0.3% CPU
-- Integrated prefilter+DFA loop (Rust approach)
+**v0.12.18 (Current):**
+- Flat DFA transition table (Rust approach) — single flat array, no pointer chase
+- Integrated prefilter skip-ahead in DFA loop (Rust hybrid/search.rs approach)
+- PikeVM integrated prefilter skip-ahead (Rust pikevm.rs approach)
+- 4x loop unrolling in DFA hot loop
+- **4 patterns at Rust parity or faster**: ip (5.6x), char_class (1.0x), inner_literal (parity), multiline_php (parity)
+- 35% faster than v0.12.14 baseline on Kostya's LangArena benchmark
 
 **Historical Improvements:**
+- v0.12.18: Flat DFA transition table, integrated prefilter, 4x unrolling — 3x from Rust
+- v0.12.17: Fix LogParser ARM64 regression, restore DFA/Teddy for (?m)^
+- v0.12.16: WrapLineAnchor for (?m)^ patterns
 - v0.12.15: Per-goroutine DFA cache, 7 correctness fixes, stdlib compat test (38/38)
 - v0.12.14: Concurrent isMatchDFA safety fix (#137)
 - v0.12.13: FatTeddy AVX2 fix, prefilter acceleration, AC v0.2.1
