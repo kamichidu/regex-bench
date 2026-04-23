@@ -1,127 +1,80 @@
-.PHONY: all build run clean generate extreme extreme-3000x langarena
+.PHONY: all build build-all run report clean generate extreme extreme-3000x langarena
 
 INPUT = input/data.txt
 INPUT_NOMATCH = input/no-match-data.txt
 INPUT_NODIGITS = input/no-digits-data.txt
 INPUT_LANGARENA = input/langarena-data.txt
+INPUT_DNA = input/dna-data.txt
+
+ENGINES = stdlib regexp-re coregex re2-wasm re2-cgo pcre2 hyperscan
 
 all: generate build run
 
 generate:
 	@echo "Generating input data..."
 	@go run scripts/generate-input.go
-
-generate-nomatch:
-	@echo "Generating no-match input data..."
 	@go run scripts/generate-no-match-input.go
+	@go run scripts/generate-langarena-input.go
+	@go run scripts/generate-dna-input.go
 
-generate-nodigits:
-	@echo "Generating no-digits input data (for 3000x speedup)..."
-	@go run scripts/generate-3000x-input.go
+build: $(foreach eng,$(ENGINES),build-go-$(eng))
 
-build: build-go-stdlib build-go-coregex
-
+# Generic build rules
 build-go-stdlib:
 	@echo "Building go-stdlib..."
 	@cd go-stdlib && go build -ldflags "-s -w" -o ../bin/go-stdlib.exe .
+
+build-go-regexp-re:
+	@echo "Building go-regexp-re..."
+	@cd go-regexp-re && go build -ldflags "-s -w" -o ../bin/go-regexp-re.exe .
 
 build-go-coregex:
 	@echo "Building go-coregex..."
 	@cd go-coregex && go mod tidy && go build -ldflags "-s -w" -o ../bin/go-coregex.exe .
 
-build-extreme: build-go-stdlib-extreme build-go-coregex-extreme
+build-go-re2-wasm:
+	@echo "Building go-re2-wasm..."
+	@cd go-re2-wasm && go build -ldflags "-s -w" -o ../bin/go-re2-wasm.exe .
 
-build-go-stdlib-extreme:
-	@echo "Building go-stdlib-extreme..."
-	@cd go-stdlib-extreme && go build -ldflags "-s -w" -o ../bin/go-stdlib-extreme.exe .
+build-go-re2-cgo:
+	@echo "Building go-re2-cgo..."
+	@cd go-re2-cgo && go build -tags re2_cgo -ldflags "-s -w" -o ../bin/go-re2-cgo.exe .
 
-build-go-coregex-extreme:
-	@echo "Building go-coregex-extreme..."
-	@cd go-coregex-extreme && go mod tidy && go build -ldflags "-s -w" -o ../bin/go-coregex-extreme.exe .
+build-go-pcre2:
+	@echo "Building go-pcre2..."
+	@cd go-pcre2 && go build -ldflags "-s -w" -o ../bin/go-pcre2.exe .
+
+build-go-hyperscan:
+	@echo "Building go-hyperscan..."
+	@cd go-hyperscan && go build -ldflags "-s -w" -o ../bin/go-hyperscan.exe .
+
+# Variant build rules
+build-all: build
+	@for sc in dna extreme langarena; do \
+		for eng in $(ENGINES); do \
+			echo "Building go-$$eng-$$sc..."; \
+			if [ "$$eng" = "re2-cgo" ]; then \
+				cd go-$$eng-$$sc && go build -tags re2_cgo -ldflags "-s -w" -o ../bin/go-$$eng-$$sc.exe . && cd ..; \
+			else \
+				cd go-$$eng-$$sc && go build -ldflags "-s -w" -o ../bin/go-$$eng-$$sc.exe . && cd ..; \
+			fi; \
+		done; \
+	done
+
+report: generate build-all
+	@chmod +x scripts/run-all.sh
+	@./scripts/run-all.sh
+	@go run scripts/generate-report.go > REPORT.md
+	@echo "Report generated in REPORT.md"
 
 run: $(INPUT)
 	@echo ""
 	@echo "==============================================="
-	@./bin/go-stdlib.exe $(INPUT)
-	@echo ""
-	@echo "==============================================="
-	@./bin/go-coregex.exe $(INPUT)
-	@echo ""
-
-# EXTREME benchmarks: demonstrate 1000-3000x speedup on no-match data
-# This is the worst case for stdlib (must scan entire file)
-# and best case for coregex prefilters (skip quickly)
-extreme: generate-nomatch build-extreme run-extreme
-
-run-extreme: $(INPUT_NOMATCH)
-	@echo ""
-	@echo "==============================================================================="
-	@echo "EXTREME BENCHMARKS: No-match data (worst case for stdlib, best for prefilters)"
-	@echo "==============================================================================="
-	@echo ""
-	@./bin/go-stdlib-extreme.exe $(INPUT_NOMATCH)
-	@echo ""
-	@echo "==============================================================================="
-	@./bin/go-coregex-extreme.exe $(INPUT_NOMATCH)
-	@echo ""
-
-# EXTREME-3000x: demonstrate 800-1000x speedup on no-digits data
-# Uses data with NO DIGITS for maximum DigitPrefilter advantage
-# (3000x achieved in go test -bench with 1MB input)
-extreme-3000x: generate-nodigits build-extreme run-extreme-3000x
-
-run-extreme-3000x: $(INPUT_NODIGITS)
-	@echo ""
-	@echo "==============================================================================="
-	@echo "EXTREME-3000x: No-digits data (800-1000x on 6MB, 3000x on 1MB in go test)"
-	@echo "==============================================================================="
-	@echo ""
-	@./bin/go-stdlib-extreme.exe $(INPUT_NODIGITS)
-	@echo ""
-	@echo "==============================================================================="
-	@./bin/go-coregex-extreme.exe $(INPUT_NODIGITS)
-	@echo ""
-
-# LANGARENA benchmarks: 13 real-world LogParser patterns from kostya/LangArena
-langarena: generate-langarena build-langarena run-langarena
-
-generate-langarena:
-	@echo "Generating LangArena input data..."
-	@go run scripts/generate-langarena-input.go
-
-build-langarena: build-go-stdlib-langarena build-go-coregex-langarena
-
-build-go-stdlib-langarena:
-	@echo "Building go-stdlib-langarena..."
-	@cd go-stdlib-langarena && go build -ldflags "-s -w" -o ../bin/go-stdlib-langarena.exe .
-
-build-go-coregex-langarena:
-	@echo "Building go-coregex-langarena..."
-	@cd go-coregex-langarena && go mod tidy && go build -ldflags "-s -w" -o ../bin/go-coregex-langarena.exe .
-
-run-langarena: $(INPUT_LANGARENA)
-	@echo ""
-	@echo "==============================================================================="
-	@echo "LANGARENA: 13 LogParser patterns (https://kostya.github.io/LangArena/)"
-	@echo "==============================================================================="
-	@echo ""
-	@./bin/go-stdlib-langarena.exe $(INPUT_LANGARENA)
-	@echo ""
-	@echo "==============================================================================="
-	@./bin/go-coregex-langarena.exe $(INPUT_LANGARENA)
+	@for eng in $(ENGINES); do ./bin/go-$$eng.exe $(INPUT); done
 	@echo ""
 
 clean:
-	@rm -rf bin/*.exe input/*.txt
+	@rm -rf bin/*.exe input/*.txt results/ REPORT.md
 
 $(INPUT):
 	@$(MAKE) generate
-
-$(INPUT_NOMATCH):
-	@$(MAKE) generate-nomatch
-
-$(INPUT_NODIGITS):
-	@$(MAKE) generate-nodigits
-
-$(INPUT_LANGARENA):
-	@$(MAKE) generate-langarena
