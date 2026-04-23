@@ -1,0 +1,33 @@
+go 1.25.4
+
+use (
+	./go-coregex
+	./go-coregex-dna
+	./go-coregex-extreme
+	./go-coregex-langarena
+	./go-hyperscan
+	./go-hyperscan-dna
+	./go-hyperscan-extreme
+	./go-hyperscan-langarena
+	./go-pcre2
+	./go-pcre2-dna
+	./go-pcre2-extreme
+	./go-pcre2-langarena
+	./go-re2-cgo
+	./go-re2-cgo-dna
+	./go-re2-cgo-extreme
+	./go-re2-cgo-langarena
+	./go-re2-wasm
+	./go-re2-wasm-dna
+	./go-re2-wasm-extreme
+	./go-re2-wasm-langarena
+	./go-regexp-re
+	./go-regexp-re-dna
+	./go-regexp-re-extreme
+	./go-regexp-re-langarena
+	./go-stdlib
+	./go-stdlib-dna
+	./go-stdlib-extreme
+	./go-stdlib-langarena
+	./internal/bench
+)
