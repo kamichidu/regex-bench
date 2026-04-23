@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	regexp "github.com/kamichidu/go-regexp-re"
+	"os"
 	"time"
 )
 

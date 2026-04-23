@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/Jemmic/go-pcre2"
+	"os"
 	"time"
 )
 
@@ -33,7 +33,7 @@ var patterns = []Pattern{
 
 func measure(data []byte, p Pattern) {
 	compileStart := time.Now()
-	// PCRE2 doesn't use (?m) for multiline by default in some cases, 
+	// PCRE2 doesn't use (?m) for multiline by default in some cases,
 	// but the library should handle it if passed in the pattern.
 	re, err := pcre2.Compile(p.Pattern, 0)
 	if err != nil {
@@ -47,7 +47,7 @@ func measure(data []byte, p Pattern) {
 	matcher := re.Matcher(data, 0)
 	for matcher.Match(data, 0) {
 		count++
-		// Move to the next position. 
+		// Move to the next position.
 		// Note: This is a simple implementation of FindAll for benchmarking.
 		// pcre2 doesn't have a direct equivalent of FindAll.
 		indices := matcher.Index()

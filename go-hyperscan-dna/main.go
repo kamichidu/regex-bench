@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/flier/gohs/hyperscan"
+	"os"
 	"time"
 )
 

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/flier/gohs/hyperscan"
+	"os"
 	"time"
 )
 
@@ -33,7 +33,7 @@ var patterns = []Pattern{
 
 func measure(data []byte, p Pattern) {
 	compileStart := time.Now()
-	// Hyperscan may not support all Go regexp syntax (e.g. (?m)) directly 
+	// Hyperscan may not support all Go regexp syntax (e.g. (?m)) directly
 	// without specific flags, but we'll try basic compilation.
 	db, err := hyperscan.Compile(p.Pattern)
 	if err != nil {

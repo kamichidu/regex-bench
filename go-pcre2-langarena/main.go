@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/Jemmic/go-pcre2"
+	"os"
 	"time"
 )
 
