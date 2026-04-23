@@ -136,12 +136,22 @@ func measureStandard(e Engine, data []byte, p Pattern) {
 		return
 	}
 
-	searchStart := time.Now()
-	matches := e.Search(re, data)
-	searchElapsed := time.Since(searchStart)
+	// Warmup
+	_ = e.Search(re, data)
+
+	// Search Measurement (Average of 3 iterations)
+	const iterations = 3
+	var totalElapsed time.Duration
+	var matches int
+	for i := 0; i < iterations; i++ {
+		start := time.Now()
+		matches = e.Search(re, data)
+		totalElapsed += time.Since(start)
+	}
+	avgSearchElapsed := totalElapsed / iterations
 
 	compileMs := float64(compileElapsed) / float64(time.Millisecond)
-	searchMs := float64(searchElapsed) / float64(time.Millisecond)
+	searchMs := float64(avgSearchElapsed) / float64(time.Millisecond)
 
 	fmt.Printf("%-15s %10.2f %10.2f %6d\n", p.Name, compileMs, searchMs, matches)
 }
