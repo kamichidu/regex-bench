@@ -7,7 +7,7 @@ import (
 
 type Engine struct{}
 
-func (e Engine) Name() string { return "Go PCRE2" }
+func (e Engine) Name() string                             { return "Go PCRE2" }
 func (e Engine) Compile(expr string) (interface{}, error) { return pcre2.Compile(expr, 0) }
 func (e Engine) Search(re interface{}, data []byte) int {
 	count := 0

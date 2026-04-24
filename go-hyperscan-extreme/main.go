@@ -8,7 +8,7 @@ import (
 
 type Engine struct{}
 
-func (e Engine) Name() string { return "Go Hyperscan" }
+func (e Engine) Name() string                             { return "Go Hyperscan" }
 func (e Engine) Compile(expr string) (interface{}, error) { return hyperscan.Compile(expr) }
 func (e Engine) Search(re interface{}, data []byte) int {
 	db := re.(hyperscan.BlockDatabase)

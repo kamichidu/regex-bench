@@ -7,7 +7,7 @@ import (
 
 type Engine struct{}
 
-func (e Engine) Name() string { return "Go coregex" }
+func (e Engine) Name() string                             { return "Go coregex" }
 func (e Engine) Compile(expr string) (interface{}, error) { return coregex.Compile(expr) }
 func (e Engine) Search(re interface{}, data []byte) int {
 	return len(re.(*coregex.Regexp).FindAll(data, -1))
