@@ -1,0 +1,7 @@
+Go coregex Extreme (input: 6.00 MB)
+---------------------------------------------------------------------
+ip_nomatch          326.09 µs  match: no
+inner_nomatch       382.77 µs  match: no
+suffix_find         289.12 µs  match: no
+phone_nomatch       294.79 µs  match: no
+word_repeat           1.21 µs  match: yes

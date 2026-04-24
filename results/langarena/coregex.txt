@@ -1,0 +1,16 @@
+Go coregex LangArena (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+errors                0.20      12.08       0.01  29159
+bots                  0.39      12.18       0.03  22911
+suspicious            0.21       7.10       0.00  10473
+ips                   0.09       0.47       0.02    180
+api_calls             2.73       5.36       0.02  11347
+post_requests         2.72       6.53       0.00  11456
+auth_attempts         0.17       5.98       0.01  15275
+methods               0.12       8.85       0.00  34368
+emails                0.13       2.68       0.03  15275
+passwords             2.63       5.27       0.00  15275
+tokens                5.34       4.86       0.00   6110
+sessions              2.61       1.71       0.03   3491
+peak_hours            0.10       7.67       0.04   9545

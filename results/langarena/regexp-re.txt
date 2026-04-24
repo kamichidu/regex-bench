@@ -1,0 +1,16 @@
+Go regexp-re LangArena (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+errors                0.60     126.30       0.02  29159
+bots                  1.87     190.63       0.01  22911
+suspicious            0.84     178.12       0.03  10473
+ips                   0.40     227.29       0.19    180
+api_calls             2.51       6.43       0.00  11347
+post_requests         3.23       3.75       0.00  11456
+auth_attempts         0.42     119.50       0.00  15275
+methods               0.50     142.27       0.00  34368
+emails                0.58     235.19       0.01  15275
+passwords             2.30       4.13       0.00  15275
+tokens                2.03     194.31       0.03   6110
+sessions              2.34       2.03       0.00   3491
+peak_hours            0.79     276.49       0.12   9545

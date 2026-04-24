@@ -1,0 +1,19 @@
+Go coregex Standard (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+literal_alt           0.15       4.73       0.00    984
+multi_literal         0.10      14.35       0.00  26937
+anchored              0.10       0.00       0.00      1
+inner_literal         0.11       0.46       0.00    326
+suffix                0.16       2.39       0.00   2214
+char_class            0.06      89.84       0.00 1296745
+email                 0.11       0.85       0.02    656
+uri                  10.42       1.09       0.03    820
+version               0.07       0.85       0.00   2732
+ip                    0.14       0.93       0.01   1093
+alpha_digit           0.09      30.01       0.00    204
+word_digit            0.09      30.49       0.00   3845
+http_methods          0.12       1.88       0.00   1714
+anchored_php          0.14       0.00       0.00      0
+multiline_php         0.11       0.50       0.00   1967
+word_repeat           0.11     282.11       0.00 1240135

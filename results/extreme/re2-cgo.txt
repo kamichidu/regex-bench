@@ -1,0 +1,7 @@
+Go RE2 CGO Extreme (input: 6.00 MB)
+---------------------------------------------------------------------
+ip_nomatch           17.28 ms  match: no
+inner_nomatch        16.43 ms  match: no
+suffix_find          26.77 ms  match: no
+phone_nomatch        17.21 ms  match: no
+word_repeat           2.17 µs  match: yes

@@ -84,13 +84,8 @@ var LangArenaPatterns = []Pattern{
 	{"peak_hours", `\[\d+/\w+/\d+:1[3-7]:\d+:\d+ [+\-]\d+\]`},
 }
 
-func Main(e Engine, s Scenario) {
-	if len(os.Args) != 2 {
-		fmt.Printf("Usage: %s <input-file>\n", os.Args[0])
-		os.Exit(1)
-	}
-
-	data, err := os.ReadFile(os.Args[1])
+func Main(e Engine, s Scenario, inputFile string) {
+	data, err := os.ReadFile(inputFile)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 		os.Exit(1)
@@ -121,8 +116,8 @@ func Main(e Engine, s Scenario) {
 			measureExtreme(e, data, p)
 		}
 	} else {
-		fmt.Printf("%-15s %10s %10s %6s\n", "pattern", "compile", "search", "matches")
-		fmt.Println("-------------------------------------------------")
+		fmt.Printf("%-15s %10s %10s %10s %6s\n", "pattern", "compile(ns)", "search(ns)", "match(ns)", "matches")
+		fmt.Println("---------------------------------------------------------------------")
 		for _, p := range patterns {
 			measureStandard(e, data, p)
 		}
@@ -130,7 +125,6 @@ func Main(e Engine, s Scenario) {
 }
 
 func measureStandard(e Engine, data []byte, p Pattern) {
-	// Explicit GC before compilation
 	runtime.GC()
 	compileStart := time.Now()
 	re, err := e.Compile(p.Pattern)
@@ -140,31 +134,38 @@ func measureStandard(e Engine, data []byte, p Pattern) {
 		return
 	}
 
-	// Warmup
-	_ = e.Search(re, data)
-
-	// Search Measurement (Median of 11 iterations)
+	// 1. Search Measurement (Median of 11 iterations)
 	const iterations = 11
-	samples := make([]time.Duration, iterations)
+	searchSamples := make([]time.Duration, iterations)
 	var matches int
 	for i := 0; i < iterations; i++ {
-		runtime.GC() // Clean up before each run to ensure consistency
+		runtime.GC()
 		start := time.Now()
 		matches = e.Search(re, data)
-		samples[i] = time.Since(start)
+		searchSamples[i] = time.Since(start)
 	}
+	sort.Slice(searchSamples, func(i, j int) bool { return searchSamples[i] < searchSamples[j] })
+	medianSearch := searchSamples[iterations/2]
 
-	sort.Slice(samples, func(i, j int) bool { return samples[i] < samples[j] })
-	medianSearchElapsed := samples[iterations/2]
+	// 2. Match Measurement (Median of 11 iterations)
+	matchSamples := make([]time.Duration, iterations)
+	for i := 0; i < iterations; i++ {
+		runtime.GC()
+		start := time.Now()
+		_ = e.Match(re, data)
+		matchSamples[i] = time.Since(start)
+	}
+	sort.Slice(matchSamples, func(i, j int) bool { return matchSamples[i] < matchSamples[j] })
+	medianMatch := matchSamples[iterations/2]
 
 	compileMs := float64(compileElapsed) / float64(time.Millisecond)
-	searchMs := float64(medianSearchElapsed) / float64(time.Millisecond)
+	searchMs := float64(medianSearch) / float64(time.Millisecond)
+	matchMs := float64(medianMatch) / float64(time.Millisecond)
 
-	fmt.Printf("%-15s %10.2f %10.2f %6d\n", p.Name, compileMs, searchMs, matches)
+	fmt.Printf("%-15s %10.2f %10.2f %10.2f %6d\n", p.Name, compileMs, searchMs, matchMs, matches)
 }
 
 func measureExtreme(e Engine, data []byte, p Pattern) {
-	// Extreme scenario often tests pre-filters, so noise reduction is critical
 	const iterations = 11
 	re, err := e.Compile(p.Pattern)
 	if err != nil {
@@ -172,9 +173,7 @@ func measureExtreme(e Engine, data []byte, p Pattern) {
 		return
 	}
 
-	// Warmup
 	matched := e.Match(re, data)
-
 	samples := make([]time.Duration, iterations)
 	for i := 0; i < iterations; i++ {
 		runtime.GC()
@@ -182,7 +181,7 @@ func measureExtreme(e Engine, data []byte, p Pattern) {
 		e.Match(re, data)
 		samples[i] = time.Since(start)
 	}
-
+	
 	sort.Slice(samples, func(i, j int) bool { return samples[i] < samples[j] })
 	medianElapsed := samples[iterations/2]
 	avgNs := medianElapsed.Nanoseconds()

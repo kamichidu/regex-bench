@@ -1,0 +1,7 @@
+Go stdlib Extreme (input: 6.00 MB)
+---------------------------------------------------------------------
+ip_nomatch          472.57 ms  match: no
+inner_nomatch       249.72 ms  match: no
+suffix_find         262.01 ms  match: no
+phone_nomatch       168.17 ms  match: no
+word_repeat           6.56 µs  match: yes

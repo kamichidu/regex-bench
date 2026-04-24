@@ -1,0 +1,16 @@
+Go stdlib LangArena (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+errors                0.25      54.25       0.02  29159
+bots                  0.04    1353.79       0.08  22911
+suspicious            0.05     499.96       0.07  10473
+ips                   0.03     248.93       0.18    180
+api_calls             0.03      22.41       0.01  11347
+post_requests         0.03      30.07       0.01  11456
+auth_attempts         0.04      47.20       0.01  15275
+methods               0.03     381.95       0.01  34368
+emails                0.03     327.32       0.01  15275
+passwords             0.03      17.78       0.01  15275
+tokens                0.04     275.96       0.05   6110
+sessions              0.03       6.15       0.01   3491
+peak_hours            0.04      43.57       0.03   9545

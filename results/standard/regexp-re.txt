@@ -1,0 +1,19 @@
+Go regexp-re Standard (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+literal_alt           1.51     145.43       0.00    984
+multi_literal         1.75     144.01       0.02  26937
+anchored              0.33       0.00       0.00      1
+inner_literal         4.30     710.49       0.01    326
+suffix                3.17     702.98       0.01   2214
+char_class            0.24     262.54       0.00 1296745
+email                 0.57     303.41       0.01    656
+uri                  16.27     152.11       0.01    820
+version               0.31    1014.47       0.00   2732
+ip                    4.44    1535.15       0.00   1093
+alpha_digit           0.46     152.85       0.02    204
+word_digit            0.44     152.44       0.00   3845
+http_methods          0.87     407.89       0.00   1714
+anchored_php          3.53       0.00       0.00      0
+multiline_php         2.51       2.46       0.00   1967
+word_repeat           2.23     255.90       0.00 1240135

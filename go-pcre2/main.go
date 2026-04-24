@@ -1,6 +1,10 @@
 package main
 
 import (
+	"flag"
+	"fmt"
+	"os"
+
 	"github.com/Jemmic/go-pcre2"
 	"github.com/kolkov/regex-bench/internal/bench"
 )
@@ -33,5 +37,30 @@ func (e Engine) Match(re interface{}, data []byte) bool {
 }
 
 func main() {
-	bench.Main(Engine{}, bench.Standard)
+	var scenarioStr string
+	flag.StringVar(&scenarioStr, "scenario", "standard", "benchmark scenario (standard, dna, extreme, langarena)")
+	flag.Parse()
+
+	args := flag.Args()
+	if len(args) != 1 {
+		fmt.Printf("Usage: %s [-scenario <scenario>] <input-file>\n", os.Args[0])
+		os.Exit(1)
+	}
+
+	var s bench.Scenario
+	switch scenarioStr {
+	case "standard":
+		s = bench.Standard
+	case "dna":
+		s = bench.DNA
+	case "extreme":
+		s = bench.Extreme
+	case "langarena":
+		s = bench.LangArena
+	default:
+		fmt.Fprintf(os.Stderr, "Unknown scenario: %s\n", scenarioStr)
+		os.Exit(1)
+	}
+
+	bench.Main(Engine{}, s, args[0])
 }

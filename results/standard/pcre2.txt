@@ -1,0 +1,19 @@
+Go PCRE2 Standard (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+literal_alt           0.05     213.59       0.01    984
+multi_literal         0.03    1040.16       0.10  26937
+anchored              0.04       0.01       0.01      1
+inner_literal         0.02     237.30       0.02    326
+suffix                0.02     231.42       0.01   2214
+char_class            0.02    2734.57       0.01 1296745
+email                 0.02     415.70       0.02    656
+uri                   0.03     432.59       0.03    820
+version               0.04      17.52       0.01   2732
+ip                    5.05      18.31       0.01   1093
+alpha_digit           0.02     409.41       0.05    204
+word_digit            0.02     753.26       0.01   3845
+http_methods          0.02      50.96       0.02   1714
+anchored_php          0.02       0.00       0.00      0
+multiline_php         0.01      43.36       0.01   1967
+word_repeat           0.02    2826.60       0.01 1240135

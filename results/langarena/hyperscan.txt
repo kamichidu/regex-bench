@@ -1,0 +1,16 @@
+Go Hyperscan LangArena (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+errors                1.60       8.01       0.04  29159
+bots                  1.14       5.87       0.03  22911
+suspicious            0.69       3.18       0.03  10473
+ips                   0.79       0.41       0.03    180
+api_calls             0.98      50.29       0.03 276695
+post_requests         0.70       4.02       0.03  11456
+auth_attempts         0.53       4.17       0.03  15275
+methods               0.59       8.82       0.03  34368
+emails                0.81      39.96       0.04  30550
+passwords             1.20      29.84       0.03 150899
+tokens                2.27      39.22       0.04 183300
+sessions              1.64       9.89       0.04  43616
+peak_hours            2.44       8.10       0.04   9545

@@ -1,0 +1,7 @@
+Go PCRE2 Extreme (input: 6.00 MB)
+---------------------------------------------------------------------
+ip_nomatch            9.58 ms  match: no
+inner_nomatch       233.85 ms  match: no
+suffix_find         768.77 ms  match: no
+phone_nomatch         9.65 ms  match: no
+word_repeat           5.18 µs  match: yes

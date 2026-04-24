@@ -1,0 +1,7 @@
+Go RE2 WASM Extreme (input: 6.00 MB)
+---------------------------------------------------------------------
+ip_nomatch           46.09 ms  match: no
+inner_nomatch        45.96 ms  match: no
+suffix_find          46.21 ms  match: no
+phone_nomatch        46.11 ms  match: no
+word_repeat           2.28 ms  match: yes

@@ -1,0 +1,19 @@
+Go stdlib Standard (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+literal_alt           0.10     516.59       0.01    984
+multi_literal         0.04    1522.58       0.10  26937
+anchored              0.07       0.00       0.00      1
+inner_literal         0.02     249.89       0.01    326
+suffix                0.03     260.26       0.01   2214
+char_class            0.03     673.48       0.01 1296745
+email                 0.03     293.13       0.02    656
+uri                   0.04     285.81       0.02    820
+version               0.02     198.85       0.02   2732
+ip                    0.05     555.69       0.05   1093
+alpha_digit           0.02     289.14       0.04    204
+word_digit            0.02     299.80       0.01   3845
+http_methods          0.06     114.74       0.02   1714
+anchored_php          0.03       0.00       0.00      0
+multiline_php         0.01     112.21       0.02   1967
+word_repeat           0.05     862.50       0.01 1240135

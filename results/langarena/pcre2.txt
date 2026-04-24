@@ -1,0 +1,16 @@
+Go PCRE2 LangArena (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+errors                0.05      92.17       0.02  29159
+bots                  0.03     162.15       0.02  22911
+suspicious            0.02      83.50       0.02  10473
+ips                   0.02     183.17       0.18    180
+api_calls             0.02      45.84       0.01  11347
+post_requests         0.02      22.49       0.01  11456
+auth_attempts         0.02      62.79       0.01  15275
+methods               0.02      93.77       0.01  34368
+emails                0.02     429.36       0.01  15275
+passwords             0.03      32.10       0.01  15275
+tokens                0.02      57.31       0.02   6110
+sessions              0.03      13.29       0.01   3491
+peak_hours            0.03      23.71       0.01   9545

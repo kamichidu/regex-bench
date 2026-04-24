@@ -58,15 +58,13 @@ for __scenario in "${__scenarios[@]}"; do
     esac
 
     for __engine in "${__engines[@]}"; do
-        __suffix=""
-        [[ "${__scenario}" != "standard" ]] && __suffix="-${__scenario}"
-
-        __bin="bin/go-${__engine}${__suffix}.exe"
+        __bin="bin/go-${__engine}.exe"
 
         if [[ -f "${__bin}" ]]; then
             echo "  Running ${__engine}..."
-            # Use tee to both display and save results
-            "${__bin}" "${__input}" 2>/dev/null | tee "results/${__scenario}/${__engine}.txt"
+            # Use timeout to prevent hanging on slow engines
+            # Standard scenario for regexp-re can be VERY slow, so we give it 300s
+            timeout 300s "${__bin}" -scenario "${__scenario}" "${__input}" 2>/dev/null | tee "results/${__scenario}/${__engine}.txt" || echo "  [Timeout/Error] ${__engine} skipped after 300s"
         else
             echo "  Binary ${__bin} not found, skipping."
         fi

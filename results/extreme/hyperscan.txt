@@ -1,0 +1,7 @@
+Go Hyperscan Extreme (input: 6.00 MB)
+---------------------------------------------------------------------
+ip_nomatch          529.97 µs  match: no
+inner_nomatch        35.20 ms  match: no
+suffix_find         501.60 µs  match: no
+phone_nomatch       364.85 µs  match: no
+word_repeat          24.14 µs  match: yes

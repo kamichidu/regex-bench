@@ -15,13 +15,14 @@ type Result struct {
 	Pattern string
 	Compile float64
 	Search  float64
-	Matches string // Matches or Match status (yes/no)
+	Match   float64
+	Matches string
 	Unit    string
 }
 
 type EngineResult struct {
 	Name      string
-	InputSize float64 // MB
+	InputSize float64
 	Results   map[string]Result
 }
 
@@ -40,7 +41,8 @@ func parseFile(path string) (*EngineResult, error) {
 
 	scanner := bufio.NewScanner(file)
 	reInput := regexp.MustCompile(`input: ([0-9.]+) MB`)
-	reStandard := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9]+)`)
+	// Updated Standard: pattern compile search match matches
+	reStandard := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9]+)`)
 	reExtreme := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+(ms|µs|ns)\s+match:\s+(yes|no)`)
 
 	for scanner.Scan() {
@@ -52,11 +54,13 @@ func parseFile(path string) (*EngineResult, error) {
 			pattern := m[1]
 			compile, _ := strconv.ParseFloat(m[2], 64)
 			search, _ := strconv.ParseFloat(m[3], 64)
-			matches := m[4]
+			match, _ := strconv.ParseFloat(m[4], 64)
+			matches := m[5]
 			res.Results[pattern] = Result{
 				Pattern: pattern,
 				Compile: compile,
 				Search:  search,
+				Match:   match,
 				Matches: matches,
 				Unit:    "ms",
 			}
@@ -65,14 +69,8 @@ func parseFile(path string) (*EngineResult, error) {
 			search, _ := strconv.ParseFloat(m[2], 64)
 			unit := m[3]
 			matches := m[4]
-
 			val := search
-			if unit == "µs" {
-				val /= 1000.0
-			} else if unit == "ns" {
-				val /= 1000000.0
-			}
-
+			if unit == "µs" { val /= 1000.0 } else if unit == "ns" { val /= 1000000.0 }
 			res.Results[pattern] = Result{
 				Pattern: pattern,
 				Search:  val,
@@ -89,129 +87,71 @@ func main() {
 	engines := []string{"stdlib", "regexp-re", "coregex", "re2-wasm", "re2-cgo", "pcre2", "hyperscan"}
 
 	fmt.Println("# Benchmark Report")
-	fmt.Println("\nGenerated automatically from the latest run.")
 
 	for _, sc := range scenarios {
 		fmt.Printf("\n## Scenario: %s\n", strings.Title(sc))
-
 		var allEngineResults []*EngineResult
 		patternsMap := make(map[string]bool)
-
 		for _, en := range engines {
-			path := filepath.Join("results", sc, en+".txt")
-			if res, err := parseFile(path); err == nil {
+			if res, err := parseFile(filepath.Join("results", sc, en+".txt")); err == nil {
 				allEngineResults = append(allEngineResults, res)
-				for p := range res.Results {
-					patternsMap[p] = true
-				}
+				for p := range res.Results { patternsMap[p] = true }
 			}
 		}
+		if len(allEngineResults) == 0 { continue }
+		patterns := make([]string, 0, len(patternsMap)); for p := range patternsMap { patterns = append(patterns, p) }; sort.Strings(patterns)
 
-		if len(allEngineResults) == 0 {
-			continue
+		// Table for Search (All Matches)
+		fmt.Printf("\n### Search Performance (FindAll)\n")
+		printTable(allEngineResults, patterns, sc, false)
+
+		// Table for Match (Boolean) - only for non-extreme
+		if sc != "extreme" {
+			fmt.Printf("\n### Match Performance (Boolean)\n")
+			printTable(allEngineResults, patterns, sc, true)
 		}
+	}
+}
 
-		patterns := make([]string, 0, len(patternsMap))
-		for p := range patternsMap {
-			patterns = append(patterns, p)
-		}
-		sort.Strings(patterns)
+func printTable(engines []*EngineResult, patterns []string, sc string, isMatch bool) {
+	header := "| Pattern | "
+	sep := "|---|"
+	for _, er := range engines { header += er.Name + " | "; sep += "---|" }
+	fmt.Println(header); fmt.Println(sep)
 
-		// Table Header
-		header := "| Pattern | "
-		sep := "|---|"
-		for _, er := range allEngineResults {
-			header += er.Name + " | "
-			sep += "---|"
-		}
-
-		if sc == "extreme" {
-			fmt.Println("\n### Search Time & Match Status (Speedup vs stdlib)")
-		} else {
-			fmt.Println("\n### Search Time in ms (Speedup vs stdlib)")
-		}
-		fmt.Println(header)
-		fmt.Println(sep)
-
-		for _, p := range patterns {
-			row := "| " + p + " | "
-
-			// Get stdlib baseline
-			var stdlibTime float64
-			for _, er := range allEngineResults {
-				if er.Name == "stdlib" {
-					if r, ok := er.Results[p]; ok {
-						stdlibTime = r.Search
-					}
-					break
-				}
-			}
-
-			for _, er := range allEngineResults {
+	for _, p := range patterns {
+		row := "| " + p + " | "
+		var baseline float64
+		for _, er := range engines {
+			if er.Name == "stdlib" {
 				if r, ok := er.Results[p]; ok {
-					ratioStr := ""
-					if stdlibTime > 0 && er.Name != "stdlib" {
-						if r.Search > 0 {
-							if r.Search < stdlibTime {
-								// Faster
-								ratio := stdlibTime / r.Search
-								if ratio >= 1.05 {
-									ratioStr = fmt.Sprintf(" (%.1fx)", ratio)
-								}
-							} else {
-								// Slower
-								ratio := r.Search / stdlibTime
-								if ratio >= 1.05 {
-									ratioStr = fmt.Sprintf(" (-%.1fx)", ratio)
-								}
-							}
-						}
-					}
+					if isMatch { baseline = r.Match } else { baseline = r.Search }
+				}
+				break
+			}
+		}
 
-					if sc == "extreme" {
-						origVal := r.Search
-						if r.Unit == "µs" {
-							origVal *= 1000.0
-						}
-						if r.Unit == "ns" {
-							origVal *= 1000000.0
-						}
-						row += fmt.Sprintf("%.2f %s%s | ", origVal, r.Unit, ratioStr)
+		for _, er := range engines {
+			if r, ok := er.Results[p]; ok {
+				val := r.Search
+				if isMatch { val = r.Match }
+				
+				ratioStr := ""
+				if baseline > 0 && er.Name != "stdlib" && val > 0 {
+					if val < baseline {
+						ratioStr = fmt.Sprintf(" (%.1fx)", baseline/val)
 					} else {
-						row += fmt.Sprintf("%.2f%s | ", r.Search, ratioStr)
+						ratioStr = fmt.Sprintf(" (-%.1fx)", val/baseline)
 					}
-				} else {
-					row += "- | "
 				}
-			}
-			fmt.Println(row)
-		}
-
-		// Mermaid Charts
-		fmt.Printf("\n### Visualizations: %s Performance by Pattern\n", strings.Title(sc))
-		for _, p := range patterns {
-			fmt.Printf("\n#### Pattern: %s\n", p)
-			fmt.Println("```mermaid")
-			fmt.Println("xychart-beta")
-			fmt.Printf("    title \"Search Time (ms) - %s\"\n", p)
-
-			engineNames := []string{}
-			for _, er := range allEngineResults {
-				engineNames = append(engineNames, `"`+er.Name+`"`)
-			}
-			fmt.Printf("    x-axis [%s]\n", strings.Join(engineNames, ", "))
-			fmt.Println("    y-axis \"Time (ms)\"")
-
-			values := []string{}
-			for _, er := range allEngineResults {
-				if r, ok := er.Results[p]; ok {
-					values = append(values, fmt.Sprintf("%.4f", r.Search))
+				if sc == "extreme" {
+					orig := r.Search; if r.Unit == "µs" { orig *= 1000 }; if r.Unit == "ns" { orig *= 1000000 }
+					row += fmt.Sprintf("%.2f %s%s | ", orig, r.Unit, ratioStr)
 				} else {
-					values = append(values, "0")
+					row += fmt.Sprintf("%.2f%s | ", val, ratioStr)
 				}
-			}
-			fmt.Printf("    bar [%s]\n", strings.Join(values, ", "))
-			fmt.Println("```")
+			} else { row += "- | " }
 		}
+		fmt.Println(row)
 	}
 }

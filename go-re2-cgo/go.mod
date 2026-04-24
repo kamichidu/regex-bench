@@ -4,11 +4,13 @@ go 1.25.4
 
 require github.com/wasilibs/go-re2 v1.10.0
 
+require github.com/stretchr/testify v1.11.1 // indirect
+
 require (
 	github.com/kolkov/regex-bench/internal/bench v0.0.0
 	github.com/tetratelabs/wazero v1.9.0 // indirect
 	github.com/wasilibs/wazero-helpers v0.0.0-20240620070341-3dff1577cd52 // indirect
-	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
 )
 
 replace github.com/kolkov/regex-bench/internal/bench => ../internal/bench

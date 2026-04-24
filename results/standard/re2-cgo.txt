@@ -1,0 +1,19 @@
+Go RE2 CGO Standard (input: 6.00 MB)
+pattern         compile(ns) search(ns)  match(ns) matches
+---------------------------------------------------------------------
+literal_alt           0.13      40.73       0.01    984
+multi_literal         0.10      67.81       0.01  26937
+anchored              0.10       0.01       0.01      1
+inner_literal         0.07      29.79       0.01    326
+suffix                0.06      31.89       0.01   2214
+char_class            0.05    1071.71       0.00 1296745
+email                 0.06      32.14       0.00    656
+uri                   0.10      30.90       0.00    820
+version               0.04      17.45       0.00   2732
+ip                    0.08      17.96       0.00   1093
+alpha_digit           0.04      31.43       0.00    204
+word_digit            0.06      32.41       0.00   3845
+http_methods          0.06      23.83       0.00   1714
+anchored_php          0.07       0.00       0.00      0
+multiline_php         0.04      20.09       0.00   1967
+word_repeat           0.08     616.87       0.00 1240135

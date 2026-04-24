@@ -1,0 +1,7 @@
+Go regexp-re Extreme (input: 6.00 MB)
+---------------------------------------------------------------------
+ip_nomatch            1.75 ms  match: no
+inner_nomatch       854.17 ms  match: no
+suffix_find         115.39 ms  match: no
+phone_nomatch         1.70 ms  match: no
+word_repeat           1.48 µs  match: yes

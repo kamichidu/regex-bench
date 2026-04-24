@@ -48,20 +48,7 @@ build-go-hyperscan:
 	@echo "Building go-hyperscan..."
 	@cd go-hyperscan && go build -ldflags "-s -w" -o ../bin/go-hyperscan.exe .
 
-# Variant build rules
-build-all: build
-	@for sc in dna extreme langarena; do \
-		for eng in $(ENGINES); do \
-			echo "Building go-$$eng-$$sc..."; \
-			if [ "$$eng" = "re2-cgo" ]; then \
-				cd go-$$eng-$$sc && go build -tags re2_cgo -ldflags "-s -w" -o ../bin/go-$$eng-$$sc.exe . && cd ..; \
-			else \
-				cd go-$$eng-$$sc && go build -ldflags "-s -w" -o ../bin/go-$$eng-$$sc.exe . && cd ..; \
-			fi; \
-		done; \
-	done
-
-report: generate build-all
+report: generate build
 	@chmod +x scripts/run-all.sh
 	@./scripts/run-all.sh
 	@go run scripts/generate-report.go > REPORT.md
