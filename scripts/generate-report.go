@@ -15,7 +15,8 @@ type Result struct {
 	Pattern string
 	Compile float64
 	Search  float64
-	Matches int
+	Matches string // Matches or Match status (yes/no)
+	Unit    string
 }
 
 type EngineResult struct {
@@ -38,22 +39,46 @@ func parseFile(path string) (*EngineResult, error) {
 	}
 
 	scanner := bufio.NewScanner(file)
-	// Example: Go stdlib (input: 6.09 MB)
 	reInput := regexp.MustCompile(`input: ([0-9.]+) MB`)
-	// Example: literal_alt         0.01       0.45   1441
-	reLine := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9]+)`)
+	reStandard := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9]+)`)
+	reExtreme := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+(ms|µs|ns)\s+match:\s+(yes|no)`)
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		if m := reInput.FindStringSubmatch(line); m != nil {
 			res.InputSize, _ = strconv.ParseFloat(m[1], 64)
 		}
-		if m := reLine.FindStringSubmatch(line); m != nil {
+		if m := reStandard.FindStringSubmatch(line); m != nil {
 			pattern := m[1]
 			compile, _ := strconv.ParseFloat(m[2], 64)
 			search, _ := strconv.ParseFloat(m[3], 64)
-			matches, _ := strconv.Atoi(m[4])
-			res.Results[pattern] = Result{pattern, compile, search, matches}
+			matches := m[4]
+			res.Results[pattern] = Result{
+				Pattern: pattern,
+				Compile: compile,
+				Search:  search,
+				Matches: matches,
+				Unit:    "ms",
+			}
+		} else if m := reExtreme.FindStringSubmatch(line); m != nil {
+			pattern := m[1]
+			search, _ := strconv.ParseFloat(m[2], 64)
+			unit := m[3]
+			matches := m[4]
+			
+			val := search
+			if unit == "µs" {
+				val /= 1000.0
+			} else if unit == "ns" {
+				val /= 1000000.0
+			}
+
+			res.Results[pattern] = Result{
+				Pattern: pattern,
+				Search:  val,
+				Matches: matches,
+				Unit:    unit,
+			}
 		}
 	}
 	return res, nil
@@ -99,15 +124,58 @@ func main() {
 			header += er.Name + " | "
 			sep += "---|"
 		}
-		fmt.Println("\n### Search Time (ms)")
+		
+		if sc == "extreme" {
+			fmt.Println("\n### Search Time & Match Status (Speedup vs stdlib)")
+		} else {
+			fmt.Println("\n### Search Time in ms (Speedup vs stdlib)")
+		}
 		fmt.Println(header)
 		fmt.Println(sep)
 
 		for _, p := range patterns {
 			row := "| " + p + " | "
+			
+			// Get stdlib baseline
+			var stdlibTime float64
+			for _, er := range allEngineResults {
+				if er.Name == "stdlib" {
+					if r, ok := er.Results[p]; ok {
+						stdlibTime = r.Search
+					}
+					break
+				}
+			}
+
 			for _, er := range allEngineResults {
 				if r, ok := er.Results[p]; ok {
-					row += fmt.Sprintf("%.2f | ", r.Search)
+					ratioStr := ""
+					if stdlibTime > 0 && er.Name != "stdlib" {
+						if r.Search > 0 {
+							if r.Search < stdlibTime {
+								// Faster
+								ratio := stdlibTime / r.Search
+								if ratio >= 1.05 {
+									ratioStr = fmt.Sprintf(" (%.1fx)", ratio)
+								}
+							} else {
+								// Slower
+								ratio := r.Search / stdlibTime
+								if ratio >= 1.05 {
+									ratioStr = fmt.Sprintf(" (-%.1fx)", ratio)
+								}
+							}
+						}
+					}
+
+					if sc == "extreme" {
+						origVal := r.Search
+						if r.Unit == "µs" { origVal *= 1000.0 }
+						if r.Unit == "ns" { origVal *= 1000000.0 }
+						row += fmt.Sprintf("%.2f %s%s | ", origVal, r.Unit, ratioStr)
+					} else {
+						row += fmt.Sprintf("%.2f%s | ", r.Search, ratioStr)
+					}
 				} else {
 					row += "- | "
 				}
@@ -115,37 +183,31 @@ func main() {
 			fmt.Println(row)
 		}
 
-		// Mermaid Chart
-		fmt.Println("\n### Visualization (Search Time)")
-		fmt.Println("```mermaid")
-		fmt.Println("xychart-beta")
-		fmt.Printf("    title \"%s Scenario Performance\"\n", strings.Title(sc))
-
-		// X-axis: Engines
-		engineNames := []string{}
-		for _, er := range allEngineResults {
-			engineNames = append(engineNames, `"`+er.Name+`"`)
-		}
-		fmt.Printf("    x-axis [%s]\n", strings.Join(engineNames, ", "))
-
-		// Y-axis: Average Search Time across all patterns
-		fmt.Println("    y-axis \"Avg Search Time (ms)\"")
-
-		avgTimes := []string{}
-		for _, er := range allEngineResults {
-			sum := 0.0
-			count := 0
-			for _, r := range er.Results {
-				sum += r.Search
-				count++
+		// Mermaid Charts
+		fmt.Printf("\n### Visualizations: %s Performance by Pattern\n", strings.Title(sc))
+		for _, p := range patterns {
+			fmt.Printf("\n#### Pattern: %s\n", p)
+			fmt.Println("```mermaid")
+			fmt.Println("xychart-beta")
+			fmt.Printf("    title \"Search Time (ms) - %s\"\n", p)
+			
+			engineNames := []string{}
+			for _, er := range allEngineResults {
+				engineNames = append(engineNames, `"`+er.Name+`"`)
 			}
-			avg := 0.0
-			if count > 0 {
-				avg = sum / float64(count)
+			fmt.Printf("    x-axis [%s]\n", strings.Join(engineNames, ", "))
+			fmt.Println("    y-axis \"Time (ms)\"")
+			
+			values := []string{}
+			for _, er := range allEngineResults {
+				if r, ok := er.Results[p]; ok {
+					values = append(values, fmt.Sprintf("%.4f", r.Search))
+				} else {
+					values = append(values, "0")
+				}
 			}
-			avgTimes = append(avgTimes, fmt.Sprintf("%.2f", avg))
+			fmt.Printf("    bar [%s]\n", strings.Join(values, ", "))
+			fmt.Println("```")
 		}
-		fmt.Printf("    bar [%s]\n", strings.Join(avgTimes, ", "))
-		fmt.Println("```")
 	}
 }
