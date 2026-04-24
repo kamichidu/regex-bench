@@ -65,7 +65,7 @@ func parseFile(path string) (*EngineResult, error) {
 			search, _ := strconv.ParseFloat(m[2], 64)
 			unit := m[3]
 			matches := m[4]
-			
+
 			val := search
 			if unit == "µs" {
 				val /= 1000.0
@@ -124,7 +124,7 @@ func main() {
 			header += er.Name + " | "
 			sep += "---|"
 		}
-		
+
 		if sc == "extreme" {
 			fmt.Println("\n### Search Time & Match Status (Speedup vs stdlib)")
 		} else {
@@ -135,7 +135,7 @@ func main() {
 
 		for _, p := range patterns {
 			row := "| " + p + " | "
-			
+
 			// Get stdlib baseline
 			var stdlibTime float64
 			for _, er := range allEngineResults {
@@ -170,8 +170,12 @@ func main() {
 
 					if sc == "extreme" {
 						origVal := r.Search
-						if r.Unit == "µs" { origVal *= 1000.0 }
-						if r.Unit == "ns" { origVal *= 1000000.0 }
+						if r.Unit == "µs" {
+							origVal *= 1000.0
+						}
+						if r.Unit == "ns" {
+							origVal *= 1000000.0
+						}
 						row += fmt.Sprintf("%.2f %s%s | ", origVal, r.Unit, ratioStr)
 					} else {
 						row += fmt.Sprintf("%.2f%s | ", r.Search, ratioStr)
@@ -190,14 +194,14 @@ func main() {
 			fmt.Println("```mermaid")
 			fmt.Println("xychart-beta")
 			fmt.Printf("    title \"Search Time (ms) - %s\"\n", p)
-			
+
 			engineNames := []string{}
 			for _, er := range allEngineResults {
 				engineNames = append(engineNames, `"`+er.Name+`"`)
 			}
 			fmt.Printf("    x-axis [%s]\n", strings.Join(engineNames, ", "))
 			fmt.Println("    y-axis \"Time (ms)\"")
-			
+
 			values := []string{}
 			for _, er := range allEngineResults {
 				if r, ok := er.Results[p]; ok {

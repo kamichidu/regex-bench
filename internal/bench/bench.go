@@ -3,6 +3,8 @@ package bench
 import (
 	"fmt"
 	"os"
+	"runtime"
+	"sort"
 	"time"
 )
 
@@ -128,6 +130,8 @@ func Main(e Engine, s Scenario) {
 }
 
 func measureStandard(e Engine, data []byte, p Pattern) {
+	// Explicit GC before compilation
+	runtime.GC()
 	compileStart := time.Now()
 	re, err := e.Compile(p.Pattern)
 	compileElapsed := time.Since(compileStart)
@@ -139,25 +143,29 @@ func measureStandard(e Engine, data []byte, p Pattern) {
 	// Warmup
 	_ = e.Search(re, data)
 
-	// Search Measurement (Average of 3 iterations)
-	const iterations = 3
-	var totalElapsed time.Duration
+	// Search Measurement (Median of 11 iterations)
+	const iterations = 11
+	samples := make([]time.Duration, iterations)
 	var matches int
 	for i := 0; i < iterations; i++ {
+		runtime.GC() // Clean up before each run to ensure consistency
 		start := time.Now()
 		matches = e.Search(re, data)
-		totalElapsed += time.Since(start)
+		samples[i] = time.Since(start)
 	}
-	avgSearchElapsed := totalElapsed / iterations
+
+	sort.Slice(samples, func(i, j int) bool { return samples[i] < samples[j] })
+	medianSearchElapsed := samples[iterations/2]
 
 	compileMs := float64(compileElapsed) / float64(time.Millisecond)
-	searchMs := float64(avgSearchElapsed) / float64(time.Millisecond)
+	searchMs := float64(medianSearchElapsed) / float64(time.Millisecond)
 
 	fmt.Printf("%-15s %10.2f %10.2f %6d\n", p.Name, compileMs, searchMs, matches)
 }
 
 func measureExtreme(e Engine, data []byte, p Pattern) {
-	const iterations = 5
+	// Extreme scenario often tests pre-filters, so noise reduction is critical
+	const iterations = 11
 	re, err := e.Compile(p.Pattern)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error compiling %s: %v\n", p.Name, err)
@@ -167,12 +175,17 @@ func measureExtreme(e Engine, data []byte, p Pattern) {
 	// Warmup
 	matched := e.Match(re, data)
 
-	start := time.Now()
+	samples := make([]time.Duration, iterations)
 	for i := 0; i < iterations; i++ {
+		runtime.GC()
+		start := time.Now()
 		e.Match(re, data)
+		samples[i] = time.Since(start)
 	}
-	totalNs := time.Since(start).Nanoseconds()
-	avgNs := totalNs / iterations
+
+	sort.Slice(samples, func(i, j int) bool { return samples[i] < samples[j] })
+	medianElapsed := samples[iterations/2]
+	avgNs := medianElapsed.Nanoseconds()
 
 	matchStr := "no"
 	if matched {
