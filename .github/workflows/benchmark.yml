@@ -11,8 +11,13 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install PCRE2 and Hyperscan
         run: |
@@ -27,6 +32,19 @@ jobs:
       - name: Generate and Report
         run: |
           make report
+
+      - name: Commit and Push Report
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add REPORT.md
+          if ! git diff --staged --quiet; then
+            git commit -m "docs: update benchmark report [skip ci]"
+            git push
+          else
+            echo "No changes to REPORT.md"
+          fi
 
       - name: Upload Report
         uses: actions/upload-artifact@v4
