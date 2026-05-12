@@ -27,20 +27,6 @@ func (e Engine) Search(re interface{}, data []byte) int {
 	}, nil)
 	return count
 }
-func (e Engine) Match(re interface{}, data []byte) bool {
-	db := re.(hyperscan.BlockDatabase)
-	scratch, err := hyperscan.NewScratch(db)
-	if err != nil {
-		return false
-	}
-	defer scratch.Free()
-	matched := false
-	db.Scan(data, scratch, func(id uint, from, to uint64, flags uint, context interface{}) error {
-		matched = true
-		return fmt.Errorf("found")
-	}, nil)
-	return matched
-}
 
 func main() {
 	var scenarioStr string

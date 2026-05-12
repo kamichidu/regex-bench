@@ -13,11 +13,9 @@ import (
 
 type Result struct {
 	Pattern string
-	Compile float64
-	Search  float64
-	Match   float64
+	Compile int64
+	Search  int64
 	Matches string
-	Unit    string
 }
 
 type EngineResult struct {
@@ -29,7 +27,10 @@ type EngineResult struct {
 func parseFile(path string) (*EngineResult, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		if os.IsNotExist(err) {
+			return nil, err
+		}
+		panic(err)
 	}
 	defer file.Close()
 
@@ -41,43 +42,39 @@ func parseFile(path string) (*EngineResult, error) {
 
 	scanner := bufio.NewScanner(file)
 	reInput := regexp.MustCompile(`input: ([0-9.]+) MB`)
-	// Updated Standard: pattern compile search match matches
-	reStandard := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9]+)`)
-	reExtreme := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9.]+)\s+(ms|µs|ns)\s+match:\s+(yes|no)`)
+	// New format: pattern compile(ns) search(ns) matches
+	reStandard := regexp.MustCompile(`^([a-z_0-9-]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)`)
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		if m := reInput.FindStringSubmatch(line); m != nil {
-			res.InputSize, _ = strconv.ParseFloat(m[1], 64)
+			val, err := strconv.ParseFloat(m[1], 64)
+			if err != nil {
+				panic(err)
+			}
+			res.InputSize = val
 		}
 		if m := reStandard.FindStringSubmatch(line); m != nil {
 			pattern := m[1]
-			compile, _ := strconv.ParseFloat(m[2], 64)
-			search, _ := strconv.ParseFloat(m[3], 64)
-			match, _ := strconv.ParseFloat(m[4], 64)
-			matches := m[5]
+			compile, err := strconv.ParseInt(m[2], 10, 64)
+			if err != nil {
+				panic(err)
+			}
+			search, err := strconv.ParseInt(m[3], 10, 64)
+			if err != nil {
+				panic(err)
+			}
+			matches := m[4]
 			res.Results[pattern] = Result{
 				Pattern: pattern,
 				Compile: compile,
 				Search:  search,
-				Match:   match,
 				Matches: matches,
-				Unit:    "ms",
-			}
-		} else if m := reExtreme.FindStringSubmatch(line); m != nil {
-			pattern := m[1]
-			search, _ := strconv.ParseFloat(m[2], 64)
-			unit := m[3]
-			matches := m[4]
-			val := search
-			if unit == "µs" { val /= 1000.0 } else if unit == "ns" { val /= 1000000.0 }
-			res.Results[pattern] = Result{
-				Pattern: pattern,
-				Search:  val,
-				Matches: matches,
-				Unit:    unit,
 			}
 		}
+	}
+	if err := scanner.Err(); err != nil {
+		panic(err)
 	}
 	return res, nil
 }
@@ -93,39 +90,47 @@ func main() {
 		var allEngineResults []*EngineResult
 		patternsMap := make(map[string]bool)
 		for _, en := range engines {
-			if res, err := parseFile(filepath.Join("results", sc, en+".txt")); err == nil {
-				allEngineResults = append(allEngineResults, res)
-				for p := range res.Results { patternsMap[p] = true }
+			res, err := parseFile(filepath.Join("results", sc, en+".txt"))
+			if err != nil {
+				continue
+			}
+			allEngineResults = append(allEngineResults, res)
+			for p := range res.Results {
+				patternsMap[p] = true
 			}
 		}
-		if len(allEngineResults) == 0 { continue }
-		patterns := make([]string, 0, len(patternsMap)); for p := range patternsMap { patterns = append(patterns, p) }; sort.Strings(patterns)
-
-		// Table for Search (All Matches)
-		fmt.Printf("\n### Search Performance (FindAll)\n")
-		printTable(allEngineResults, patterns, sc, false)
-
-		// Table for Match (Boolean) - only for non-extreme
-		if sc != "extreme" {
-			fmt.Printf("\n### Match Performance (Boolean)\n")
-			printTable(allEngineResults, patterns, sc, true)
+		if len(allEngineResults) == 0 {
+			continue
 		}
+		patterns := make([]string, 0, len(patternsMap))
+		for p := range patternsMap {
+			patterns = append(patterns, p)
+		}
+		sort.Strings(patterns)
+
+		// Table for Search Performance
+		fmt.Printf("\n### Search Performance (ns)\n")
+		printTable(allEngineResults, patterns)
 	}
 }
 
-func printTable(engines []*EngineResult, patterns []string, sc string, isMatch bool) {
+func printTable(engines []*EngineResult, patterns []string) {
 	header := "| Pattern | "
 	sep := "|---|"
-	for _, er := range engines { header += er.Name + " | "; sep += "---|" }
-	fmt.Println(header); fmt.Println(sep)
+	for _, er := range engines {
+		header += er.Name + " | "
+		sep += "---|"
+	}
+	fmt.Println(header)
+	fmt.Println(sep)
 
 	for _, p := range patterns {
 		row := "| " + p + " | "
-		var baseline float64
+		var baseline int64
 		for _, er := range engines {
 			if er.Name == "stdlib" {
 				if r, ok := er.Results[p]; ok {
-					if isMatch { baseline = r.Match } else { baseline = r.Search }
+					baseline = r.Search
 				}
 				break
 			}
@@ -134,23 +139,18 @@ func printTable(engines []*EngineResult, patterns []string, sc string, isMatch b
 		for _, er := range engines {
 			if r, ok := er.Results[p]; ok {
 				val := r.Search
-				if isMatch { val = r.Match }
-				
 				ratioStr := ""
 				if baseline > 0 && er.Name != "stdlib" && val > 0 {
 					if val < baseline {
-						ratioStr = fmt.Sprintf(" (%.1fx)", baseline/val)
+						ratioStr = fmt.Sprintf(" (%.1fx)", float64(baseline)/float64(val))
 					} else {
-						ratioStr = fmt.Sprintf(" (-%.1fx)", val/baseline)
+						ratioStr = fmt.Sprintf(" (-%.1fx)", float64(val)/float64(baseline))
 					}
 				}
-				if sc == "extreme" {
-					orig := r.Search; if r.Unit == "µs" { orig *= 1000 }; if r.Unit == "ns" { orig *= 1000000 }
-					row += fmt.Sprintf("%.2f %s%s | ", orig, r.Unit, ratioStr)
-				} else {
-					row += fmt.Sprintf("%.2f%s | ", val, ratioStr)
-				}
-			} else { row += "- | " }
+				row += fmt.Sprintf("%d%s | ", val, ratioStr)
+			} else {
+				row += "- | "
+			}
 		}
 		fmt.Println(row)
 	}

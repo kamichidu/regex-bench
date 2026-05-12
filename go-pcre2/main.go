@@ -32,9 +32,6 @@ func (e Engine) Search(re interface{}, data []byte) int {
 	}
 	return count
 }
-func (e Engine) Match(re interface{}, data []byte) bool {
-	return re.(*pcre2.Regexp).Matcher(data, 0).Match(data, 0)
-}
 
 func main() {
 	var scenarioStr string
