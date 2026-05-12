@@ -22,20 +22,13 @@ jobs:
         with:
           go-version: '1.25'
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
-
       - name: Generate LangArena input data
         run: go run scripts/generate-langarena-input.go
 
-      - name: Build Go stdlib LangArena
-        run: cd go-stdlib-langarena && go build -o ../bin/go-stdlib-langarena .
-
-      - name: Build Go coregex LangArena
-        run: cd go-coregex-langarena && go build -o ../bin/go-coregex-langarena .
-
-      - name: Build Rust LangArena
-        run: cd rust-langarena && cargo build --release && cp target/release/langarena-benchmark ../bin/rust-langarena
+      - name: Build engines
+        run: |
+          cd go-regexp-re && go build -o ../bin/go-regexp-re .
+          cd ../go-coregex && go build -o ../bin/go-coregex .
 
       - name: Run LangArena benchmarks
         run: |
@@ -47,16 +40,14 @@ jobs:
           echo "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          ./bin/go-stdlib-langarena input/langarena-data.txt | tee /tmp/stdlib.txt
+          ./bin/go-regexp-re -scenario langarena input/langarena-data.txt | tee /tmp/stdlib.txt
           echo ""
-          ./bin/go-coregex-langarena input/langarena-data.txt | tee /tmp/coregex.txt
-          echo ""
-          ./bin/rust-langarena input/langarena-data.txt | tee /tmp/rust.txt
+          ./bin/go-coregex -scenario langarena input/langarena-data.txt | tee /tmp/coregex.txt
 
           echo "### Search Time Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Pattern | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Pattern | Go stdlib | Go coregex | vs stdlib |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-----------|------------|-----------|" >> $GITHUB_STEP_SUMMARY
 
           grep -E "^[a-z_]+\s" /tmp/stdlib.txt | grep -v "^pattern " | while read line; do
             pattern=$(echo "$line" | awk '{print $1}')
@@ -64,9 +55,6 @@ jobs:
 
             cor_line=$(grep "^${pattern} " /tmp/coregex.txt)
             cor_search=$(echo "$cor_line" | awk '{print $3}')
-
-            rus_line=$(grep "^${pattern} " /tmp/rust.txt)
-            rus_search=$(echo "$rus_line" | awk '{print $3}')
 
             # vs stdlib speedup
             if [ -n "$cor_search" ] && [ -n "$std_search" ]; then
@@ -77,6 +65,7 @@ jobs:
                 speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null)
                 if [ "$speedup_int" -ge 2 ] 2>/dev/null; then
                   vs_stdlib="**${speedup}x faster**"
+                  cor_fmt="**${cor_search} ms**"
                 elif [ "$speedup_int" -eq 1 ] 2>/dev/null; then
                   # Check if it's 1.5x+ (meaningful speedup)
                   frac=$(echo "scale=0; $std_search * 10 / $cor_search" | bc 2>/dev/null)
@@ -85,42 +74,22 @@ jobs:
                   else
                     vs_stdlib="~1x"
                   fi
+                  cor_fmt="${cor_search} ms"
                 else
                   vs_stdlib="~1x"
+                  cor_fmt="${cor_search} ms"
                 fi
               else
                 slowdown=$(echo "scale=1; $cor_search / $std_search" | bc 2>/dev/null)
                 vs_stdlib="${slowdown}x slower"
+                cor_fmt="${cor_search} ms"
               fi
             else
               vs_stdlib="—"
-            fi
-
-            # vs Rust comparison
-            if [ -n "$cor_search" ] && [ -n "$rus_search" ]; then
-              cor_int=$(echo "$cor_search * 1000" | bc | cut -d. -f1)
-              rus_int=$(echo "$rus_search * 1000" | bc | cut -d. -f1)
-              if [ "$cor_int" -le "$rus_int" ] 2>/dev/null; then
-                ratio=$(echo "scale=1; $rus_search / $cor_search" | bc 2>/dev/null)
-                vs_rust="**${ratio}x faster**"
-                winner="coregex"
-                cor_fmt="**${cor_search} ms**"
-                rus_fmt="${rus_search} ms"
-              else
-                ratio=$(echo "scale=1; $cor_search / $rus_search" | bc 2>/dev/null)
-                vs_rust="${ratio}x slower"
-                winner="Rust"
-                cor_fmt="${cor_search} ms"
-                rus_fmt="**${rus_search} ms**"
-              fi
-            else
-              vs_rust="—"
-              winner="—"
               cor_fmt="${cor_search} ms"
-              rus_fmt="${rus_search} ms"
             fi
 
-            echo "| $pattern | ${std_search} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY
+            echo "| $pattern | ${std_search} ms | $cor_fmt | $vs_stdlib |" >> $GITHUB_STEP_SUMMARY
           done
 
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -128,8 +97,8 @@ jobs:
           # Compile time comparison table
           echo "### Compile Time Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Pattern | Go stdlib | Go coregex | Rust regex |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|-----------|------------|------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Pattern | Go stdlib | Go coregex |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-----------|------------|" >> $GITHUB_STEP_SUMMARY
 
           grep -E "^[a-z_]+\s" /tmp/stdlib.txt | grep -v "^pattern " | while read line; do
             pattern=$(echo "$line" | awk '{print $1}')
@@ -138,10 +107,7 @@ jobs:
             cor_line=$(grep "^${pattern} " /tmp/coregex.txt)
             cor_compile=$(echo "$cor_line" | awk '{print $2}')
 
-            rus_line=$(grep "^${pattern} " /tmp/rust.txt)
-            rus_compile=$(echo "$rus_line" | awk '{print $2}')
-
-            echo "| $pattern | ${std_compile} ms | ${cor_compile} ms | ${rus_compile} ms |" >> $GITHUB_STEP_SUMMARY
+            echo "| $pattern | ${std_compile} ms | ${cor_compile} ms |" >> $GITHUB_STEP_SUMMARY
           done
 
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -165,11 +131,6 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat /tmp/coregex.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          echo "#### Rust regex" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat /tmp/rust.txt >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
 
           echo "</details>" >> $GITHUB_STEP_SUMMARY
+

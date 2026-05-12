@@ -23,20 +23,13 @@ jobs:
         with:
           go-version: '1.25'
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
-
       - name: Generate DNA input data
         run: go run scripts/generate-dna-input.go
 
-      - name: Build Go stdlib DNA
-        run: cd go-stdlib-dna && go build -o ../bin/go-stdlib-dna .
-
-      - name: Build Go coregex DNA
-        run: cd go-coregex-dna && go build -o ../bin/go-coregex-dna .
-
-      - name: Build Rust DNA
-        run: cd rust-dna && cargo build --release && cp target/release/dna-benchmark ../bin/rust-dna
+      - name: Build engines
+        run: |
+          cd go-regexp-re && go build -o ../bin/go-regexp-re .
+          cd ../go-coregex && go build -o ../bin/go-coregex .
 
       - name: Run DNA benchmarks
         run: |
@@ -48,14 +41,13 @@ jobs:
           echo "**CPU**: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          ./bin/go-stdlib-dna input/dna-data.txt | tee /tmp/stdlib.txt
-          ./bin/go-coregex-dna input/dna-data.txt | tee /tmp/coregex.txt
-          ./bin/rust-dna input/dna-data.txt | tee /tmp/rust.txt
+          ./bin/go-regexp-re -scenario dna input/dna-data.txt | tee /tmp/stdlib.txt
+          ./bin/go-coregex -scenario dna input/dna-data.txt | tee /tmp/coregex.txt
 
           echo "### Search Time Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Pattern | Regex | Strategy | Go stdlib | Go coregex | Rust regex | vs stdlib | vs Rust | Winner |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|-------|----------|-----------|------------|------------|-----------|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Pattern | Regex | Strategy | Go stdlib | Go coregex | vs stdlib |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|----------|-----------|------------|-----------|" >> $GITHUB_STEP_SUMMARY
 
           # Pattern regexes for display
           declare -A regexes
@@ -77,9 +69,6 @@ jobs:
             cor_search=$(echo "$cor_line" | awk '{print $3}')
             strategy=$(echo "$cor_line" | awk '{print $5}')
 
-            rus_line=$(grep "^${pattern} " /tmp/rust.txt)
-            rus_search=$(echo "$rus_line" | awk '{print $3}')
-
             regex="${regexes[$pattern]//|/\\|}"
 
             # vs stdlib speedup
@@ -91,43 +80,24 @@ jobs:
                 speedup_int=$(echo "scale=0; $std_search / $cor_search" | bc 2>/dev/null)
                 if [ "$speedup_int" -gt 2 ] 2>/dev/null; then
                   vs_stdlib="**${speedup}x faster**"
+                  cor_fmt="**${cor_search} ms**"
                 else
                   vs_stdlib="~1x"
+                  cor_fmt="${cor_search} ms"
                 fi
               else
                 slowdown=$(echo "scale=1; $cor_search / $std_search" | bc 2>/dev/null)
                 vs_stdlib="${slowdown}x slower"
+                cor_fmt="${cor_search} ms"
               fi
             else
               vs_stdlib="—"
-            fi
-
-            # vs Rust comparison
-            if [ -n "$cor_search" ] && [ -n "$rus_search" ]; then
-              cor_int=$(echo "$cor_search * 1000" | bc | cut -d. -f1)
-              rus_int=$(echo "$rus_search * 1000" | bc | cut -d. -f1)
-              if [ "$cor_int" -le "$rus_int" ] 2>/dev/null; then
-                ratio=$(echo "scale=1; $rus_search / $cor_search" | bc 2>/dev/null)
-                vs_rust="**${ratio}x faster**"
-                winner="coregex"
-                cor_fmt="**${cor_search} ms**"
-                rus_fmt="${rus_search} ms"
-              else
-                ratio=$(echo "scale=1; $cor_search / $rus_search" | bc 2>/dev/null)
-                vs_rust="${ratio}x slower"
-                winner="Rust"
-                cor_fmt="${cor_search} ms"
-                rus_fmt="**${rus_search} ms**"
-              fi
-            else
-              vs_rust="—"
-              winner="—"
               cor_fmt="${cor_search} ms"
-              rus_fmt="${rus_search} ms"
             fi
 
-            echo "| $pattern | \`$regex\` | $strategy | ${std_search} ms | $cor_fmt | $rus_fmt | $vs_stdlib | $vs_rust | $winner |" >> $GITHUB_STEP_SUMMARY
+            echo "| $pattern | \`$regex\` | $strategy | ${std_search} ms | $cor_fmt | $vs_stdlib |" >> $GITHUB_STEP_SUMMARY
           done
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "> Patterns from [regexdna benchmark](https://benchmarksgame-team.pages.debian.net/benchmarksgame/). Reported by [@kostya](https://github.com/kostya) in [coregex#116](https://github.com/coregx/coregex/issues/116)." >> $GITHUB_STEP_SUMMARY
+

@@ -27,11 +27,10 @@ jobs:
       - name: Generate NO-DIGITS input data (for 3000x speedup)
         run: go run scripts/generate-3000x-input.go
 
-      - name: Build Go stdlib extreme
-        run: cd go-stdlib-extreme && go build -o ../bin/go-stdlib-extreme .
-
-      - name: Build Go coregex extreme
-        run: cd go-coregex-extreme && go build -o ../bin/go-coregex-extreme .
+      - name: Build engines
+        run: |
+          cd go-regexp-re && go build -o ../bin/go-regexp-re .
+          cd ../go-coregex && go build -o ../bin/go-coregex .
 
       - name: Run EXTREME benchmarks
         run: |
@@ -47,13 +46,13 @@ jobs:
 
           echo "### Go stdlib (baseline)" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          ./bin/go-stdlib-extreme input/no-digits-data.txt | tee stdlib.txt | tee -a $GITHUB_STEP_SUMMARY
+          ./bin/go-regexp-re -scenario extreme input/no-digits-data.txt | tee stdlib.txt | tee -a $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           echo "### Go coregex (optimized)" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          ./bin/go-coregex-extreme input/no-digits-data.txt | tee coregex.txt | tee -a $GITHUB_STEP_SUMMARY
+          ./bin/go-coregex -scenario extreme input/no-digits-data.txt | tee coregex.txt | tee -a $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
