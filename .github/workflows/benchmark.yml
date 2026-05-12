@@ -19,10 +19,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install PCRE2 and Hyperscan
+      - name: Install PCRE2, Hyperscan and RE2
         run: |
           sudo apt-get update
-          sudo apt-get install -y libpcre2-dev libhyperscan-dev
+          sudo apt-get install -y libpcre2-dev libhyperscan-dev libre2-dev
 
       - name: Set up Go
         uses: actions/setup-go@v5
